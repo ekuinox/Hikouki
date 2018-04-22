@@ -38,15 +38,16 @@ using Data = struct _Data {
 	struct ROT { float x, y, z; } rot;
 	D3DXMATRIX mat;
 	CDirect3DXFile *xfile;
-	bool explosion = false;
+	bool explosion_flag;
+	Explosion* explosion;
 	_Data(CDirect3DXFile* _xfile) : xfile(_xfile) {
 		xfile->LoadXFile("assets/f1.x", g_DXGrobj->GetDXDevice());
+		explosion = new Explosion(xfile, g_DXGrobj->GetDXDevice());
+		explosion_flag = false;
 	};
 };
 
 std::vector<Data*> data;
-
-bool g_ExplosionFlag = false;			// 爆発フラグ
 
 D3DXMATRIX			g_MatTotal = {			// 積算行列（単位行列で初期化）
 	1.0f, 0.0f, 0.0f, 0.0f,
@@ -97,7 +98,7 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 
 	// カメラ変換行列作成
 	D3DXMatrixLookAtLH(&g_MatView,
-		&D3DXVECTOR3(0.0f, 0.0f, -100.0f),		// 視点
+		&D3DXVECTOR3(0.0f, 0.0f, -80.0f),		// 視点
 		&D3DXVECTOR3(0.0f, 0.0f, 0.0f),		// 注視点
 		&D3DXVECTOR3(0.0f, 1.0f, 0.0f));		// 上向き
 
@@ -186,20 +187,16 @@ void GameUpdate(){
 		D3DXMatrixMultiply(&hikouki->mat, &hikouki->mat, &mx);
 	}
 
-	if (GetKeyboardTrigger(DIK_G)) {
-		g_ExplosionFlag = !g_ExplosionFlag;
+	// 爆発ボタン
+	if (GetKeyboardTrigger(DIK_SPACE)) {
 		const int n = rand() % data.size();
-		data[n]->explosion = true;
-		if (g_ExplosionFlag) {
-			ExplosionInit(data[n]->xfile, g_DXGrobj->GetDXDevice());
-			TriangleTransforms(data[n]->mat);
+		data[n]->explosion_flag = !data[n]->explosion_flag;
+		if (data[n]->explosion_flag) {
+			data[n]->explosion->TriangleTransforms(data[n]->mat);
 		}
 	}
+	for (const auto& hikouki : data) if (hikouki->explosion_flag) hikouki->explosion->Update();
 
-	// 爆発の更新処理
-	if (g_ExplosionFlag) {
-		ExplosionUpdate();
-	}
 }
 
 //==============================================================================
@@ -220,8 +217,8 @@ void GameRender(){
 	// ワールド変換行列の初期化
 	for (const auto& hikouki : data)
 	{
-		if (hikouki->explosion) {
-			ExplosionDraw(g_DXGrobj->GetDXDevice());
+		if (hikouki->explosion_flag) {
+			hikouki->explosion->Draw(g_DXGrobj->GetDXDevice());
 		}
 		else {
 			D3DXMatrixIdentity(&g_MatWorld);

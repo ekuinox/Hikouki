@@ -57,11 +57,25 @@ struct	MyTriangle{
 	}
 };
 
-void XfileToTriangle(LPD3DXMESH, LPDIRECT3DDEVICE9);
-void TriangleTransforms(const D3DXMATRIX&);
-void ExplosionDraw(LPDIRECT3DDEVICE9);
-void ExplosionInit(CDirect3DXFile*, LPDIRECT3DDEVICE9);
-void ExplosionUpdate();
+class Explosion {
+private:
+	MyVertex *vertex = nullptr; // 頂点情報
+	int	num_vertex = 0; // 頂点数
+	MyConnect *connect = nullptr; // 結線情報
+	int num_face = 0; // 面数
+	MyTriangle	*triangle = nullptr; // トライアングルの先頭
+	LPDIRECT3DTEXTURE9 tex = nullptr; // テクスチャ
+public:
+	Explosion();
+	Explosion(CDirect3DXFile *xobj, LPDIRECT3DDEVICE9 device);
+	~Explosion();
+	void Init(CDirect3DXFile *xobj, LPDIRECT3DDEVICE9 device);
+	void Uninit();
+	void Update();
+	void Draw(LPDIRECT3DDEVICE9 device);
+	void TriangleTransforms(const D3DXMATRIX& mat);
+	void XfileToTriangle(LPD3DXMESH mesh, LPDIRECT3DDEVICE9 device);
+};
 //******************************************************************************
 //	End of file.
 //******************************************************************************
