@@ -156,6 +156,20 @@ void GameInput(){
 	if (GetKeyboardPress(DIK_LEFTARROW)) {
 		for (const auto& hikouki : data) hikouki->rot.x++;
 	}
+
+	int keys[] = {
+		DIK_NUMPAD1, DIK_NUMPAD2, DIK_NUMPAD3, DIK_NUMPAD4, DIK_NUMPAD5, DIK_NUMPAD6, DIK_NUMPAD7, DIK_NUMPAD8, DIK_NUMPAD9
+	};
+
+	for (auto i = 0; i < 9; i++) {
+		if (GetKeyboardTrigger(keys[i]))
+		{
+			data[i]->explosion_flag = !data[i]->explosion_flag;
+			if (data[i]->explosion_flag) {
+				data[i]->explosion->TriangleTransforms(data[i]->mat);
+			}
+		}
+	}
 }
 
 //==============================================================================
@@ -185,18 +199,9 @@ void GameUpdate(){
 		D3DXMatrixIdentity(&mx);
 		D3DXMatrixTranslation(&mx, hikouki->cor.x, hikouki->cor.y, hikouki->cor.z);
 		D3DXMatrixMultiply(&hikouki->mat, &hikouki->mat, &mx);
-	}
 
-	// ”š”­ƒ{ƒ^ƒ“
-	if (GetKeyboardTrigger(DIK_SPACE)) {
-		const int n = rand() % data.size();
-		data[n]->explosion_flag = !data[n]->explosion_flag;
-		if (data[n]->explosion_flag) {
-			data[n]->explosion->TriangleTransforms(data[n]->mat);
-		}
+		if (hikouki->explosion_flag) hikouki->explosion->Update();
 	}
-	for (const auto& hikouki : data) if (hikouki->explosion_flag) hikouki->explosion->Update();
-
 }
 
 //==============================================================================

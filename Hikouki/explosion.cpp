@@ -43,16 +43,16 @@ void Explosion::Uninit()
 
 void Explosion::Update()
 {
-	D3DXMATRIX mat1, mat2, mat3;
-
 	for (int i = 0; i < num_face; i++) {
+		D3DXMATRIX mat;
 
 		// 回転角度から行列を作成する
-		D3DXMatrixRotationX(&mat1, triangle[i].xangle);
-		D3DXMatrixRotationY(&mat2, triangle[i].yangle);
-		D3DXMatrixRotationZ(&mat3, triangle[i].zangle);
+		D3DXMatrixIdentity(&mat);
+		D3DXMatrixRotationX(&mat, triangle[i].xangle);
+		D3DXMatrixRotationY(&mat, triangle[i].yangle);
+		D3DXMatrixRotationZ(&mat, triangle[i].zangle);
 
-		triangle[i].mat = mat1 * mat2*mat3;
+		triangle[i].mat = mat;
 
 		triangle[i].mat._41 = triangle[i].cx;
 		triangle[i].mat._42 = triangle[i].cy;
@@ -62,6 +62,9 @@ void Explosion::Update()
 		// ここをコーディング
 		// ――――― start -----------
 
+		triangle[i].xangle += triangle[i].dxa;
+		triangle[i].yangle += triangle[i].dya;
+		triangle[i].zangle += triangle[i].dza;
 
 		// ――――― end -----------
 
@@ -69,6 +72,13 @@ void Explosion::Update()
 		// ここをコーディング
 		// ――――― start -----------
 
+		triangle[i].cx += triangle[i].nx;
+		triangle[i].cy += triangle[i].ny;
+		triangle[i].cz += triangle[i].nz;
+		
+		D3DXMatrixIdentity(&mat);
+		D3DXMatrixTranslation(&mat, triangle[i].cx, triangle[i].cy, triangle[i].cz);
+		D3DXMatrixMultiply(&triangle[i].mat, &triangle[i].mat, &mat);
 
 		// ――――― end -----------
 
