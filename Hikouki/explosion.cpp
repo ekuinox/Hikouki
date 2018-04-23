@@ -235,13 +235,13 @@ void Explosion::XfileToTriangle(LPD3DXMESH mesh, LPDIRECT3DDEVICE9 device)
 	length = sizeof(MyVertex);
 
 	// 頂点バッファロック
-	hr = lpVertexBuffer->Lock(0, length, (void**)&data, D3DLOCK_READONLY);
+	hr = lpVertexBuffer->Lock(0, length, (void**)&data, D3DLOCK_READONLY); // ゲームループの中でロックかけるとエラーになる
 	if (hr == D3D_OK) {
 		vertex = new MyVertex[num_vertex];
 		pVertex = (MyVertex*)data;
 
 		// 頂点情報をコピー
-		memcpy(vertex, pVertex, sizeof(MyVertex)*(num_vertex));
+		memcpy(vertex, pVertex, sizeof(MyVertex)*(num_vertex)); // dataはロックしてる間しか有効でないので
 
 		length = sizeof(WORD);
 		// インデックスバッファロック
