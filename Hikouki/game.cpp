@@ -40,14 +40,15 @@ using Data = struct _Data {
 	CDirect3DXFile *xfile;
 	bool explosion_flag;
 	Explosion* explosion;
-	_Data(CDirect3DXFile* _xfile) : xfile(_xfile) {
-		xfile->LoadXFile("assets/f1.x", g_DXGrobj->GetDXDevice());
+	_Data(CDirect3DXFile* _xfile, const char* _xfile_path = "assets/f1.x") : xfile(_xfile) {
+		xfile->LoadXFile(_xfile_path, g_DXGrobj->GetDXDevice());
 		explosion = new Explosion(xfile, g_DXGrobj->GetDXDevice());
 		explosion_flag = false;
 	};
 };
 
 std::vector<Data*> data;
+Data* skydome;
 
 D3DXVECTOR3 camera = {
 	0.0f, 0.0f,-80.0f
@@ -96,6 +97,9 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int _width, int _height,bool fullscree
 	constexpr int hikouki_count = 9;
 	constexpr float margin = 50.0f;
 	auto xfile = new CDirect3DXFile(); // どうせ同じなので
+	skydome = new Data(new CDirect3DXFile(), "assets/skydome.x");
+	skydome->cor = { 0, 0, 0 };
+	skydome->rot = { 0, 0, 0 };
 
 	for (auto i = 0; i < sqrt(hikouki_count); ++i)
 	{
@@ -220,7 +224,7 @@ void GameRender(){
 		D3DX_PI / 2,					// 視野角
 		(float)width / (float)height,	// アスペクト比
 		1.0f,						// ニアプレーン
-		1000.0f);					// ファープレーン
+		5000.0f);					// ファープレーン
 
 									// 射影変換行列を固定パイプラインへセット
 	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_PROJECTION, &g_MatProjection);
@@ -254,6 +258,10 @@ void GameRender(){
 			hikouki->xfile->DrawWithAxis(g_DXGrobj->GetDXDevice());				// Ｘファイル描画
 		}
 	}
+
+	D3DXMatrixIdentity(&g_MatWorld);
+	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_WORLD, &g_MatWorld);	// ワールド変換行列をセット
+	skydome->xfile->DrawWithAxis(g_DXGrobj->GetDXDevice());
 
 	g_DXGrobj->GetDXDevice()->EndScene();	// 描画の終了を待つ
 
