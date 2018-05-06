@@ -41,18 +41,24 @@ void Explosion::Uninit()
 	}
 }
 
+void Explosion::Start()
+{
+	last_update = std::chrono::system_clock::now();
+}
+
 void Explosion::Update()
 {
+	auto now = std::chrono::system_clock::now(); // 現在時刻
+	auto s = std::chrono::duration_cast<std::chrono::milliseconds>(now - last_update).count();
+
 	for (int i = 0; i < num_face; i++) {
 		D3DXMATRIX mat;
 
 		// 回転角度から行列を作成する
 		D3DXMatrixIdentity(&mat);
-		D3DXMatrixRotationX(&mat, triangle[i].xangle);
-		D3DXMatrixRotationY(&mat, triangle[i].yangle);
-		D3DXMatrixRotationZ(&mat, triangle[i].zangle);
-
-		triangle[i].mat = mat;
+		D3DXMatrixRotationX(&triangle[i].mat, triangle[i].xangle);
+		D3DXMatrixRotationY(&triangle[i].mat, triangle[i].yangle);
+		D3DXMatrixRotationZ(&triangle[i].mat, triangle[i].zangle);
 
 		triangle[i].mat._41 = triangle[i].cx;
 		triangle[i].mat._42 = triangle[i].cy;
@@ -72,27 +78,30 @@ void Explosion::Update()
 		// ここをコーディング
 		// ――――― start -----------
 
+		triangle[i].ny -= GRAVITY * s / 1000 / 10; // 10は気持ちゆっくりにしたいからです．．
+
+
 		triangle[i].cx += triangle[i].nx;
-		triangle[i].cy += triangle[i].ny;
+		triangle[i].cy += triangle[i].ny ;
 		triangle[i].cz += triangle[i].nz;
 		
-		D3DXMatrixIdentity(&mat);
-		D3DXMatrixTranslation(&mat, triangle[i].cx, triangle[i].cy, triangle[i].cz);
-		D3DXMatrixMultiply(&triangle[i].mat, &triangle[i].mat, &mat);
-
 		// ――――― end -----------
 
 		for (int j = 0; j < 3; j++) {
 			unsigned char alpha = (unsigned char)((triangle[i].Vertex[j].col & 0xff000000) >> 24);
+			/*
 			if (alpha > 0) {
 				triangle[i].Vertex[j].col -= 0x01000000;	// アルファ値の変更
 			}
 			else {
 				triangle[i].Vertex[j].col = 0x00ffffff;	// アルファ値が0以下なら0に
 			}
+			*/
 		}
 
 	}
+	last_update = now; // 最終更新に代入して終了
+
 }
 
 void Explosion::Draw(LPDIRECT3DDEVICE9 device)
@@ -132,13 +141,10 @@ void Explosion::TriangleTransforms(const D3DXMATRIX &mat)
 	MyVertex		*TransformWork;	// ワールド座標系に変換するためのワーク
 	D3DXVECTOR3		temp;
 
-	int idx[3];// idx0, idx1, idx2;
+	int				idx0, idx1, idx2;
 	D3DXVECTOR3		normal;
-	D3DXVECTOR3 p0ps[2];
-	/*
 	D3DXVECTOR3		p0p1;
 	D3DXVECTOR3		p0p2;
-	*/
 
 	// 生成された三角形情報があれば削除する
 	if (triangle != nullptr) {
@@ -166,24 +172,29 @@ void Explosion::TriangleTransforms(const D3DXMATRIX &mat)
 	triangle = new MyTriangle[num_face];			// 三角形の面数分オブジェクト生成
 
 	for (i = 0; i < num_face; i++) {						// ３角形ポリゴン数分ループ
-		
-		for (auto j = 0; j < 3; j++) idx[j] = connect[i].idx[j];
+		idx0 = connect[i].idx[0];
+		idx1 = connect[i].idx[1];
+		idx2 = connect[i].idx[2];
 
-		for (auto j = 0; j < 3; j++)
-		{
-			triangle[i].Vertex[j] = TransformWork[idx[j]];
-			triangle[i].Vertex[j].col = D3DCOLOR_ARGB(255, 255, 255, 255);		// ディフューズ値をセットする。（Ｘファイルに含まれていない為）
-		}
+		triangle[i].Vertex[0] = TransformWork[idx0];
+		triangle[i].Vertex[0].col = D3DCOLOR_ARGB(255, 255, 255, 255);		// ディフューズ値をセットする。（Ｘファイルに含まれていない為）
 
-		for (auto j = 1; j < 2; j++)
-		{
-			p0ps[j - 1].x = triangle[i].Vertex[j].x - triangle[i].Vertex[0].x;
-			p0ps[j - 1].y = triangle[i].Vertex[j].y - triangle[i].Vertex[0].y;
-			p0ps[j - 1].z = triangle[i].Vertex[j].z - triangle[i].Vertex[0].z;
-		}
+		triangle[i].Vertex[1] = TransformWork[idx1];
+		triangle[i].Vertex[1].col = D3DCOLOR_ARGB(255, 255, 255, 255);		// ディフューズ値をセットする。（Ｘファイルに含まれていない為）
+
+		triangle[i].Vertex[2] = TransformWork[idx2];
+		triangle[i].Vertex[2].col = D3DCOLOR_ARGB(255, 255, 255, 255);		// ディフューズ値をセットする。（Ｘファイルに含まれていない為）
+
+		p0p1.x = triangle[i].Vertex[1].x - triangle[i].Vertex[0].x;
+		p0p1.y = triangle[i].Vertex[1].y - triangle[i].Vertex[0].y;
+		p0p1.z = triangle[i].Vertex[1].z - triangle[i].Vertex[0].z;
+
+		p0p2.x = triangle[i].Vertex[2].x - triangle[i].Vertex[0].x;
+		p0p2.y = triangle[i].Vertex[2].y - triangle[i].Vertex[0].y;
+		p0p2.z = triangle[i].Vertex[2].z - triangle[i].Vertex[0].z;
 
 		// 法線情報計算
-		D3DXVec3Cross(&normal, &p0ps[0], &p0ps[1]);			// 外積を計算
+		D3DXVec3Cross(&normal, &p0p1, &p0p2);			// 外積を計算
 		D3DXVec3Normalize(&normal, &normal);			// 単位ベクトル化
 		triangle[i].nx = normal.x;					// 法線情報セット
 		triangle[i].ny = normal.y;
@@ -195,12 +206,17 @@ void Explosion::TriangleTransforms(const D3DXMATRIX &mat)
 		triangle[i].cz = (triangle[i].Vertex[0].z + triangle[i].Vertex[1].z + triangle[i].Vertex[2].z) / 3;
 
 		// 頂点座標を原点を基準とした座標に変換する
-		for (auto j = 0; j < 3; j++)
-		{
-			triangle[i].Vertex[j].x -= triangle[i].cx;
-			triangle[i].Vertex[j].y -= triangle[i].cy;
-			triangle[i].Vertex[j].z -= triangle[i].cz;
-		}
+		triangle[i].Vertex[0].x -= triangle[i].cx;
+		triangle[i].Vertex[0].y -= triangle[i].cy;
+		triangle[i].Vertex[0].z -= triangle[i].cz;
+
+		triangle[i].Vertex[1].x -= triangle[i].cx;
+		triangle[i].Vertex[1].y -= triangle[i].cy;
+		triangle[i].Vertex[1].z -= triangle[i].cz;
+
+		triangle[i].Vertex[2].x -= triangle[i].cx;
+		triangle[i].Vertex[2].y -= triangle[i].cy;
+		triangle[i].Vertex[2].z -= triangle[i].cz;
 	}
 
 	delete[] TransformWork;

@@ -11,11 +11,13 @@
 //-----------------------------------------------------------------------------
 #include	<d3dx9.h>
 #include	"CDirect3DXFile.h"
+#include <chrono>
 
 //-----------------------------------------------------------------------------
 // マクロ宣言
 //-----------------------------------------------------------------------------
 #define  D3DFVFCUSTOM_VERTEX		(D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1)
+#define GRAVITY (9.8f)
 
 //-----------------------------------------------------------------------------
 // プロトタイプ宣言
@@ -32,6 +34,9 @@ struct	MyVertex{
 struct MyConnect{
 	WORD		idx[3];
 };
+
+using time_point = std::chrono::system_clock::time_point;
+
 
 // ３角形情報
 struct	MyTriangle{
@@ -65,12 +70,14 @@ private:
 	int num_face = 0; // 面数
 	MyTriangle	*triangle = nullptr; // トライアングルの先頭
 	LPDIRECT3DTEXTURE9 tex = nullptr; // テクスチャ
+	time_point last_update;
 public:
 	Explosion();
 	Explosion(CDirect3DXFile *xobj, LPDIRECT3DDEVICE9 device);
 	~Explosion();
 	void Init(CDirect3DXFile *xobj, LPDIRECT3DDEVICE9 device);
 	void Uninit();
+	void Start();
 	void Update();
 	void Draw(LPDIRECT3DDEVICE9 device);
 	void TriangleTransforms(const D3DXMATRIX& mat);

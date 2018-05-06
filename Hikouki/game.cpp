@@ -49,6 +49,10 @@ using Data = struct _Data {
 
 std::vector<Data*> data;
 
+D3DXVECTOR3 camera = {
+	0.0f, 0.0f,-80.0f
+};
+
 D3DXMATRIX			g_MatTotal = {			// 積算行列（単位行列で初期化）
 	1.0f, 0.0f, 0.0f, 0.0f,
 	0.0f, 1.0f, 0.0f, 0.0f,
@@ -56,6 +60,10 @@ D3DXMATRIX			g_MatTotal = {			// 積算行列（単位行列で初期化）
 	0.0f, 0.0f, 0.0f, 1.0f
 };
 
+int width;
+int height;
+
+int now_controll = 0;
 
 
 //==============================================================================
@@ -68,8 +76,11 @@ D3DXMATRIX			g_MatTotal = {			// 積算行列（単位行列で初期化）
 //!	@param　	フルスクリーンフラグ　true ; フルスクリーン　false : ウインドウ
 //!	@retval	true 成功　false 失敗
 //==============================================================================
-bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
+bool GameInit(HINSTANCE hinst, HWND hwnd, int _width, int _height,bool fullscreen)
 {
+	width = _width;
+	height = _height;
+
 	// 入力初期化
 	InitKeyboard(hinst, hwnd);
 
@@ -95,33 +106,6 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int width, int height,bool fullscreen)
 			data.back()->rot = { 0.0f, 0.0f, 0.0f };
 		}
 	}
-
-	// カメラ変換行列作成
-	D3DXMatrixLookAtLH(&g_MatView,
-		&D3DXVECTOR3(0.0f, 0.0f, -80.0f),		// 視点
-		&D3DXVECTOR3(0.0f, 0.0f, 0.0f),		// 注視点
-		&D3DXVECTOR3(0.0f, 1.0f, 0.0f));		// 上向き
-
-	// カメラ行列を固定パイプラインへセット
-	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_VIEW, &g_MatView);
-
-	// プロジェクション変換行列作成
-	D3DXMatrixPerspectiveFovLH(&g_MatProjection,
-		D3DX_PI / 2,					// 視野角
-		(float)width / (float)height,	// アスペクト比
-		1.0f,						// ニアプレーン
-		1000.0f);					// ファープレーン
-
-	// 射影変換行列を固定パイプラインへセット
-	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_PROJECTION, &g_MatProjection);
-	// Ｚバッファ有効
-	g_DXGrobj->GetDXDevice()->SetRenderState(D3DRS_ZENABLE, TRUE);
-	// ライト有効
-	g_DXGrobj->GetDXDevice()->SetRenderState(D3DRS_LIGHTING, true);
-	// カリング無効化
-	g_DXGrobj->GetDXDevice()->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-	// 環境光セット
-	g_DXGrobj->GetDXDevice()->SetRenderState(D3DRS_AMBIENT, 0xffffffff);
 
 	// イベントハンドル生成
 	g_hEventHandle = CreateEvent(NULL, false, false, NULL);
@@ -157,6 +141,14 @@ void GameInput(){
 		for (const auto& hikouki : data) hikouki->rot.x++;
 	}
 
+	if (GetKeyboardPress(DIK_A)) data[now_controll]->cor.x--;
+	if (GetKeyboardPress(DIK_D)) data[now_controll]->cor.x++;
+	if (GetKeyboardPress(DIK_W)) data[now_controll]->cor.z++;
+	if (GetKeyboardPress(DIK_S)) data[now_controll]->cor.z--;
+
+	if (GetKeyboardTrigger(DIK_ADD) && now_controll + 1 < data.size()) now_controll++;
+	if (GetKeyboardTrigger(DIK_SUBTRACT) && now_controll > 0) now_controll--;
+
 	int keys[] = {
 		DIK_NUMPAD1, DIK_NUMPAD2, DIK_NUMPAD3, DIK_NUMPAD4, DIK_NUMPAD5, DIK_NUMPAD6, DIK_NUMPAD7, DIK_NUMPAD8, DIK_NUMPAD9
 	};
@@ -167,6 +159,7 @@ void GameInput(){
 			data[i]->explosion_flag = !data[i]->explosion_flag;
 			if (data[i]->explosion_flag) {
 				data[i]->explosion->TriangleTransforms(data[i]->mat);
+				data[i]->explosion->Start();
 			}
 		}
 	}
@@ -188,17 +181,18 @@ void GameUpdate(){
 
 		//	回転が先
 		D3DXMatrixIdentity(&mx);
-		D3DXMatrixRotationX(&mx, D3DXToRadian(hikouki->rot.y));
+		D3DXMatrixRotationX(&mx, D3DXToRadian(hikouki->rot.x));
 		D3DXMatrixMultiply(&hikouki->mat, &hikouki->mat, &mx);
 
 		D3DXMatrixIdentity(&mx);
-		D3DXMatrixRotationY(&mx, D3DXToRadian(hikouki->rot.x));
+		D3DXMatrixRotationY(&mx, D3DXToRadian(hikouki->rot.y));
 		D3DXMatrixMultiply(&hikouki->mat, &hikouki->mat, &mx);
 
 		// 移動が後
 		D3DXMatrixIdentity(&mx);
 		D3DXMatrixTranslation(&mx, hikouki->cor.x, hikouki->cor.y, hikouki->cor.z);
 		D3DXMatrixMultiply(&hikouki->mat, &hikouki->mat, &mx);
+
 
 		if (hikouki->explosion_flag) hikouki->explosion->Update();
 	}
@@ -211,6 +205,34 @@ void GameUpdate(){
 //!	@retval	なし
 //==============================================================================
 void GameRender(){
+
+	// カメラ変換行列作成
+	D3DXMatrixLookAtLH(&g_MatView,
+		&camera,		// 視点
+		&D3DXVECTOR3(0.0f, 0.0f, 0.0f),		// 注視点
+		&D3DXVECTOR3(0.0f, 1.0f, 0.0f));		// 上向き
+
+												// カメラ行列を固定パイプラインへセット
+	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_VIEW, &g_MatView);
+
+	// プロジェクション変換行列作成
+	D3DXMatrixPerspectiveFovLH(&g_MatProjection,
+		D3DX_PI / 2,					// 視野角
+		(float)width / (float)height,	// アスペクト比
+		1.0f,						// ニアプレーン
+		1000.0f);					// ファープレーン
+
+									// 射影変換行列を固定パイプラインへセット
+	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_PROJECTION, &g_MatProjection);
+	// Ｚバッファ有効
+	g_DXGrobj->GetDXDevice()->SetRenderState(D3DRS_ZENABLE, TRUE);
+	// ライト有効
+	g_DXGrobj->GetDXDevice()->SetRenderState(D3DRS_LIGHTING, true);
+	// カリング無効化
+	g_DXGrobj->GetDXDevice()->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	// 環境光セット
+	g_DXGrobj->GetDXDevice()->SetRenderState(D3DRS_AMBIENT, 0xffffffff);
+
 	HRESULT  hr;
 
 	// ターゲットバッファのクリア、Ｚバッファのクリア
