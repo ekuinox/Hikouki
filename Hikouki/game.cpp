@@ -17,6 +17,7 @@
 #include "explosion.h"
 #include "mathutil.h"
 #include <vector>
+#include <chrono>
 
 //-----------------------------------------------------------------------------
 // グローバル変数
@@ -27,15 +28,16 @@ CDirect3DXFile		*g_DXXFileObj = NULL;	// Ｘファイルオブジェクト
 D3DXMATRIX			g_MatView;			// カメラ行列
 D3DXMATRIX			g_MatProjection;	// プロジェクション変換行列
 D3DXMATRIX			g_MatWorld;			// ワールド変換行列
-D3DXMATRIX		    pol_mat; // 飛行機の行列がはいるはず
 
 HANDLE				g_hEventHandle;		// イベントハンドル
 bool				g_EndFlag = false;	// 終了フラグ
 std::thread			g_gamemainthread;	// ゲームメインスレッド
 
 using Data = struct _Data {
-	struct COR { float x, y, z; } cor;
-	struct ROT { float x, y, z; } rot;
+	D3DXVECTOR3 cor;
+	D3DXVECTOR3 rot;
+	D3DXVECTOR3 _cor;	 // 差分のあれ
+	D3DXVECTOR3 _rot;	 // 差分のあれ
 	D3DXMATRIX mat;
 	CDirect3DXFile *xfile;
 	bool explosion_flag;
@@ -44,6 +46,12 @@ using Data = struct _Data {
 		xfile->LoadXFile(_xfile_path, g_DXGrobj->GetDXDevice());
 		explosion = new Explosion(xfile, g_DXGrobj->GetDXDevice());
 		explosion_flag = false;
+		mat = {			// 積算行列（単位行列で初期化）
+			1.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 0.0f, 1.0f
+		};
 	};
 };
 
@@ -64,7 +72,7 @@ D3DXMATRIX			g_MatTotal = {			// 積算行列（単位行列で初期化）
 int width;
 int height;
 
-int now_controll = 0;
+int now_controll = 4;
 
 
 //==============================================================================
@@ -108,6 +116,8 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int _width, int _height,bool fullscree
 			data.push_back(new Data(xfile));
 			data.back()->cor = { j * margin - margin, i * margin - margin,  0.0f };
 			data.back()->rot = { 0.0f, 0.0f, 0.0f };
+			data.back()->_cor = { 0.0f, 0.0f, 1.0f };
+			data.back()->_rot = { rand() % 2 - 1.0f, rand() % 2 - 1.0f, rand() % 2 - 1.0f };
 		}
 	}
 
@@ -131,28 +141,17 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int _width, int _height,bool fullscree
 //==============================================================================
 void GameInput(){
 	UpdateInput();
-
-	if (GetKeyboardPress(DIK_UPARROW)) {
-		for (const auto& hikouki : data) hikouki->rot.y--;
-	}
-	if (GetKeyboardPress(DIK_DOWNARROW)) {
-		for (const auto& hikouki : data) hikouki->rot.y++;
-	}
-	if (GetKeyboardPress(DIK_RIGHTARROW)) {
-		for (const auto& hikouki : data) hikouki->rot.x--;
-	}
-	if (GetKeyboardPress(DIK_LEFTARROW)) {
-		for (const auto& hikouki : data) hikouki->rot.x++;
-	}
-
-	if (GetKeyboardPress(DIK_A)) data[now_controll]->cor.x--;
-	if (GetKeyboardPress(DIK_D)) data[now_controll]->cor.x++;
-	if (GetKeyboardPress(DIK_W)) data[now_controll]->cor.z++;
-	if (GetKeyboardPress(DIK_S)) data[now_controll]->cor.z--;
-
+	
+	/*
+	if (GetKeyboardPress(DIK_A)) data[now_controll]->_rot.y = -1;
+	if (GetKeyboardPress(DIK_D)) data[now_controll]->_rot.y = +1;
+	if (GetKeyboardPress(DIK_W)) data[now_controll]->_rot.x = -1;
+	if (GetKeyboardPress(DIK_S)) data[now_controll]->_rot.x = +1;
+	if (GetKeyboardPress(DIK_SPACE)) data[now_controll]->_cor.z = 1;
 	if (GetKeyboardTrigger(DIK_ADD) && now_controll + 1 < data.size()) now_controll++;
 	if (GetKeyboardTrigger(DIK_SUBTRACT) && now_controll > 0) now_controll--;
-
+	*/
+	
 	int keys[] = {
 		DIK_NUMPAD1, DIK_NUMPAD2, DIK_NUMPAD3, DIK_NUMPAD4, DIK_NUMPAD5, DIK_NUMPAD6, DIK_NUMPAD7, DIK_NUMPAD8, DIK_NUMPAD9
 	};
@@ -177,13 +176,21 @@ void GameInput(){
 //==============================================================================
 void GameUpdate(){
 
+	static auto last_update = std::chrono::system_clock::now();
+
 	for (const auto& hikouki : data)
 	{
 		D3DXMATRIX mx;
+		//D3DXMatrixIdentity(&hikouki->mat);
 
-		D3DXMatrixIdentity(&hikouki->mat);
+		//もうわからん
+		/*
+		// 移動が先
+		D3DXMatrixIdentity(&mx);
+		D3DXMatrixTranslation(&mx, hikouki->cor.x, hikouki->cor.y, hikouki->cor.z);
+		D3DXMatrixMultiply(&hikouki->mat, &hikouki->mat, &mx);
 
-		//	回転が先
+		//	回転が後
 		D3DXMatrixIdentity(&mx);
 		D3DXMatrixRotationX(&mx, D3DXToRadian(hikouki->rot.x));
 		D3DXMatrixMultiply(&hikouki->mat, &hikouki->mat, &mx);
@@ -191,12 +198,15 @@ void GameUpdate(){
 		D3DXMatrixIdentity(&mx);
 		D3DXMatrixRotationY(&mx, D3DXToRadian(hikouki->rot.y));
 		D3DXMatrixMultiply(&hikouki->mat, &hikouki->mat, &mx);
+		*/
 
-		// 移動が後
-		D3DXMatrixIdentity(&mx);
-		D3DXMatrixTranslation(&mx, hikouki->cor.x, hikouki->cor.y, hikouki->cor.z);
-		D3DXMatrixMultiply(&hikouki->mat, &hikouki->mat, &mx);
+		if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - last_update).count() > 1)
+		{
+			hikouki->_rot.x = rand() % 2 - 1;
+			hikouki->_rot.y = rand() % 2 - 1;
+		}
 
+		MakeWorldMatrix(mx, hikouki->mat, hikouki->_rot, hikouki->_cor);
 
 		if (hikouki->explosion_flag) hikouki->explosion->Update();
 	}
@@ -252,16 +262,14 @@ void GameRender(){
 			hikouki->explosion->Draw(g_DXGrobj->GetDXDevice());
 		}
 		else {
-			D3DXMatrixIdentity(&g_MatWorld);
-			D3DXMatrixMultiply(&g_MatWorld, &g_MatWorld, &hikouki->mat);
-			g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_WORLD, &g_MatWorld);	// ワールド変換行列をセット
-			hikouki->xfile->DrawWithAxis(g_DXGrobj->GetDXDevice());				// Ｘファイル描画
+			g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_WORLD, &hikouki->mat);	// ワールド変換行列をセット
+			hikouki->xfile->Draw(g_DXGrobj->GetDXDevice());				// Ｘファイル描画
 		}
 	}
 
 	D3DXMatrixIdentity(&g_MatWorld);
 	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_WORLD, &g_MatWorld);	// ワールド変換行列をセット
-	skydome->xfile->DrawWithAxis(g_DXGrobj->GetDXDevice());
+	skydome->xfile->Draw(g_DXGrobj->GetDXDevice());
 
 	g_DXGrobj->GetDXDevice()->EndScene();	// 描画の終了を待つ
 
