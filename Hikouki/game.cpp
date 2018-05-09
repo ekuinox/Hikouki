@@ -55,12 +55,21 @@ using Data = struct _Data {
 	};
 };
 
+using Camera = struct _Camera {
+	D3DXVECTOR3 pos;
+	D3DXVECTOR3 looking;
+	D3DXVECTOR3 up;
+	_Camera() :
+		pos(D3DXVECTOR3(0.0, 0.0f, -80.0f)),
+		looking(D3DXVECTOR3(0.0, 0.0f, 0.0f)),
+		up(D3DXVECTOR3(0.0, 1.0f, 0.0f))
+	{};
+};
+
 std::vector<Data*> data;
 Data* skydome;
-
-D3DXVECTOR3 camera = {
-	0.0f, 0.0f,-80.0f
-};
+Camera *camera;
+bool tps = false;
 
 D3DXMATRIX			g_MatTotal = {			// 積算行列（単位行列で初期化）
 	1.0f, 0.0f, 0.0f, 0.0f,
@@ -108,6 +117,7 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int _width, int _height,bool fullscree
 	skydome = new Data(new CDirect3DXFile(), "assets/skydome.x");
 	skydome->cor = { 0, 0, 0 };
 	skydome->rot = { 0, 0, 0 };
+	camera = new Camera();
 
 	for (auto i = 0; i < sqrt(hikouki_count); ++i)
 	{
@@ -148,10 +158,12 @@ void GameInput(){
 	if (GetKeyboardPress(DIK_W)) data[now_controll]->_rot.x = -1;
 	if (GetKeyboardPress(DIK_S)) data[now_controll]->_rot.x = +1;
 	if (GetKeyboardPress(DIK_SPACE)) data[now_controll]->_cor.z = 1;
+	*/
 	if (GetKeyboardTrigger(DIK_ADD) && now_controll + 1 < data.size()) now_controll++;
 	if (GetKeyboardTrigger(DIK_SUBTRACT) && now_controll > 0) now_controll--;
-	*/
 	
+	if (GetKeyboardTrigger(DIK_V)) tps = !tps;
+
 	int keys[] = {
 		DIK_NUMPAD1, DIK_NUMPAD2, DIK_NUMPAD3, DIK_NUMPAD4, DIK_NUMPAD5, DIK_NUMPAD6, DIK_NUMPAD7, DIK_NUMPAD8, DIK_NUMPAD9
 	};
@@ -210,6 +222,19 @@ void GameUpdate(){
 
 		if (hikouki->explosion_flag) hikouki->explosion->Update();
 	}
+
+	if (tps)
+	{
+		camera->pos = D3DXVECTOR3(data[now_controll]->mat._41, data[now_controll]->mat._42, data[now_controll]->mat._43);
+		camera->looking = camera->pos - 50 * D3DXVECTOR3(data[now_controll]->mat._31, data[now_controll]->mat._32, data[now_controll]->mat._33);
+		camera->up = D3DXVECTOR3(data[now_controll]->mat._21, data[now_controll]->mat._22, data[now_controll]->mat._23);
+	}
+	else
+	{
+		camera->pos = D3DXVECTOR3(0.0f, 0.0f, -80.0f);
+		camera->looking = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		camera->up = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	}
 }
 
 //==============================================================================
@@ -221,11 +246,7 @@ void GameUpdate(){
 void GameRender(){
 
 	// カメラ変換行列作成
-	D3DXMatrixLookAtLH(&g_MatView,
-		&camera,		// 視点
-		&D3DXVECTOR3(0.0f, 0.0f, 0.0f),		// 注視点
-		&D3DXVECTOR3(0.0f, 1.0f, 0.0f));		// 上向き
-
+	D3DXMatrixLookAtLH(&g_MatView, &camera->pos, &camera->looking, &camera->up);
 												// カメラ行列を固定パイプラインへセット
 	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_VIEW, &g_MatView);
 
