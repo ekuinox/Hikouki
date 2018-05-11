@@ -1,10 +1,8 @@
 #include "Airplain.h"
 #include "mathutil.h"
 
-#define AIRPLAIN_XFILE "assets/f1.x"
-
-Airplain::Airplain(LPDIRECT3DDEVICE9 device)
-	: XFileObjectBase(new CDirect3DXFile(AIRPLAIN_XFILE, device)),
+Airplain::Airplain(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device)
+	: XFileObjectBase(_xfile),
 	explosion(new Explosion(xfile, device)), explosion_flag(false)
 {
 }

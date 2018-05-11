@@ -12,7 +12,7 @@ private:
 	Explosion* explosion;
 	system_clock::time_point latest_update;
 public:
-	Airplain(LPDIRECT3DDEVICE9);
+	Airplain(CDirect3DXFile*, LPDIRECT3DDEVICE9);
 	void draw(LPDIRECT3DDEVICE9) const;
 	void update();
 	void switchExplosion();

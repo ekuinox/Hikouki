@@ -156,6 +156,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mathutil.cpp" />
+    <ClCompile Include="XFileManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Airplain.h" />
@@ -166,6 +167,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="mathutil.h" />
+    <ClInclude Include="XFileManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

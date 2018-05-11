@@ -19,6 +19,7 @@
 #include <vector>
 #include <chrono>
 #include "Airplain.h"
+#include "XFileManager.h"
 
 //-----------------------------------------------------------------------------
 // グローバル変数
@@ -45,6 +46,7 @@ std::vector<Airplain*> airplains;
 XFileObjectBase* skydome;
 Camera *camera;
 bool tps = false;
+XFileManager *xfile_manager;
 
 int width;
 int height;
@@ -80,19 +82,21 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int _width, int _height,bool fullscree
 	constexpr int hikouki_count = 9;
 	constexpr float margin = 50.0f;
 
-	std::vector<CDirect3DXFile*> xfiles = {
-		new CDirect3DXFile("assets/f1.x", g_DXGrobj->GetDXDevice()), // 飛行機
-		new CDirect3DXFile("assets/skydome.x", g_DXGrobj->GetDXDevice()) // スカイドーム
-	};
-
-	skydome = new XFileObjectBase(xfiles[1]);
 	camera = new Camera();
+
+	xfile_manager = new XFileManager(g_DXGrobj->GetDXDevice());
+	xfile_manager->add({
+		{ "Airplain", "assets/f1.x" }, // 飛行機
+		{ "Skydome", "assets/skydome.x" } // スカイドーム
+	});
+
+	skydome = new XFileObjectBase(xfile_manager->get("Skydome"));
 
 	for (auto i = 0; i < sqrt(hikouki_count); ++i)
 	{
 		for (auto j = 0; j < sqrt(hikouki_count); ++j)
 		{
-			airplains.push_back(new Airplain(g_DXGrobj->GetDXDevice()));
+			airplains.push_back(new Airplain(xfile_manager->get("Airplain"), g_DXGrobj->GetDXDevice()));
 		}
 	}
 
