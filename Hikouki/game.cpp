@@ -11,7 +11,7 @@
 #include <Windows.h>
 #include <thread>
 #include "CDirectXGraphics.h"
-#include "CDirect3DXFile.h"
+#include "GameObject.h"
 #include "game.h"
 #include "input.h"
 #include "explosion.h"
@@ -60,7 +60,7 @@ using Camera = struct _Camera {
 };
 
 std::vector<Data*> data;
-Data* skydome;
+XFileObjectBase* skydome;
 Camera *camera;
 bool tps = false;
 
@@ -103,9 +103,7 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int _width, int _height,bool fullscree
 		new CDirect3DXFile("assets/skydome.x", g_DXGrobj->GetDXDevice()) // スカイドーム
 	};
 
-	skydome = new Data(xfiles[1]);
-	skydome->cor = { 0, 0, 0 };
-	skydome->rot = { 0, 0, 0 };
+	skydome = new XFileObjectBase(xfiles[1]);
 	camera = new Camera();
 
 	for (auto i = 0; i < sqrt(hikouki_count); ++i)
@@ -251,9 +249,7 @@ void GameRender(){
 		}
 	}
 
-	D3DXMatrixIdentity(&world);
-	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_WORLD, &world);	// ワールド変換行列をセット
-	skydome->xfile->Draw(g_DXGrobj->GetDXDevice());
+	skydome->draw(g_DXGrobj->GetDXDevice());
 
 	g_DXGrobj->GetDXDevice()->EndScene();	// 描画の終了を待つ
 

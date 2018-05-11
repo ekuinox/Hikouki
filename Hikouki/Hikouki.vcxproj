@@ -151,6 +151,7 @@
     <ClCompile Include="CDirectXGraphics.cpp" />
     <ClCompile Include="explosion.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mathutil.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="CDirectxGraphics.h" />
     <ClInclude Include="explosion.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="mathutil.h" />
   </ItemGroup>
