@@ -221,7 +221,7 @@ void GameUpdate(){
 	}
 	else // fps
 	{
-		camera->looking_at = 2 * D3DXVECTOR3(data[now_controll]->mat._41, data[now_controll]->mat._42, data[now_controll]->mat._43);
+		camera->looking_at = 2 * D3DXVECTOR3(data[now_controll]->mat._41, data[now_controll]->mat._42, data[now_controll]->mat._43); // ‚¸‚ç‚³‚È‚¢‚Æ–{‘Ì‚Æ”í‚Á‚¿‚Ü‚¤‚Ì‚Å
 		camera->looking_for = camera->looking_at + 10 * D3DXVECTOR3(data[now_controll]->mat._31, data[now_controll]->mat._32, data[now_controll]->mat._33);
 		camera->up = D3DXVECTOR3(data[now_controll]->mat._21, data[now_controll]->mat._22, data[now_controll]->mat._23);
 	}
