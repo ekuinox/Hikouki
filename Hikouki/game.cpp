@@ -25,10 +25,6 @@
 CDirectXGraphics	*g_DXGrobj = NULL;		// DirectX Graphicsオブジェクト
 CDirect3DXFile		*g_DXXFileObj = NULL;	// Ｘファイルオブジェクト
 
-D3DXMATRIX			g_MatView;			// カメラ行列
-D3DXMATRIX			g_MatProjection;	// プロジェクション変換行列
-D3DXMATRIX			g_MatWorld;			// ワールド変換行列
-
 HANDLE				g_hEventHandle;		// イベントハンドル
 bool				g_EndFlag = false;	// 終了フラグ
 std::thread			g_gamemainthread;	// ゲームメインスレッド
@@ -56,12 +52,12 @@ using Data = struct _Data {
 };
 
 using Camera = struct _Camera {
-	D3DXVECTOR3 pos;
-	D3DXVECTOR3 looking;
+	D3DXVECTOR3 looking_at; // 視点
+	D3DXVECTOR3 looking_for; // 注視点
 	D3DXVECTOR3 up;
 	_Camera() :
-		pos(D3DXVECTOR3(0.0, 0.0f, -80.0f)),
-		looking(D3DXVECTOR3(0.0, 0.0f, 0.0f)),
+		looking_at(D3DXVECTOR3(0.0, 0.0f, -80.0f)),
+		looking_for(D3DXVECTOR3(0.0, 0.0f, 0.0f)),
 		up(D3DXVECTOR3(0.0, 1.0f, 0.0f))
 	{};
 };
@@ -70,13 +66,6 @@ std::vector<Data*> data;
 Data* skydome;
 Camera *camera;
 bool tps = false;
-
-D3DXMATRIX			g_MatTotal = {			// 積算行列（単位行列で初期化）
-	1.0f, 0.0f, 0.0f, 0.0f,
-	0.0f, 1.0f, 0.0f, 0.0f,
-	0.0f, 0.0f, 1.0f, 0.0f,
-	0.0f, 0.0f, 0.0f, 1.0f
-};
 
 int width;
 int height;
@@ -159,6 +148,7 @@ void GameInput(){
 	if (GetKeyboardPress(DIK_S)) data[now_controll]->_rot.x = +1;
 	if (GetKeyboardPress(DIK_SPACE)) data[now_controll]->_cor.z = 1;
 	*/
+
 	if (GetKeyboardTrigger(DIK_ADD) && now_controll + 1 < data.size()) now_controll++;
 	if (GetKeyboardTrigger(DIK_SUBTRACT) && now_controll > 0) now_controll--;
 	
@@ -223,17 +213,17 @@ void GameUpdate(){
 		if (hikouki->explosion_flag) hikouki->explosion->Update();
 	}
 
-	if (tps)
+	if (tps) // tps
 	{
-		camera->pos = D3DXVECTOR3(data[now_controll]->mat._41, data[now_controll]->mat._42, data[now_controll]->mat._43);
-		camera->looking = camera->pos - 50 * D3DXVECTOR3(data[now_controll]->mat._31, data[now_controll]->mat._32, data[now_controll]->mat._33);
+		camera->looking_for = D3DXVECTOR3(data[now_controll]->mat._41, data[now_controll]->mat._42, data[now_controll]->mat._43);
+		camera->looking_at = camera->looking_for - 10 * D3DXVECTOR3(data[now_controll]->mat._31, data[now_controll]->mat._32, data[now_controll]->mat._33);
 		camera->up = D3DXVECTOR3(data[now_controll]->mat._21, data[now_controll]->mat._22, data[now_controll]->mat._23);
 	}
-	else
+	else // fps
 	{
-		camera->pos = D3DXVECTOR3(0.0f, 0.0f, -80.0f);
-		camera->looking = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		camera->up = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+		camera->looking_at = 2 * D3DXVECTOR3(data[now_controll]->mat._41, data[now_controll]->mat._42, data[now_controll]->mat._43);
+		camera->looking_for = camera->looking_at + 10 * D3DXVECTOR3(data[now_controll]->mat._31, data[now_controll]->mat._32, data[now_controll]->mat._33);
+		camera->up = D3DXVECTOR3(data[now_controll]->mat._21, data[now_controll]->mat._22, data[now_controll]->mat._23);
 	}
 }
 
@@ -246,19 +236,22 @@ void GameUpdate(){
 void GameRender(){
 
 	// カメラ変換行列作成
-	D3DXMatrixLookAtLH(&g_MatView, &camera->pos, &camera->looking, &camera->up);
+
+	D3DXMATRIX view, proj, world;
+
+	D3DXMatrixLookAtLH(&view, &camera->looking_at, &camera->looking_for, &camera->up);
 												// カメラ行列を固定パイプラインへセット
-	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_VIEW, &g_MatView);
+	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_VIEW, &view);
 
 	// プロジェクション変換行列作成
-	D3DXMatrixPerspectiveFovLH(&g_MatProjection,
+	D3DXMatrixPerspectiveFovLH(&proj,
 		D3DX_PI / 2,					// 視野角
 		(float)width / (float)height,	// アスペクト比
 		1.0f,						// ニアプレーン
 		5000.0f);					// ファープレーン
 
 									// 射影変換行列を固定パイプラインへセット
-	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_PROJECTION, &g_MatProjection);
+	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_PROJECTION, &proj);
 	// Ｚバッファ有効
 	g_DXGrobj->GetDXDevice()->SetRenderState(D3DRS_ZENABLE, TRUE);
 	// ライト有効
@@ -268,7 +261,7 @@ void GameRender(){
 	// 環境光セット
 	g_DXGrobj->GetDXDevice()->SetRenderState(D3DRS_AMBIENT, 0xffffffff);
 
-	HRESULT  hr;
+	HRESULT hr;
 
 	// ターゲットバッファのクリア、Ｚバッファのクリア
 	g_DXGrobj->GetDXDevice()->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
@@ -288,8 +281,8 @@ void GameRender(){
 		}
 	}
 
-	D3DXMatrixIdentity(&g_MatWorld);
-	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_WORLD, &g_MatWorld);	// ワールド変換行列をセット
+	D3DXMatrixIdentity(&world);
+	g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_WORLD, &world);	// ワールド変換行列をセット
 	skydome->xfile->Draw(g_DXGrobj->GetDXDevice());
 
 	g_DXGrobj->GetDXDevice()->EndScene();	// 描画の終了を待つ
