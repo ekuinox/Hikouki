@@ -1,5 +1,5 @@
 #pragma once
-#include	"CDirect3DXFile.h"
+#include "CDirect3DXFile.h"
 
 class GameObjectInterface {
 protected:
