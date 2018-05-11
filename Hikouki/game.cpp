@@ -22,27 +22,24 @@
 //-----------------------------------------------------------------------------
 // グローバル変数
 //-----------------------------------------------------------------------------
-CDirectXGraphics	*g_DXGrobj = NULL;		// DirectX Graphicsオブジェクト
-CDirect3DXFile		*g_DXXFileObj = NULL;	// Ｘファイルオブジェクト
+CDirectXGraphics *g_DXGrobj = NULL; // DirectX Graphicsオブジェクト
+CDirect3DXFile *g_DXXFileObj = NULL; // Ｘファイルオブジェクト
 
-HANDLE				g_hEventHandle;		// イベントハンドル
-bool				g_EndFlag = false;	// 終了フラグ
-std::thread			g_gamemainthread;	// ゲームメインスレッド
+HANDLE g_hEventHandle; // イベントハンドル
+bool g_EndFlag = false;	// 終了フラグ
+std::thread g_gamemainthread; // ゲームメインスレッド
 
 using Data = struct _Data {
 	D3DXVECTOR3 cor;
 	D3DXVECTOR3 rot;
-	D3DXVECTOR3 _cor;	 // 差分のあれ
-	D3DXVECTOR3 _rot;	 // 差分のあれ
 	D3DXMATRIX mat;
 	CDirect3DXFile *xfile;
 	bool explosion_flag;
 	Explosion* explosion;
-	_Data(CDirect3DXFile* _xfile, const char* _xfile_path = "assets/f1.x") : xfile(_xfile) {
-		xfile->LoadXFile(_xfile_path, g_DXGrobj->GetDXDevice());
+	_Data(CDirect3DXFile* _xfile) : xfile(_xfile) {
 		explosion = new Explosion(xfile, g_DXGrobj->GetDXDevice());
 		explosion_flag = false;
-		mat = {			// 積算行列（単位行列で初期化）
+		mat = { // 積算行列（単位行列で初期化）
 			1.0f, 0.0f, 0.0f, 0.0f,
 			0.0f, 1.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 1.0f, 0.0f,
@@ -91,19 +88,23 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int _width, int _height,bool fullscree
 	// 入力初期化
 	InitKeyboard(hinst, hwnd);
 
-	bool sts;
 	g_DXGrobj = new CDirectXGraphics();	// DirectX Graphicsオブジェクト生成
-	sts = g_DXGrobj->Init(hwnd, fullscreen, width, height);	// DirectX Graphicsオブジェクト初期化
 
-	if (!sts){
+	if (!g_DXGrobj->Init(hwnd, fullscreen, width, height)){	// DirectX Graphicsオブジェクト初期化
 		MessageBox(hwnd, "ERROR!!", "DirectX 初期化エラー", MB_OK);
 		return false;
 	}
 
 	constexpr int hikouki_count = 9;
 	constexpr float margin = 50.0f;
-	auto xfile = new CDirect3DXFile(); // どうせ同じなので
-	skydome = new Data(new CDirect3DXFile(), "assets/skydome.x");
+	std::vector<std::pair<CDirect3DXFile*, const char*>> xfiles = {
+		{ new CDirect3DXFile(), "assets/f1.x" }, // 飛行機
+		{ new CDirect3DXFile(), "assets/skydome.x" } // スカイドーム
+	};
+
+	for (const auto& xfile : xfiles) xfile.first->LoadXFile(xfile.second, g_DXGrobj->GetDXDevice());
+
+	skydome = new Data(xfiles[1].first);
 	skydome->cor = { 0, 0, 0 };
 	skydome->rot = { 0, 0, 0 };
 	camera = new Camera();
@@ -112,11 +113,11 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int _width, int _height,bool fullscree
 	{
 		for (auto j = 0; j < sqrt(hikouki_count); ++j)
 		{
-			data.push_back(new Data(xfile));
-			data.back()->cor = { j * margin - margin, i * margin - margin,  0.0f };
-			data.back()->rot = { 0.0f, 0.0f, 0.0f };
-			data.back()->_cor = { 0.0f, 0.0f, 1.0f };
-			data.back()->_rot = { rand() % 2 - 1.0f, rand() % 2 - 1.0f, rand() % 2 - 1.0f };
+			D3DXMATRIX mx;
+			data.push_back(new Data(xfiles[0].first));
+			data.back()->cor = { 0.0f, 0.0f, 1.0f };
+			data.back()->rot = { rand() % 2 - 1.0f, rand() % 2 - 1.0f, rand() % 2 - 1.0f };
+			MakeWorldMatrix(mx, data.back()->mat, { 0.0f, 0.0f, 0.0f }, { j * margin - margin, i * margin - margin,  0.0f });
 		}
 	}
 
@@ -140,14 +141,6 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int _width, int _height,bool fullscree
 //==============================================================================
 void GameInput(){
 	UpdateInput();
-	
-	/*
-	if (GetKeyboardPress(DIK_A)) data[now_controll]->_rot.y = -1;
-	if (GetKeyboardPress(DIK_D)) data[now_controll]->_rot.y = +1;
-	if (GetKeyboardPress(DIK_W)) data[now_controll]->_rot.x = -1;
-	if (GetKeyboardPress(DIK_S)) data[now_controll]->_rot.x = +1;
-	if (GetKeyboardPress(DIK_SPACE)) data[now_controll]->_cor.z = 1;
-	*/
 
 	if (GetKeyboardTrigger(DIK_ADD) && now_controll + 1 < data.size()) now_controll++;
 	if (GetKeyboardTrigger(DIK_SUBTRACT) && now_controll > 0) now_controll--;
@@ -183,32 +176,14 @@ void GameUpdate(){
 	for (const auto& hikouki : data)
 	{
 		D3DXMATRIX mx;
-		//D3DXMatrixIdentity(&hikouki->mat);
-
-		//もうわからん
-		/*
-		// 移動が先
-		D3DXMatrixIdentity(&mx);
-		D3DXMatrixTranslation(&mx, hikouki->cor.x, hikouki->cor.y, hikouki->cor.z);
-		D3DXMatrixMultiply(&hikouki->mat, &hikouki->mat, &mx);
-
-		//	回転が後
-		D3DXMatrixIdentity(&mx);
-		D3DXMatrixRotationX(&mx, D3DXToRadian(hikouki->rot.x));
-		D3DXMatrixMultiply(&hikouki->mat, &hikouki->mat, &mx);
-
-		D3DXMatrixIdentity(&mx);
-		D3DXMatrixRotationY(&mx, D3DXToRadian(hikouki->rot.y));
-		D3DXMatrixMultiply(&hikouki->mat, &hikouki->mat, &mx);
-		*/
 
 		if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - last_update).count() > 1)
 		{
-			hikouki->_rot.x = rand() % 2 - 1;
-			hikouki->_rot.y = rand() % 2 - 1;
+			hikouki->rot.x = rand() % 2 - 1;
+			hikouki->rot.y = rand() % 2 - 1;
 		}
 
-		MakeWorldMatrix(mx, hikouki->mat, hikouki->_rot, hikouki->_cor);
+		MakeWorldMatrix(mx, hikouki->mat, hikouki->rot, hikouki->cor);
 
 		if (hikouki->explosion_flag) hikouki->explosion->Update();
 	}
@@ -235,8 +210,6 @@ void GameUpdate(){
 //==============================================================================
 void GameRender(){
 
-	// カメラ変換行列作成
-
 	D3DXMATRIX view, proj, world;
 
 	D3DXMatrixLookAtLH(&view, &camera->looking_at, &camera->looking_for, &camera->up);
@@ -260,8 +233,6 @@ void GameRender(){
 	g_DXGrobj->GetDXDevice()->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	// 環境光セット
 	g_DXGrobj->GetDXDevice()->SetRenderState(D3DRS_AMBIENT, 0xffffffff);
-
-	HRESULT hr;
 
 	// ターゲットバッファのクリア、Ｚバッファのクリア
 	g_DXGrobj->GetDXDevice()->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
@@ -287,8 +258,7 @@ void GameRender(){
 
 	g_DXGrobj->GetDXDevice()->EndScene();	// 描画の終了を待つ
 
-	hr = g_DXGrobj->GetDXDevice()->Present(NULL, NULL, NULL, NULL);	// バックバッファからプライマリバッファへ転送
-	if (hr != D3D_OK){
+	if (g_DXGrobj->GetDXDevice()->Present(NULL, NULL, NULL, NULL) != D3D_OK){ // バックバッファからプライマリバッファへ転送
 		g_DXGrobj->GetDXDevice()->Reset(&g_DXGrobj->GetDXD3dpp());
 	}
 }
@@ -327,7 +297,6 @@ void GameMain()
 //==============================================================================
 void GameExit()
 {
-
 	g_gamemainthread.join();					// ゲームメインスレッドの終了を待つ
 
 	CloseHandle(g_hEventHandle);				// イベントハンドルクローズ
