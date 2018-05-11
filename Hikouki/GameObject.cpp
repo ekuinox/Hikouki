@@ -10,6 +10,8 @@ XFileObjectBase::XFileObjectBase(CDirect3DXFile *_xfile)
 		0.0f, 0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f
 	};
+	show();
+	enable();
 }
 
 void XFileObjectBase::draw(LPDIRECT3DDEVICE9 device) const
@@ -46,4 +48,9 @@ void XFileObjectBase::enable()
 void XFileObjectBase::disable()
 {
 	active = false;
+}
+
+D3DXMATRIX XFileObjectBase::getMat() const
+{
+	return mat;
 }

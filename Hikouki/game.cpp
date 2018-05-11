@@ -18,6 +18,7 @@
 #include "mathutil.h"
 #include <vector>
 #include <chrono>
+#include "Airplain.h"
 
 //-----------------------------------------------------------------------------
 // グローバル変数
@@ -28,25 +29,6 @@ CDirect3DXFile *g_DXXFileObj = NULL; // Ｘファイルオブジェクト
 HANDLE g_hEventHandle; // イベントハンドル
 bool g_EndFlag = false;	// 終了フラグ
 std::thread g_gamemainthread; // ゲームメインスレッド
-
-using Data = struct _Data {
-	D3DXVECTOR3 cor;
-	D3DXVECTOR3 rot;
-	D3DXMATRIX mat;
-	CDirect3DXFile *xfile;
-	bool explosion_flag;
-	Explosion* explosion;
-	_Data(CDirect3DXFile* _xfile) : xfile(_xfile) {
-		explosion = new Explosion(xfile, g_DXGrobj->GetDXDevice());
-		explosion_flag = false;
-		mat = { // 積算行列（単位行列で初期化）
-			1.0f, 0.0f, 0.0f, 0.0f,
-			0.0f, 1.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 0.0f, 1.0f
-		};
-	};
-};
 
 using Camera = struct _Camera {
 	D3DXVECTOR3 looking_at; // 視点
@@ -59,7 +41,7 @@ using Camera = struct _Camera {
 	{};
 };
 
-std::vector<Data*> data;
+std::vector<Airplain*> airplains;
 XFileObjectBase* skydome;
 Camera *camera;
 bool tps = false;
@@ -110,11 +92,7 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int _width, int _height,bool fullscree
 	{
 		for (auto j = 0; j < sqrt(hikouki_count); ++j)
 		{
-			D3DXMATRIX mx;
-			data.push_back(new Data(xfiles[0]));
-			data.back()->cor = { 0.0f, 0.0f, 1.0f };
-			data.back()->rot = { rand() % 2 - 1.0f, rand() % 2 - 1.0f, rand() % 2 - 1.0f };
-			MakeWorldMatrix(mx, data.back()->mat, { 0.0f, 0.0f, 0.0f }, { j * margin - margin, i * margin - margin,  0.0f });
+			airplains.push_back(new Airplain(g_DXGrobj->GetDXDevice()));
 		}
 	}
 
@@ -139,7 +117,7 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int _width, int _height,bool fullscree
 void GameInput(){
 	UpdateInput();
 
-	if (GetKeyboardTrigger(DIK_ADD) && now_controll + 1 < data.size()) now_controll++;
+	if (GetKeyboardTrigger(DIK_ADD) && now_controll + 1 < airplains.size()) now_controll++;
 	if (GetKeyboardTrigger(DIK_SUBTRACT) && now_controll > 0) now_controll--;
 	
 	if (GetKeyboardTrigger(DIK_V)) tps = !tps;
@@ -151,11 +129,7 @@ void GameInput(){
 	for (auto i = 0; i < 9; i++) {
 		if (GetKeyboardTrigger(keys[i]))
 		{
-			data[i]->explosion_flag = !data[i]->explosion_flag;
-			if (data[i]->explosion_flag) {
-				data[i]->explosion->TriangleTransforms(data[i]->mat);
-				data[i]->explosion->Start();
-			}
+			airplains[i]->switchExplosion();
 		}
 	}
 }
@@ -168,34 +142,22 @@ void GameInput(){
 //==============================================================================
 void GameUpdate(){
 
-	static auto last_update = std::chrono::system_clock::now();
-
-	for (const auto& hikouki : data)
+	for (const auto& airplain : airplains)
 	{
-		D3DXMATRIX mx;
-
-		if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - last_update).count() > 1)
-		{
-			hikouki->rot.x = rand() % 2 - 1;
-			hikouki->rot.y = rand() % 2 - 1;
-		}
-
-		MakeWorldMatrix(mx, hikouki->mat, hikouki->rot, hikouki->cor);
-
-		if (hikouki->explosion_flag) hikouki->explosion->Update();
+		airplain->update();
 	}
 
 	if (tps) // tps
 	{
-		camera->looking_for = D3DXVECTOR3(data[now_controll]->mat._41, data[now_controll]->mat._42, data[now_controll]->mat._43);
-		camera->looking_at = camera->looking_for - 10 * D3DXVECTOR3(data[now_controll]->mat._31, data[now_controll]->mat._32, data[now_controll]->mat._33);
-		camera->up = D3DXVECTOR3(data[now_controll]->mat._21, data[now_controll]->mat._22, data[now_controll]->mat._23);
+		camera->looking_for = D3DXVECTOR3(airplains[now_controll]->getMat()._41, airplains[now_controll]->getMat()._42, airplains[now_controll]->getMat()._43);
+		camera->looking_at = camera->looking_for - 10 * D3DXVECTOR3(airplains[now_controll]->getMat()._31, airplains[now_controll]->getMat()._32, airplains[now_controll]->getMat()._33);
+		camera->up = D3DXVECTOR3(airplains[now_controll]->getMat()._21, airplains[now_controll]->getMat()._22, airplains[now_controll]->getMat()._23);
 	}
 	else // fps
 	{
-		camera->looking_at = 2 * D3DXVECTOR3(data[now_controll]->mat._41, data[now_controll]->mat._42, data[now_controll]->mat._43); // ずらさないと本体と被っちまうので
-		camera->looking_for = camera->looking_at + 10 * D3DXVECTOR3(data[now_controll]->mat._31, data[now_controll]->mat._32, data[now_controll]->mat._33);
-		camera->up = D3DXVECTOR3(data[now_controll]->mat._21, data[now_controll]->mat._22, data[now_controll]->mat._23);
+		camera->looking_at = 2 * D3DXVECTOR3(airplains[now_controll]->getMat()._41, airplains[now_controll]->getMat()._42, airplains[now_controll]->getMat()._43); // ずらさないと本体と被っちまうので
+		camera->looking_for = camera->looking_at + 10 * D3DXVECTOR3(airplains[now_controll]->getMat()._31, airplains[now_controll]->getMat()._32, airplains[now_controll]->getMat()._33);
+		camera->up = D3DXVECTOR3(airplains[now_controll]->getMat()._21, airplains[now_controll]->getMat()._22, airplains[now_controll]->getMat()._23);
 	}
 }
 
@@ -234,21 +196,10 @@ void GameRender(){
 	// ターゲットバッファのクリア、Ｚバッファのクリア
 	g_DXGrobj->GetDXDevice()->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
 
-	// 描画の開始をＤＩＲＥＣＴＸに通知
+	// 描画の開始をDirectXに通知
 	g_DXGrobj->GetDXDevice()->BeginScene();
 
-	// ワールド変換行列の初期化
-	for (const auto& hikouki : data)
-	{
-		if (hikouki->explosion_flag) {
-			hikouki->explosion->Draw(g_DXGrobj->GetDXDevice());
-		}
-		else {
-			g_DXGrobj->GetDXDevice()->SetTransform(D3DTS_WORLD, &hikouki->mat);	// ワールド変換行列をセット
-			hikouki->xfile->Draw(g_DXGrobj->GetDXDevice());				// Ｘファイル描画
-		}
-	}
-
+	for (const auto& airplain : airplains) airplain->draw(g_DXGrobj->GetDXDevice());
 	skydome->draw(g_DXGrobj->GetDXDevice());
 
 	g_DXGrobj->GetDXDevice()->EndScene();	// 描画の終了を待つ

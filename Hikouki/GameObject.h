@@ -14,8 +14,8 @@ public:
 	virtual void disable() = 0;
 };
 
-class XFileObjectBase : public GameObjectInterface{
-private:
+class XFileObjectBase : public GameObjectInterface {
+protected:
 	D3DXMATRIX mat; // êœéZçsóÒ
 	CDirect3DXFile *xfile;
 public:
@@ -26,4 +26,5 @@ public:
 	void hide();
 	void enable();
 	void disable();
+	D3DXMATRIX getMat() const;
 };
