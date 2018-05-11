@@ -28,7 +28,7 @@ public:
 		m_lpmeshtextures=NULL;
 		m_lpmesh=NULL;
 	}
-
+	CDirect3DXFile(const char*, LPDIRECT3DDEVICE9);
 	virtual ~CDirect3DXFile()
 	{
 		UnLoadXFile();

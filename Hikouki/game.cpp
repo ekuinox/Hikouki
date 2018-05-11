@@ -97,14 +97,13 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int _width, int _height,bool fullscree
 
 	constexpr int hikouki_count = 9;
 	constexpr float margin = 50.0f;
-	std::vector<std::pair<CDirect3DXFile*, const char*>> xfiles = {
-		{ new CDirect3DXFile(), "assets/f1.x" }, // 飛行機
-		{ new CDirect3DXFile(), "assets/skydome.x" } // スカイドーム
+
+	std::vector<CDirect3DXFile*> xfiles = {
+		new CDirect3DXFile("assets/f1.x", g_DXGrobj->GetDXDevice()), // 飛行機
+		new CDirect3DXFile("assets/skydome.x", g_DXGrobj->GetDXDevice()) // スカイドーム
 	};
 
-	for (const auto& xfile : xfiles) xfile.first->LoadXFile(xfile.second, g_DXGrobj->GetDXDevice());
-
-	skydome = new Data(xfiles[1].first);
+	skydome = new Data(xfiles[1]);
 	skydome->cor = { 0, 0, 0 };
 	skydome->rot = { 0, 0, 0 };
 	camera = new Camera();
@@ -114,7 +113,7 @@ bool GameInit(HINSTANCE hinst, HWND hwnd, int _width, int _height,bool fullscree
 		for (auto j = 0; j < sqrt(hikouki_count); ++j)
 		{
 			D3DXMATRIX mx;
-			data.push_back(new Data(xfiles[0].first));
+			data.push_back(new Data(xfiles[0]));
 			data.back()->cor = { 0.0f, 0.0f, 1.0f };
 			data.back()->rot = { rand() % 2 - 1.0f, rand() % 2 - 1.0f, rand() % 2 - 1.0f };
 			MakeWorldMatrix(mx, data.back()->mat, { 0.0f, 0.0f, 0.0f }, { j * margin - margin, i * margin - margin,  0.0f });
