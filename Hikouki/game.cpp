@@ -66,7 +66,14 @@ constexpr CameraTypes operator++(CameraTypes& c, int)
 	return current;
 }
 
+struct {
+	float azimuth; // 方位角
+	float elevation_angle; // 仰角
+	float distance; // 距離
+} over_camera = { 0, 0, 100 };
+
 auto view_type = CameraTypes::FPS;
+D3DXMATRIX view;
 
 std::vector<Airplain*> airplains;
 XFileObjectBase* skydome;
@@ -145,8 +152,19 @@ void GameInput(){
 
 	if (GetKeyboardTrigger(DIK_ADD) && now_controll + 1 < airplains.size()) now_controll++;
 	if (GetKeyboardTrigger(DIK_SUBTRACT) && now_controll > 0) now_controll--;
-	
+
+	if (view_type == CameraTypes::OVER)
+	{
+		if (GetKeyboardPress(DIK_UPARROW)) over_camera.elevation_angle += 1.0f;
+		if (GetKeyboardPress(DIK_DOWNARROW)) over_camera.elevation_angle -= 1.0f;
+		if (GetKeyboardPress(DIK_RIGHTARROW)) over_camera.azimuth -= 1.0f;
+		if (GetKeyboardPress(DIK_LEFTARROW)) over_camera.azimuth += 1.0f;
+		if (GetKeyboardPress(DIK_RETURN)) over_camera.distance -= 1.0f;
+		if (GetKeyboardPress(DIK_BACKSPACE)) over_camera.distance += 1.0f;
+	}
+
 	if (GetKeyboardTrigger(DIK_V)) view_type++;
+
 
 	int keys[] = {
 		DIK_NUMPAD1, DIK_NUMPAD2, DIK_NUMPAD3, DIK_NUMPAD4, DIK_NUMPAD5, DIK_NUMPAD6, DIK_NUMPAD7, DIK_NUMPAD8, DIK_NUMPAD9
@@ -176,6 +194,19 @@ void GameUpdate(){
 	switch (view_type)
 	{
 	case CameraTypes::OVER:
+		camera->looking_for = D3DXVECTOR3(0, 0, 0);
+		camera->looking_at = D3DXVECTOR3(
+			over_camera.distance * sin(D3DXToRadian(over_camera.elevation_angle)) * cos(D3DXToRadian(over_camera.azimuth)),
+			over_camera.distance * cos(D3DXToRadian(over_camera.elevation_angle)),
+			over_camera.distance * sin(D3DXToRadian(over_camera.distance)) * sin(D3DXToRadian(over_camera.elevation_angle))
+		);
+		camera->up = D3DXVECTOR3(
+			view._21,
+			view._22,
+			view._23
+		);
+		break;
+
 	case CameraTypes::TPS:
 		camera->looking_for = D3DXVECTOR3(airplains[now_controll]->getMat()._41, airplains[now_controll]->getMat()._42, airplains[now_controll]->getMat()._43);
 		camera->looking_at = camera->looking_for - 10 * D3DXVECTOR3(airplains[now_controll]->getMat()._31, airplains[now_controll]->getMat()._32, airplains[now_controll]->getMat()._33);
@@ -197,7 +228,7 @@ void GameUpdate(){
 //==============================================================================
 void GameRender(){
 
-	D3DXMATRIX view, proj, world;
+	D3DXMATRIX proj, world;
 
 	D3DXMatrixLookAtLH(&view, &camera->looking_at, &camera->looking_for, &camera->up);
 												// カメラ行列を固定パイプラインへセット
