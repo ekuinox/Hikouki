@@ -70,7 +70,7 @@ struct {
 	float azimuth; // •ûˆÊŠp
 	float elevation_angle; // ‹ÂŠp
 	float distance; // ‹——£
-} over_camera = { 0, 0, 100 };
+} over_camera = { 0, 0, 1000 };
 
 auto view_type = CameraTypes::FPS;
 D3DXMATRIX view;
@@ -155,11 +155,11 @@ void GameInput(){
 
 	if (view_type == CameraTypes::OVER)
 	{
-		if (GetKeyboardPress(DIK_UPARROW)) over_camera.elevation_angle += 1.0f;
-		if (GetKeyboardPress(DIK_DOWNARROW)) over_camera.elevation_angle -= 1.0f;
-		if (GetKeyboardPress(DIK_RIGHTARROW)) over_camera.azimuth -= 1.0f;
-		if (GetKeyboardPress(DIK_LEFTARROW)) over_camera.azimuth += 1.0f;
-		if (GetKeyboardPress(DIK_RETURN)) over_camera.distance -= 1.0f;
+		if (GetKeyboardPress(DIK_UPARROW)) over_camera.elevation_angle += 0.1f;
+		if (GetKeyboardPress(DIK_DOWNARROW)) over_camera.elevation_angle -= 0.1f;
+		if (GetKeyboardPress(DIK_RIGHTARROW)) over_camera.azimuth -= 0.1f;
+		if (GetKeyboardPress(DIK_LEFTARROW)) over_camera.azimuth += 0.1f;
+		if (GetKeyboardPress(DIK_RETURN) && 0 < over_camera.distance) over_camera.distance -= 1.0f;
 		if (GetKeyboardPress(DIK_BACKSPACE)) over_camera.distance += 1.0f;
 	}
 
@@ -190,20 +190,23 @@ void GameUpdate(){
 	{
 		airplain->update();
 	}
+	D3DXMATRIX mat;
 
 	switch (view_type)
 	{
 	case CameraTypes::OVER:
 		camera->looking_for = D3DXVECTOR3(0, 0, 0);
 		camera->looking_at = D3DXVECTOR3(
-			over_camera.distance * sin(D3DXToRadian(over_camera.elevation_angle)) * cos(D3DXToRadian(over_camera.azimuth)),
-			over_camera.distance * cos(D3DXToRadian(over_camera.elevation_angle)),
-			over_camera.distance * sin(D3DXToRadian(over_camera.distance)) * sin(D3DXToRadian(over_camera.elevation_angle))
+			over_camera.distance * sin(over_camera.elevation_angle) * cos(over_camera.azimuth),
+			over_camera.distance * cos(over_camera.elevation_angle),
+			over_camera.distance * sin(over_camera.azimuth) * sin(over_camera.elevation_angle)
 		);
+		
+		D3DXMatrixInverse(&mat, NULL, &view);
 		camera->up = D3DXVECTOR3(
-			view._21,
-			view._22,
-			view._23
+			mat._21,
+			mat._22,
+			mat._23
 		);
 		break;
 
