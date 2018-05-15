@@ -41,10 +41,36 @@ using Camera = struct _Camera {
 	{};
 };
 
+enum class CameraTypes : char {
+	FPS = 0,
+	TPS = 1,
+	OVER = 2 // ÇÆÇÈÇÆÇÈÉJÉÅÉâ
+};
+
+constexpr CameraTypes operator++(CameraTypes& c, int)
+{
+	auto current = c;
+
+	switch (c)
+	{
+	case CameraTypes::FPS:
+		c = CameraTypes::TPS;
+		break;
+	case CameraTypes::TPS:
+		c = CameraTypes::OVER;
+		break;
+	case CameraTypes::OVER:
+		c = CameraTypes::FPS;
+		break;
+	}
+	return current;
+}
+
+auto view_type = CameraTypes::FPS;
+
 std::vector<Airplain*> airplains;
 XFileObjectBase* skydome;
 Camera *camera;
-bool tps = false;
 
 int width;
 int height;
@@ -120,7 +146,7 @@ void GameInput(){
 	if (GetKeyboardTrigger(DIK_ADD) && now_controll + 1 < airplains.size()) now_controll++;
 	if (GetKeyboardTrigger(DIK_SUBTRACT) && now_controll > 0) now_controll--;
 	
-	if (GetKeyboardTrigger(DIK_V)) tps = !tps;
+	if (GetKeyboardTrigger(DIK_V)) view_type++;
 
 	int keys[] = {
 		DIK_NUMPAD1, DIK_NUMPAD2, DIK_NUMPAD3, DIK_NUMPAD4, DIK_NUMPAD5, DIK_NUMPAD6, DIK_NUMPAD7, DIK_NUMPAD8, DIK_NUMPAD9
@@ -147,17 +173,19 @@ void GameUpdate(){
 		airplain->update();
 	}
 
-	if (tps) // tps
+	switch (view_type)
 	{
+	case CameraTypes::OVER:
+	case CameraTypes::TPS:
 		camera->looking_for = D3DXVECTOR3(airplains[now_controll]->getMat()._41, airplains[now_controll]->getMat()._42, airplains[now_controll]->getMat()._43);
 		camera->looking_at = camera->looking_for - 10 * D3DXVECTOR3(airplains[now_controll]->getMat()._31, airplains[now_controll]->getMat()._32, airplains[now_controll]->getMat()._33);
 		camera->up = D3DXVECTOR3(airplains[now_controll]->getMat()._21, airplains[now_controll]->getMat()._22, airplains[now_controll]->getMat()._23);
-	}
-	else // fps
-	{
+		break;
+	case CameraTypes::FPS:
 		camera->looking_at = 2 * D3DXVECTOR3(airplains[now_controll]->getMat()._41, airplains[now_controll]->getMat()._42, airplains[now_controll]->getMat()._43); // Ç∏ÇÁÇ≥Ç»Ç¢Ç∆ñ{ëÃÇ∆îÌÇ¡ÇøÇ‹Ç§ÇÃÇ≈
 		camera->looking_for = camera->looking_at + 10 * D3DXVECTOR3(airplains[now_controll]->getMat()._31, airplains[now_controll]->getMat()._32, airplains[now_controll]->getMat()._33);
 		camera->up = D3DXVECTOR3(airplains[now_controll]->getMat()._21, airplains[now_controll]->getMat()._22, airplains[now_controll]->getMat()._23);
+		break;
 	}
 }
 
