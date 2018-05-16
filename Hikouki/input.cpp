@@ -1,168 +1,112 @@
 #include "input.h"
 
-#define NUM_KEY_MAX (256)
-#define LIMIT_COUNT_REPEAT (20)
-
-LPDIRECTINPUT8 g_pDInput = NULL;
-LPDIRECTINPUTDEVICE8 g_pDIDevKeyboard = NULL;
-LPDIRECTINPUTDEVICE8 g_pDIDevMouse = NULL;
-
-BYTE g_aKeyState[NUM_KEY_MAX];
-BYTE g_aKeyStateTrigger[NUM_KEY_MAX];
-BYTE g_aKeyStateRepeat[NUM_KEY_MAX];
-BYTE g_aKeyStateRelease[NUM_KEY_MAX];
-int g_aKeyStateRepeatCnt[NUM_KEY_MAX];
-
-/* 入力処理の初期化 */
-HRESULT InitInput(HINSTANCE hInstance, HWND hWnd)
+Input::Input(HINSTANCE ins)
 {
-	HRESULT hr;
-	if (g_pDInput == NULL)
+	if (FAILED(DirectInput8Create(ins, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&input, NULL)))
 	{
-		hr = DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&g_pDInput, NULL);
-		return hr;
-	}
-	return S_OK;
-}
-
-/* 入力処理の更新処理 */
-void UpdateInput()
-{
-	UpdateKeyboard();
-}
-
-/* 入力処理の終了処理 */
-void UninitInput()
-{
-	if (g_pDInput)
-	{
-		g_pDInput->Release();
-		g_pDInput = NULL;
+		throw "Init Input Error";
 	}
 }
 
-/* キーボードの初期化 */
-HRESULT InitKeyboard(HINSTANCE hInstance, HWND hWnd)
+Input::~Input()
 {
-	HRESULT hr;
+	if (input) input->Release();
+}
 
-	// 入力処理の初期化
-	hr = InitInput(hInstance, hWnd);
-	if (FAILED(hr))
-	{
-		MessageBox(hWnd, "DirectInputオブジェクトが作れない．", "X(", MB_ICONWARNING);
-		return hr;
-	}
+LPDIRECTINPUT8 Input::get()
+{
+	return input;
+}
 
+Keyboard::Keyboard(LPDIRECTINPUT8 input, HWND wnd)
+{
 	// デバイスオブジェクトを作成
-	hr = g_pDInput->CreateDevice(GUID_SysKeyboard, &g_pDIDevKeyboard, NULL);
-	if (FAILED(hr))
-	{
-		MessageBox(hWnd, "キーボードが見つからない．", "X(", MB_ICONWARNING);
-		return hr;
-	}
-	
+	if (FAILED(input->CreateDevice(GUID_SysKeyboard, &device, NULL)))
+		throw "Not found a Keyboard";
+
 	// データフォーマットを設定
-	hr = g_pDIDevKeyboard->SetDataFormat(&c_dfDIKeyboard);
-	if (FAILED(hr))
-	{
-		MessageBox(hWnd, "キーボードのデータのフォーマットに失敗．", "X(", MB_ICONWARNING);
-		return hr;
-	}
+	if (FAILED(device->SetDataFormat(&c_dfDIKeyboard)))
+		throw "Failed to format keyboard data";
 
 	// 強調モードを設定（フォアグラウンド＆非排他モード）
-	hr = g_pDIDevKeyboard->SetCooperativeLevel(hWnd, (DISCL_FOREGROUND | DISCL_NONEXCLUSIVE));
-	if (FAILED(hr))
-	{
-		MessageBox(hWnd, "キーボードの強調モードを設定できなかった．", "X(", MB_ICONWARNING);
-		return hr;
-	}
-	
-	g_pDIDevKeyboard->Acquire();
-	
-	return S_OK;
+	if (FAILED(device->SetCooperativeLevel(wnd, (DISCL_FOREGROUND | DISCL_NONEXCLUSIVE))))
+		throw "キーボードの協調モードを設定できなかった．";
+
+	device->Acquire();
 }
 
-/* キーボードの更新処理 */
-void UpdateKeyboard(void)
+Keyboard::~Keyboard()
 {
-	BYTE aKeyState[NUM_KEY_MAX];
+	if (device)
+	{
+		device->Unacquire();
+		device->Release();
+	}
+}
 
-	if (SUCCEEDED(g_pDIDevKeyboard->GetDeviceState(sizeof(aKeyState), aKeyState)))
+void Keyboard::update()
+{
+	BYTE current[NUM_KEY_MAX];
+
+	if (SUCCEEDED(device->GetDeviceState(sizeof(current), current)))
 	{
 		for (int nCnKey = 0; nCnKey < NUM_KEY_MAX; nCnKey++)
 		{
 			// キートリガー・リリース情報を生成．
-			g_aKeyStateTrigger[nCnKey] = (g_aKeyState[nCnKey] ^ aKeyState[nCnKey]) & aKeyState[nCnKey];
-			g_aKeyStateRelease[nCnKey] = (g_aKeyState[nCnKey] ^ aKeyState[nCnKey]) & ~aKeyState[nCnKey];
+			state_trigger[nCnKey] = (buff[nCnKey] ^ current[nCnKey]) & current[nCnKey];
+			state_release[nCnKey] = (buff[nCnKey] ^ current[nCnKey]) & ~current[nCnKey];
 
 			// キーピート情報を生成
-			if (aKeyState[nCnKey])
+			if (current[nCnKey])
 			{
-				if (g_aKeyStateRepeatCnt[nCnKey] < LIMIT_COUNT_REPEAT)
+				if (repeat_cnt[nCnKey] < LIMIT_COUNT_REPEAT)
 				{
-					g_aKeyStateRepeatCnt[nCnKey]++;
-					if (g_aKeyStateRepeatCnt[nCnKey] == 1
-						|| g_aKeyStateRepeatCnt[nCnKey] >= LIMIT_COUNT_REPEAT)
+					repeat_cnt[nCnKey]++;
+					if (repeat_cnt[nCnKey] == 1
+						|| repeat_cnt[nCnKey] >= LIMIT_COUNT_REPEAT)
 					{
-						g_aKeyStateRepeat[nCnKey] = aKeyState[nCnKey];
+						state_repeat[nCnKey] = current[nCnKey];
 					}
 					else
 					{
-						g_aKeyStateRepeat[nCnKey] = 0;
+						state_repeat[nCnKey] = 0;
 					}
 				}
 			}
 			else
 			{
-				g_aKeyStateRepeatCnt[nCnKey] = 0;
-				g_aKeyStateRepeat[nCnKey] = 0;
+				repeat_cnt[nCnKey] = 0;
+				state_repeat[nCnKey] = 0;
 			}
 
 			// キープレス情報を保存
-			g_aKeyState[nCnKey] = aKeyState[nCnKey];
+			buff[nCnKey] = current[nCnKey];
 		}
 	}
 	else
 	{
 		// キーボードへのアクセス権を取得
-		g_pDIDevKeyboard->Acquire();
+		device->Acquire();
 	}
 }
 
-/* キーボードの終了処理 */
-void UninitKeyboard(void)
+bool Keyboard::getPress(int key)
 {
-	if (g_pDIDevKeyboard)
-	{
-		g_pDIDevKeyboard->Unacquire();
-		g_pDIDevKeyboard->Release();
-		g_pDIDevKeyboard = NULL;
-	}
-
-	UninitInput();
+	return (buff[key] & 0x80) ? true : false;
 }
 
-/* キーボードのプレス状態を取得 */
-bool GetKeyboardPress(int nKey)
+bool Keyboard::getTrigger(int key)
 {
-	return (g_aKeyState[nKey] & 0x80) ? true : false;
+	return (state_trigger[key] & 0x80) ? true : false;
 }
 
-/* キーボードのトリガ状態を取得 */
-bool GetKeyboardTrigger(int nKey)
+bool Keyboard::getRepeat(int key)
 {
-	return (g_aKeyStateTrigger[nKey] & 0x80) ? true : false;
+	return (state_repeat[key] & 0x80) ? true : false;
 }
 
-/* キーボードのリピート状態を取得 */
-bool GetKeyboardRepeat(int nKey)
+bool Keyboard::getRelease(int key)
 {
-	return (g_aKeyStateRepeat[nKey] & 0x80) ? true : false;
+	return (state_release[key] & 0x80) ? true : false;
 }
 
-/* キーボードのリリース状態を取得 */
-bool GetKeyboardRelease(int nKey)
-{
-	return (g_aKeyStateRelease[nKey] & 0x80) ? true : false;
-}

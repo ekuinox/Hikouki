@@ -17,7 +17,8 @@ void GameController::init(HINSTANCE hinst, HWND hwnd, int _width, int _height, b
 	height = _height;
 
 	// 入力初期化
-	InitKeyboard(hinst, hwnd);
+	input_device = new Input(hinst);
+	keyboard = new Keyboard(input_device->get(), hwnd);
 
 	graphics = new CDirectXGraphics();	// DirectX Graphicsオブジェクト生成
 
@@ -65,6 +66,9 @@ void GameController::uninit()
 		graphics->Exit();
 		delete graphics;
 	}
+
+	delete keyboard;
+	delete input_device;
 }
 
 void GameController::main()
@@ -89,29 +93,29 @@ void GameController::main()
 
 void GameController::input()
 {
-	UpdateInput();
+	keyboard->update();
 
-	if (GetKeyboardTrigger(DIK_ADD) && under_controll + 1 < airplains.size()) under_controll++;
-	if (GetKeyboardTrigger(DIK_SUBTRACT) && under_controll > 0) under_controll--;
+	if (keyboard->getTrigger(DIK_ADD) && under_controll + 1 < airplains.size()) under_controll++;
+	if (keyboard->getTrigger(DIK_SUBTRACT) && under_controll > 0) under_controll--;
 
 	if (view_type == CameraTypes::OVER)
 	{
-		if (GetKeyboardPress(DIK_UPARROW)) over_camera.elevation_angle += 0.1f;
-		if (GetKeyboardPress(DIK_DOWNARROW)) over_camera.elevation_angle -= 0.1f;
-		if (GetKeyboardPress(DIK_RIGHTARROW)) over_camera.azimuth -= 0.1f;
-		if (GetKeyboardPress(DIK_LEFTARROW)) over_camera.azimuth += 0.1f;
-		if (GetKeyboardPress(DIK_RETURN) && 0 < over_camera.distance) over_camera.distance -= 1.0f;
-		if (GetKeyboardPress(DIK_BACKSPACE)) over_camera.distance += 1.0f;
+		if (keyboard->getPress(DIK_UPARROW)) over_camera.elevation_angle += 0.1f;
+		if (keyboard->getPress(DIK_DOWNARROW)) over_camera.elevation_angle -= 0.1f;
+		if (keyboard->getPress(DIK_RIGHTARROW)) over_camera.azimuth -= 0.1f;
+		if (keyboard->getPress(DIK_LEFTARROW)) over_camera.azimuth += 0.1f;
+		if (keyboard->getPress(DIK_RETURN) && 0 < over_camera.distance) over_camera.distance -= 1.0f;
+		if (keyboard->getPress(DIK_BACKSPACE)) over_camera.distance += 1.0f;
 	}
 
-	if (GetKeyboardTrigger(DIK_V)) view_type++;
+	if (keyboard->getTrigger(DIK_V)) view_type++;
 
 	int keys[] = {
 		DIK_NUMPAD1, DIK_NUMPAD2, DIK_NUMPAD3, DIK_NUMPAD4, DIK_NUMPAD5, DIK_NUMPAD6, DIK_NUMPAD7, DIK_NUMPAD8, DIK_NUMPAD9
 	};
 
 	for (auto i = 0; i < 9; i++) {
-		if (GetKeyboardTrigger(keys[i]))
+		if (keyboard->getTrigger(keys[i]))
 		{
 			airplains[i]->switchExplosion();
 		}

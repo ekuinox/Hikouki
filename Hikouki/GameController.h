@@ -69,6 +69,9 @@ private:
 	CameraTypes view_type;
 	D3DXMATRIX view;
 
+	Input *input_device;
+	Keyboard *keyboard;
+
 public:
 	GameController(HINSTANCE, HWND, int, int, bool);
 	~GameController();

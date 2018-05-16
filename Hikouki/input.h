@@ -4,15 +4,31 @@
 #pragma comment(lib, "dinput8.lib")
 #include <dinput.h>
 
-HRESULT InitInput(HINSTANCE, HWND);
-void UninitInput(void);
-void UpdateInput(void);
+class Input {
+private:
+	LPDIRECTINPUT8 input;
+public:
+	Input(HINSTANCE);
+	~Input();
+	LPDIRECTINPUT8 get();
+};
 
-HRESULT InitKeyboard(HINSTANCE, HWND);
-void UninitKeyboard(void);
-void UpdateKeyboard(void);
-
-bool GetKeyboardPress(int);
-bool GetKeyboardTrigger(int);
-bool GetKeyboardRepeat(int);
-bool GetKeyboardRelease(int);
+class Keyboard {
+private:
+	static constexpr unsigned int NUM_KEY_MAX = 256;
+	static constexpr unsigned int LIMIT_COUNT_REPEAT = 20;
+	LPDIRECTINPUTDEVICE8 device;
+	BYTE buff[NUM_KEY_MAX];
+	BYTE state_trigger[NUM_KEY_MAX];
+	BYTE state_repeat[NUM_KEY_MAX];
+	BYTE state_release[NUM_KEY_MAX];
+	unsigned int repeat_cnt[NUM_KEY_MAX];
+public:
+	Keyboard(LPDIRECTINPUT8, HWND);
+	~Keyboard();
+	void update();
+	bool getPress(int);
+	bool getTrigger(int);
+	bool getRepeat(int);
+	bool getRelease(int);
+};
