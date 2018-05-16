@@ -22,7 +22,7 @@ void GameController::init(HINSTANCE hinst, HWND hwnd, int _width, int _height, b
 	mouse = new Mouse(input_device->get(), hwnd);
 
 #ifdef _DEBUG
-	DebugConsole::create_console_window();
+//	DebugConsole::create_console_window();
 #endif
 
 	graphics = new CDirectXGraphics();	// DirectX Graphicsオブジェクト生成
@@ -106,8 +106,11 @@ void GameController::input()
 	}
 	catch (const char *e)
 	{
+#ifdef _DEBUG
 		std::cout << e << std::endl;
+#endif
 	}
+	auto mouse_current_state = mouse->getState();
 
 	if (keyboard->getTrigger(DIK_ADD) && under_controll + 1 < airplains.size()) under_controll++;
 	if (keyboard->getTrigger(DIK_SUBTRACT) && under_controll > 0) under_controll--;
@@ -120,6 +123,7 @@ void GameController::input()
 		if (keyboard->getPress(DIK_LEFTARROW)) over_camera.azimuth += 0.1f;
 		if (keyboard->getPress(DIK_RETURN) && 0 < over_camera.distance) over_camera.distance -= 1.0f;
 		if (keyboard->getPress(DIK_BACKSPACE)) over_camera.distance += 1.0f;
+		over_camera.distance += mouse_current_state.lZ / 10;
 	}
 
 	if (keyboard->getTrigger(DIK_V)) view_type++;
@@ -135,7 +139,8 @@ void GameController::input()
 		}
 	}
 
-	auto mouse_current_state = mouse->getState();
+
+	
 #ifdef _DEBUG
 	printf("%ld, %ld, %ld\n", mouse_current_state.lX, mouse_current_state.lY, mouse_current_state.lZ);
 #endif
