@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------------
 //	Include header files.
 //-----------------------------------------------------------------------------
-#include	"CDirect3DXFile.h"
+#include "CDirect3DXFile.h"
 
 CDirect3DXFile::CDirect3DXFile(const char* xfilename, LPDIRECT3DDEVICE9 lpd3ddevice)
 	: CDirect3DXFile()

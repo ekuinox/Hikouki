@@ -151,21 +151,23 @@
     <ClCompile Include="CDirect3DXFile.cpp" />
     <ClCompile Include="CDirectXGraphics.cpp" />
     <ClCompile Include="explosion.cpp" />
-    <ClCompile Include="game.cpp" />
+    <ClCompile Include="GameController.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mathutil.cpp" />
+    <ClCompile Include="XFileManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Airplain.h" />
     <ClInclude Include="CDirect3DXFile.h" />
     <ClInclude Include="CDirectxGraphics.h" />
     <ClInclude Include="explosion.h" />
-    <ClInclude Include="game.h" />
+    <ClInclude Include="GameController.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="mathutil.h" />
+    <ClInclude Include="XFileManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

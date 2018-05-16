@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <process.h>
 #include <thread>
-#include "game.h"
+#include "GameController.h"
 
 //-----------------------------------------------------------------------------
 // マクロの定義
@@ -40,6 +40,7 @@ void	CALLBACK TimerProc(UINT ,UINT,DWORD,DWORD,DWORD);			// タイマ処理
 // グローバル変数
 //-----------------------------------------------------------------------------
 int				g_timerid=0;		// タイマＩＤ
+GameController *game_controller;
 
 //==============================================================================
 //!	@fn		WinMain
@@ -124,15 +125,14 @@ int APIENTRY WinMain(HINSTANCE 	hInstance, 		// アプリケーションのハンドル
 	ShowWindow(hwnd, nWinMode);
 	UpdateWindow(hwnd);
 
-	// ゲームの初期処理
-	if(!GameInit(hInstance,hwnd,SCREEN_X,SCREEN_Y,FULLSCREEN)){
-		GameExit();
-		MessageBox(hwnd,"ERROR!","GameInit Error",MB_OK);
-		return false;
+	try{
+		game_controller = new GameController(hInstance, hwnd, SCREEN_X, SCREEN_Y, FULLSCREEN);
+	} catch (const char *err) {
+		MessageBox(hwnd, "ERROR", err, MB_OK);
 	}
 
 	// イベントタイマーをセットする
-	timeBeginPeriod(1);			// タイマの分解能力を１ｍｓにする
+	timeBeginPeriod(1); // タイマの分解能力を１ｍｓにする
 	g_timerid = timeSetEvent(16, 1, TimerProc, 1, TIME_PERIODIC);
 
 	while(1){	// メッセージ･ループ
@@ -145,12 +145,12 @@ int APIENTRY WinMain(HINSTANCE 	hInstance, 		// アプリケーションのハンドル
 	}
 
 	// ゲーム終了フラグをセットする
-	GameSetEndFlag();
+	game_controller->setEndFlag();
 
 	if( g_timerid ) timeKillEvent(g_timerid);	// マルチメディアタイマの終了
 	timeEndPeriod(1);							// タイマの分解能力もとに戻す
 
-	GameExit();
+	delete game_controller;
 	return (int)msg.wParam;
 }
 
@@ -197,7 +197,7 @@ LRESULT WINAPI WndProc(	HWND hwnd, 		// ウィンドウハンドル
 //==============================================================================
 void CALLBACK TimerProc(UINT, UINT, DWORD, DWORD, DWORD)
 {
-	GameSetEvent();			// イベントオブジェクトをセットする
+	game_controller->setEvent();
 }
 
 //******************************************************************************
