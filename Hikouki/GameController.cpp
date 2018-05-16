@@ -19,6 +19,11 @@ void GameController::init(HINSTANCE hinst, HWND hwnd, int _width, int _height, b
 	// 入力初期化
 	input_device = new Input(hinst);
 	keyboard = new Keyboard(input_device->get(), hwnd);
+	mouse = new Mouse(input_device->get(), hwnd);
+
+#ifdef _DEBUG
+	DebugConsole::create_console_window();
+#endif
 
 	graphics = new CDirectXGraphics();	// DirectX Graphicsオブジェクト生成
 
@@ -69,6 +74,7 @@ void GameController::uninit()
 
 	delete keyboard;
 	delete input_device;
+	delete mouse;
 }
 
 void GameController::main()
@@ -94,6 +100,14 @@ void GameController::main()
 void GameController::input()
 {
 	keyboard->update();
+	try
+	{
+		mouse->update();
+	}
+	catch (const char *e)
+	{
+		std::cout << e << std::endl;
+	}
 
 	if (keyboard->getTrigger(DIK_ADD) && under_controll + 1 < airplains.size()) under_controll++;
 	if (keyboard->getTrigger(DIK_SUBTRACT) && under_controll > 0) under_controll--;
@@ -120,6 +134,11 @@ void GameController::input()
 			airplains[i]->switchExplosion();
 		}
 	}
+
+	auto mouse_current_state = mouse->getState();
+#ifdef _DEBUG
+	printf("%ld, %ld, %ld\n", mouse_current_state.lX, mouse_current_state.lY, mouse_current_state.lZ);
+#endif
 }
 
 void GameController::update()

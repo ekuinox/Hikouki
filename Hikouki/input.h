@@ -32,3 +32,15 @@ public:
 	bool getRepeat(int);
 	bool getRelease(int);
 };
+
+class Mouse {
+private:
+	LPDIRECTINPUTDEVICE8 device;
+	DIMOUSESTATE buff;
+public:
+	Mouse(LPDIRECTINPUT8, HWND);
+	~Mouse();
+	void update();
+	DIMOUSESTATE getState();
+	
+};

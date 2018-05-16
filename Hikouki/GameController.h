@@ -11,6 +11,9 @@
 #include <chrono>
 #include "Airplain.h"
 
+#ifdef _DEBUG
+#include "DebugConsole.h"
+#endif
 enum class CameraTypes : char {
 	FPS = 0,
 	TPS = 1,
@@ -71,6 +74,7 @@ private:
 
 	Input *input_device;
 	Keyboard *keyboard;
+	Mouse *mouse;
 
 public:
 	GameController(HINSTANCE, HWND, int, int, bool);
