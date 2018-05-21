@@ -1,7 +1,7 @@
 #include "GameController.h"
 
 GameController::GameController(HINSTANCE hinst, HWND hwnd, int _width, int _height, bool fullscreen)
-	: end(false), under_controll(0), over_camera({ 0, 0, 1000 }), view_type(CameraTypes::FPS)
+	: end(false), under_controll(0), over_camera({ 0, 90, 1000 }), view_type(CameraTypes::OVER)
 {
 	init(hinst, hwnd, _width, _height, fullscreen);
 }
@@ -117,13 +117,13 @@ void GameController::input()
 
 	if (view_type == CameraTypes::OVER)
 	{
-		if (keyboard->getPress(DIK_UPARROW)) over_camera.elevation_angle += 0.1f;
-		if (keyboard->getPress(DIK_DOWNARROW)) over_camera.elevation_angle -= 0.1f;
+		if (keyboard->getPress(DIK_UPARROW)) over_camera.elevation += 0.1f;
+		if (keyboard->getPress(DIK_DOWNARROW)) over_camera.elevation -= 0.1f;
 		if (keyboard->getPress(DIK_RIGHTARROW)) over_camera.azimuth -= 0.1f;
 		if (keyboard->getPress(DIK_LEFTARROW)) over_camera.azimuth += 0.1f;
 		if (keyboard->getPress(DIK_RETURN) && 0 < over_camera.distance) over_camera.distance -= 1.0f;
 		if (keyboard->getPress(DIK_BACKSPACE)) over_camera.distance += 1.0f;
-		over_camera.distance += mouse_current_state.lZ / 10;
+		over_camera.distance -= mouse_current_state.lZ / 10;
 	}
 
 	if (keyboard->getTrigger(DIK_V)) view_type++;
@@ -158,28 +158,39 @@ void GameController::update()
 	switch (view_type)
 	{
 	case CameraTypes::OVER:
-		camera->looking_for = D3DXVECTOR3(0, 0, 0);
-		camera->looking_at = D3DXVECTOR3(
-			over_camera.distance * sin(over_camera.elevation_angle) * cos(over_camera.azimuth),
-			over_camera.distance * cos(over_camera.elevation_angle),
-			over_camera.distance * sin(over_camera.azimuth) * sin(over_camera.elevation_angle)
+#define OVER_CAMERA_FLAG 1
+#if OVER_CAMERA_FLAG == 1
+		camera->look_at = D3DXVECTOR3(0, 0, 0);
+		camera->eye = D3DXVECTOR3(
+			over_camera.distance * sin(over_camera.elevation) * cos(over_camera.azimuth),
+			over_camera.distance * cos(over_camera.elevation),
+			over_camera.distance * sin(over_camera.azimuth) * sin(over_camera.elevation)
 		);
-
+		camera->eye += camera->look_at;
+		camera->up = D3DXVECTOR3(0, 1, 0);
+#elif OVER_CAMERA_FLAG == 2
+		camera->look_at = D3DXVECTOR3(0, 0, 0);
+		camera->eye = D3DXVECTOR3(
+			over_camera.distance * sin(over_camera.elevation) * cos(over_camera.azimuth),
+			over_camera.distance * cos(over_camera.elevation),
+			over_camera.distance * sin(over_camera.azimuth) * sin(over_camera.elevation)
+		);
 		D3DXMatrixInverse(&mat, NULL, &view);
 		camera->up = D3DXVECTOR3(
 			mat._21,
 			mat._22,
 			mat._23
 		);
+#endif
 		break;
 	case CameraTypes::TPS:
-		camera->looking_for = D3DXVECTOR3(airplains[under_controll]->getMat()._41, airplains[under_controll]->getMat()._42, airplains[under_controll]->getMat()._43);
-		camera->looking_at = camera->looking_for - 10 * D3DXVECTOR3(airplains[under_controll]->getMat()._31, airplains[under_controll]->getMat()._32, airplains[under_controll]->getMat()._33);
+		camera->look_at = D3DXVECTOR3(airplains[under_controll]->getMat()._41, airplains[under_controll]->getMat()._42, airplains[under_controll]->getMat()._43);
+		camera->eye = camera->look_at - 10 * D3DXVECTOR3(airplains[under_controll]->getMat()._31, airplains[under_controll]->getMat()._32, airplains[under_controll]->getMat()._33);
 		camera->up = D3DXVECTOR3(airplains[under_controll]->getMat()._21, airplains[under_controll]->getMat()._22, airplains[under_controll]->getMat()._23);
 		break;
 	case CameraTypes::FPS:
-		camera->looking_at = 2 * D3DXVECTOR3(airplains[under_controll]->getMat()._41, airplains[under_controll]->getMat()._42, airplains[under_controll]->getMat()._43); // ずらさないと本体と被っちまうので
-		camera->looking_for = camera->looking_at + 10 * D3DXVECTOR3(airplains[under_controll]->getMat()._31, airplains[under_controll]->getMat()._32, airplains[under_controll]->getMat()._33);
+		camera->eye = 2 * D3DXVECTOR3(airplains[under_controll]->getMat()._41, airplains[under_controll]->getMat()._42, airplains[under_controll]->getMat()._43); // ずらさないと本体と被っちまうので
+		camera->look_at = camera->eye + 10 * D3DXVECTOR3(airplains[under_controll]->getMat()._31, airplains[under_controll]->getMat()._32, airplains[under_controll]->getMat()._33);
 		camera->up = D3DXVECTOR3(airplains[under_controll]->getMat()._21, airplains[under_controll]->getMat()._22, airplains[under_controll]->getMat()._23);
 		break;
 	}
@@ -189,7 +200,7 @@ void GameController::render()
 {
 	D3DXMATRIX proj, world;
 
-	D3DXMatrixLookAtLH(&view, &camera->looking_at, &camera->looking_for, &camera->up);
+	D3DXMatrixLookAtLH(&view, &camera->eye, &camera->look_at, &camera->up);
 	// カメラ行列を固定パイプラインへセット
 	graphics->GetDXDevice()->SetTransform(D3DTS_VIEW, &view);
 

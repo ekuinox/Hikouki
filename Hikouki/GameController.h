@@ -47,12 +47,12 @@ private:
 	std::thread main_thread;
 
 	using Camera = struct _Camera {
-		D3DXVECTOR3 looking_at; // 視点
-		D3DXVECTOR3 looking_for; // 注視点
+		D3DXVECTOR3 eye; // 視点
+		D3DXVECTOR3 look_at; // 注視点
 		D3DXVECTOR3 up;
 		_Camera() :
-			looking_at(D3DXVECTOR3(0.0, 0.0f, -80.0f)),
-			looking_for(D3DXVECTOR3(0.0, 0.0f, 0.0f)),
+			eye(D3DXVECTOR3(0.0, 0.0f, -80.0f)),
+			look_at(D3DXVECTOR3(0.0, 0.0f, 0.0f)),
 			up(D3DXVECTOR3(0.0, 1.0f, 0.0f))
 		{
 		};
@@ -65,7 +65,7 @@ private:
 	int under_controll;
 	struct {
 		float azimuth; // 方位角
-		float elevation_angle; // 仰角
+		float elevation; // 仰角
 		float distance; // 距離
 	} over_camera;
 
