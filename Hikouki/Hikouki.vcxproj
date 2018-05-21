@@ -150,6 +150,7 @@
     <ClCompile Include="Airplain.cpp" />
     <ClCompile Include="CDirect3DXFile.cpp" />
     <ClCompile Include="CDirectXGraphics.cpp" />
+    <ClCompile Include="Collider.cpp" />
     <ClCompile Include="DebugConsole.cpp" />
     <ClCompile Include="explosion.cpp" />
     <ClCompile Include="GameController.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="Airplain.h" />
     <ClInclude Include="CDirect3DXFile.h" />
     <ClInclude Include="CDirectxGraphics.h" />
+    <ClInclude Include="Collider.h" />
     <ClInclude Include="DebugConsole.h" />
     <ClInclude Include="explosion.h" />
     <ClInclude Include="GameController.h" />
