@@ -18,6 +18,7 @@ class XFileObjectBase : public GameObjectInterface {
 protected:
 	D3DXMATRIX mat; // ÏZs—ñ
 	CDirect3DXFile *xfile;
+	D3DXVECTOR3 angle, trans; // ˆÚ“®—Ê
 public:
 	XFileObjectBase(CDirect3DXFile*);
 	void draw(LPDIRECT3DDEVICE9) const;

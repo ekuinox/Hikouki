@@ -40,15 +40,13 @@ void Airplain::update()
 	}
 	else
 	{
-#ifdef __MOVE_RANDOM
-		D3DXVECTOR3 angle(0.0f, 0.0f, 0.0f), trans(0.0f, 0.0f, 1.0f);
 		D3DXMATRIX mx;
 
+#ifdef __MOVE_RANDOM
 		angle.x = rand() % 2 - 1;
 		angle.y = rand() % 2 - 1;
-
-		MakeWorldMatrix(mx, mat, angle, trans);
 #endif
+		MakeWorldMatrix(mx, mat, angle, trans);
 		bbox->updatePosition(mat);
 	}
 
@@ -77,4 +75,19 @@ void Airplain::switchDrawBBox()
 void Airplain::switchDrawBBox(bool new_drawing_bbox)
 {
 	drawing_bbox = new_drawing_bbox;
+}
+
+BoundingSphere* Airplain::getBBox()
+{
+	return bbox;
+}
+
+void Airplain::addTrans(D3DXVECTOR3 v)
+{
+	trans += v;
+}
+
+void Airplain::setTrans(D3DXVECTOR3 v)
+{
+	trans = v;
 }

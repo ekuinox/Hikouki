@@ -124,6 +124,15 @@ void BoundingSphere::createBoxMesh(const LPDIRECT3DDEVICE9 device)
 	);
 }
 
+float BoundingSphere::calculateDistance(D3DXVECTOR3 & a, D3DXVECTOR3 & b)
+{
+	return sqrt(
+		fabs(pow(a.x - b.x, 2))
+		+ fabs(pow(a.y - b.y, 2))
+		+ fabs(pow(a.z - b.z, 2))
+	);
+}
+
 BoundingSphere::BoundingSphere()
 	: sphere_mesh(nullptr), box_mesh(nullptr)
 {
@@ -203,3 +212,16 @@ const HITDATA & BoundingSphere::getHitData()
 {
 	return hitdata;
 }
+
+bool BoundingSphere::isCollision(BoundingSphere * _another)
+{
+	// ”¼Œa‚Ì˜a‚Æ’†S“¯Žm‚Ì‚Ì‹——£‚ð”äŠr‚·‚é
+	auto another = _another->getHitData();
+	auto self = getHitData();
+	auto another_position = _another->getPosition();
+
+	auto distance = calculateDistance(position, another_position);
+
+	return distance < (self.r + another.r);
+}
+

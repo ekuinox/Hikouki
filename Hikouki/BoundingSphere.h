@@ -20,7 +20,7 @@ private:
 	void calculateBoundingSphere(const LPD3DXMESH mesh, const LPDIRECT3DDEVICE9 device);
 	void createSphereMesh(float r, const LPDIRECT3DDEVICE9 device);
 	void createBoxMesh(const LPDIRECT3DDEVICE9 device);
-
+	float calculateDistance(D3DXVECTOR3 &a, D3DXVECTOR3 &b);
 public:
 	BoundingSphere();
 	BoundingSphere(const LPD3DXMESH mesh, const LPDIRECT3DDEVICE9 device);
@@ -33,4 +33,5 @@ public:
 	float getR() const;
 	const D3DXVECTOR3& getPosition();
 	const HITDATA& getHitData();
+	bool isCollision(BoundingSphere* _another);
 };

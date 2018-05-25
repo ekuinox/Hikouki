@@ -22,4 +22,7 @@ public:
 	void switchExplosion();
 	void switchDrawBBox();
 	void switchDrawBBox(bool);
+	BoundingSphere* getBBox();
+	void addTrans(D3DXVECTOR3 v);
+	void setTrans(D3DXVECTOR3 v);
 };
