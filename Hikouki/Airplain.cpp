@@ -17,7 +17,11 @@ Airplain::Airplain(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, D3DXVECTOR3
 void Airplain::draw(LPDIRECT3DDEVICE9 device) const
 {
 	if (!drawing) return;
-
+	if (explosion_flag)
+	{
+		explosion->Draw(device);
+		return;
+	}
 	device->SetTransform(D3DTS_WORLD, &mat);
 	xfile->Draw(device);
 	if (drawing_bbox) bbox->draw(device);
