@@ -31,7 +31,6 @@ void GameController::init(HINSTANCE hinst, HWND hwnd, int _width, int _height, b
 		throw "DirectX 初期化エラー";
 	}
 
-	constexpr int hikouki_count = 9;
 	constexpr float margin = 50.0f;
 
 	camera = new Camera();
@@ -44,13 +43,9 @@ void GameController::init(HINSTANCE hinst, HWND hwnd, int _width, int _height, b
 
 	skydome = new XFileObjectBase(xfile_manager->get("Skydome"));
 
-	for (auto i = 0; i < sqrt(hikouki_count); ++i)
-	{
-		for (auto j = 0; j < sqrt(hikouki_count); ++j)
-		{
-			airplains.push_back(new Airplain(xfile_manager->get("Airplain"), graphics->GetDXDevice()));
-		}
-	}
+	airplains.push_back(new Airplain(xfile_manager->get("Airplain"), graphics->GetDXDevice(), D3DXVECTOR3( 0.0, 0.0, 10.0f )));
+	airplains.push_back(new Airplain(xfile_manager->get("Airplain"), graphics->GetDXDevice(), D3DXVECTOR3(0.0, 0.0, -10.0f)));
+
 
 	// イベントハンドル生成
 	event_handle = CreateEvent(NULL, false, false, NULL);
@@ -123,24 +118,12 @@ void GameController::input()
 		if (keyboard->getPress(DIK_LEFTARROW)) over_camera.azimuth += 0.1f;
 		if (keyboard->getPress(DIK_RETURN) && 0 < over_camera.distance) over_camera.distance -= 1.0f;
 		if (keyboard->getPress(DIK_BACKSPACE)) over_camera.distance += 1.0f;
+		if (keyboard->getPress(DIK_NUMPAD5)) airplains[under_controll]->switchExplosion();
 		over_camera.distance -= mouse_current_state.lZ / 10;
 	}
 
 	if (keyboard->getTrigger(DIK_V)) view_type++;
 
-	int keys[] = {
-		DIK_NUMPAD1, DIK_NUMPAD2, DIK_NUMPAD3, DIK_NUMPAD4, DIK_NUMPAD5, DIK_NUMPAD6, DIK_NUMPAD7, DIK_NUMPAD8, DIK_NUMPAD9
-	};
-
-	for (auto i = 0; i < 9; i++) {
-		if (keyboard->getTrigger(keys[i]))
-		{
-			airplains[i]->switchExplosion();
-		}
-	}
-
-
-	
 #ifdef _DEBUG
 	printf("%ld, %ld, %ld\n", mouse_current_state.lX, mouse_current_state.lY, mouse_current_state.lZ);
 #endif

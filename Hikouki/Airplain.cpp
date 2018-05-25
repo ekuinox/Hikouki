@@ -8,6 +8,12 @@ Airplain::Airplain(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device)
 {
 }
 
+Airplain::Airplain(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, D3DXVECTOR3 coord)
+	: Airplain(_xfile, device)
+{
+	D3DXMatrixTranslation(&mat, coord.x, coord.y, coord.z);
+}
+
 void Airplain::draw(LPDIRECT3DDEVICE9 device) const
 {
 	if (!drawing) return;
@@ -30,6 +36,7 @@ void Airplain::update()
 	}
 	else
 	{
+#ifdef __MOVE_RANDOM
 		D3DXVECTOR3 angle(0.0f, 0.0f, 0.0f), trans(0.0f, 0.0f, 1.0f);
 		D3DXMATRIX mx;
 
@@ -37,6 +44,7 @@ void Airplain::update()
 		angle.y = rand() % 2 - 1;
 
 		MakeWorldMatrix(mx, mat, angle, trans);
+#endif
 		bbox->updatePosition(mat);
 	}
 

@@ -15,6 +15,7 @@ private:
 	BoundingSphere *bbox;
 public:
 	Airplain(CDirect3DXFile*, LPDIRECT3DDEVICE9);
+	Airplain(CDirect3DXFile*, LPDIRECT3DDEVICE9, D3DXVECTOR3);
 	void draw(LPDIRECT3DDEVICE9) const;
 	void update();
 	void switchExplosion();
