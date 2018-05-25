@@ -3,7 +3,8 @@
 
 Airplain::Airplain(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device)
 	: XFileObjectBase(_xfile),
-	explosion(new Explosion(xfile, device)), explosion_flag(false)
+	explosion(new Explosion(xfile, device)), explosion_flag(false),
+	bbox(new BoundingSphere(xfile->GetMesh(), device))
 {
 }
 
@@ -13,6 +14,7 @@ void Airplain::draw(LPDIRECT3DDEVICE9 device) const
 
 	device->SetTransform(D3DTS_WORLD, &mat);
 	xfile->Draw(device);
+	bbox->draw(device);
 }
 
 void Airplain::update()
@@ -35,6 +37,7 @@ void Airplain::update()
 		angle.y = rand() % 2 - 1;
 
 		MakeWorldMatrix(mx, mat, angle, trans);
+		bbox->updatePosition(mat);
 	}
 
 	latest_update = current;
