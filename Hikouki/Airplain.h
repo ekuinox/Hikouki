@@ -8,6 +8,7 @@ using std::chrono::system_clock;
 
 class Airplain : public XFileObjectBase {
 private:
+	bool drawing_bbox;
 	bool explosion_flag;
 	void startExplosion();
 	Explosion* explosion;
@@ -19,4 +20,6 @@ public:
 	void draw(LPDIRECT3DDEVICE9) const;
 	void update();
 	void switchExplosion();
+	void switchDrawBBox();
+	void switchDrawBBox(bool);
 };

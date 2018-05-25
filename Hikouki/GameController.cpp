@@ -1,7 +1,7 @@
 #include "GameController.h"
 
 GameController::GameController(HINSTANCE hinst, HWND hwnd, int _width, int _height, bool fullscreen)
-	: end(false), under_controll(0), over_camera({ 0, 90, 1000 }), view_type(CameraTypes::OVER)
+	: end(false), under_controll(0), over_camera({ 0, 90, -100 }), view_type(CameraTypes::OVER)
 {
 	init(hinst, hwnd, _width, _height, fullscreen);
 }
@@ -44,7 +44,7 @@ void GameController::init(HINSTANCE hinst, HWND hwnd, int _width, int _height, b
 	skydome = new XFileObjectBase(xfile_manager->get("Skydome"));
 
 	airplains.push_back(new Airplain(xfile_manager->get("Airplain"), graphics->GetDXDevice(), D3DXVECTOR3( 0.0, 0.0, 10.0f )));
-	airplains.push_back(new Airplain(xfile_manager->get("Airplain"), graphics->GetDXDevice(), D3DXVECTOR3(0.0, 0.0, -10.0f)));
+	airplains.push_back(new Airplain(xfile_manager->get("Airplain"), graphics->GetDXDevice(), D3DXVECTOR3( 0.0, 0.0, -10.0f)));
 
 
 	// イベントハンドル生成
@@ -118,7 +118,8 @@ void GameController::input()
 		if (keyboard->getPress(DIK_LEFTARROW)) over_camera.azimuth += 0.1f;
 		if (keyboard->getPress(DIK_RETURN) && 0 < over_camera.distance) over_camera.distance -= 1.0f;
 		if (keyboard->getPress(DIK_BACKSPACE)) over_camera.distance += 1.0f;
-		if (keyboard->getPress(DIK_NUMPAD5)) airplains[under_controll]->switchExplosion();
+		if (keyboard->getTrigger(DIK_NUMPAD5)) airplains[under_controll]->switchExplosion();
+		if (keyboard->getTrigger(DIK_NUMPAD8)) airplains[under_controll]->switchDrawBBox();
 		over_camera.distance -= mouse_current_state.lZ / 10;
 	}
 

@@ -4,7 +4,7 @@
 Airplain::Airplain(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device)
 	: XFileObjectBase(_xfile),
 	explosion(new Explosion(xfile, device)), explosion_flag(false),
-	bbox(new BoundingSphere(xfile->GetMesh(), device))
+	bbox(new BoundingSphere(xfile->GetMesh(), device)), drawing_bbox(true)
 {
 }
 
@@ -20,7 +20,7 @@ void Airplain::draw(LPDIRECT3DDEVICE9 device) const
 
 	device->SetTransform(D3DTS_WORLD, &mat);
 	xfile->Draw(device);
-	bbox->draw(device);
+	if (drawing_bbox) bbox->draw(device);
 }
 
 void Airplain::update()
@@ -63,4 +63,14 @@ void Airplain::switchExplosion()
 {
 	explosion_flag = !explosion_flag;
 	startExplosion();
+}
+
+void Airplain::switchDrawBBox()
+{
+	switchDrawBBox(!drawing_bbox);
+}
+
+void Airplain::switchDrawBBox(bool new_drawing_bbox)
+{
+	drawing_bbox = new_drawing_bbox;
 }
