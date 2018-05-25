@@ -118,12 +118,12 @@ void GameController::input()
 		if (keyboard->getPress(DIK_LEFTARROW)) over_camera.azimuth += 0.1f;
 		if (keyboard->getPress(DIK_RETURN) && 0 < over_camera.distance) over_camera.distance -= 1.0f;
 		if (keyboard->getPress(DIK_BACKSPACE)) over_camera.distance += 1.0f;
-		if (keyboard->getTrigger(DIK_NUMPAD5)) airplains[under_controll]->switchExplosion();
-		if (keyboard->getTrigger(DIK_NUMPAD8)) airplains[under_controll]->switchDrawBBox();
 		over_camera.distance -= mouse_current_state.lZ / 10;
 	}
 
 	if (keyboard->getTrigger(DIK_V)) view_type++;
+	if (keyboard->getTrigger(DIK_NUMPAD5)) airplains[under_controll]->switchExplosion();
+	if (keyboard->getTrigger(DIK_NUMPAD8)) airplains[under_controll]->switchDrawBBox();
 
 #ifdef _DEBUG
 	printf("%ld, %ld, %ld\n", mouse_current_state.lX, mouse_current_state.lY, mouse_current_state.lZ);
