@@ -13,6 +13,7 @@
 
 #ifdef _DEBUG
 #include "DebugConsole.h"
+#include "CDebugFont.h"
 #endif
 enum class CameraTypes : char {
 	FPS = 0,
@@ -75,6 +76,11 @@ private:
 	Input *input_device;
 	Keyboard *keyboard;
 	Mouse *mouse;
+#ifdef _DEBUG
+	CDebugFont *debug_font;
+	std::string debug_text;
+#endif // _DEBUG
+
 
 public:
 	GameController(HINSTANCE, HWND, int, int, bool);

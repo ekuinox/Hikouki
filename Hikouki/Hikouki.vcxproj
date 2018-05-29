@@ -164,6 +164,7 @@
   <ItemGroup>
     <ClInclude Include="Airplain.h" />
     <ClInclude Include="BoundingSphere.h" />
+    <ClInclude Include="CDebugFont.h" />
     <ClInclude Include="CDirect3DXFile.h" />
     <ClInclude Include="CDirectxGraphics.h" />
     <ClInclude Include="Collider.h" />

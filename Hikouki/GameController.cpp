@@ -54,6 +54,11 @@ void GameController::init(HINSTANCE hinst, HWND hwnd, int _width, int _height, b
 	}
 	// スレッド生成(ゲームメイン)
 	main_thread = std::thread([&](){ main(); });
+
+#ifdef _DEBUG
+	debug_font = new CDebugFont();
+	debug_font->CreateFontA(graphics->GetDXDevice());
+#endif
 }
 
 void GameController::uninit()
@@ -141,9 +146,16 @@ void GameController::update()
 
 	if (airplains[0]->getBBox()->isCollision(airplains[1]->getBBox()))
 	{
-		printf("アタタタタタ\n");
+#ifdef _DEBUG
+		debug_text = "あたっとる";
+#endif // DEBUG
 	}
-
+	else
+	{
+#ifdef _DEBUG
+		debug_text = "あたっとらん";
+#endif // DEBUG
+	}
 
 	D3DXMATRIX mat;
 
@@ -222,6 +234,11 @@ void GameController::render()
 
 	for (const auto& airplain : airplains) airplain->draw(graphics->GetDXDevice());
 	skydome->draw(graphics->GetDXDevice());
+
+#ifdef _DEBUG
+	debug_font->DrawTextA(0, 0, debug_text.c_str());
+#endif // _DEBUG
+
 
 	graphics->GetDXDevice()->EndScene();	// 描画の終了を待つ
 
