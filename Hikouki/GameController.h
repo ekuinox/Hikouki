@@ -72,7 +72,7 @@ private:
 	} over_camera;
 
 	CameraTypes view_type;
-	D3DXMATRIX view;
+	D3DXMATRIX view, proj;
 
 	Input *input_device;
 	Keyboard *keyboard;

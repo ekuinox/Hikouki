@@ -55,6 +55,17 @@ void GameController::init(HINSTANCE hinst, HWND hwnd, int _width, int _height, b
 	// スレッド生成(ゲームメイン)
 	main_thread = std::thread([&](){ main(); });
 
+	// 初期設定
+	graphics->SetRenderStateArray({
+		{ D3DRS_ZENABLE, TRUE }, // Ｚバッファ有効
+		{ D3DRS_LIGHTING, true }, // ライト有効
+		{ D3DRS_CULLMODE, D3DCULL_NONE }, // カリング無効化
+		{ D3DRS_AMBIENT, 0xffffffff }, // 環境光セット
+		{ D3DRS_ALPHABLENDENABLE, TRUE }, // アルファ・ブレンディングを行う
+		{ D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA }, // 透過処理を行う
+		{ D3DRS_SRCBLEND, D3DBLEND_SRCALPHA } // 半透明処理を行う
+		});
+
 #ifdef _DEBUG
 	debug_font = new CDebugFont();
 	debug_font->CreateFontA(graphics->GetDXDevice());
@@ -202,38 +213,26 @@ void GameController::update()
 		camera->up = D3DXVECTOR3(airplains[under_controll]->getMat()._21, airplains[under_controll]->getMat()._22, airplains[under_controll]->getMat()._23);
 		break;
 	}
+
+	D3DXMatrixLookAtLH(&view, &camera->eye, &camera->look_at, &camera->up);
+
+	// プロジェクション変換行列作成
+	D3DXMatrixPerspectiveFovLH(
+		&proj,
+		D3DX_PI / 2,					// 視野角
+		(float)width / (float)height,	// アスペクト比
+		1.0f,							// ニアプレーン
+		5000.0f							// ファープレーン
+	);
 }
 
 void GameController::render()
 {
-	D3DXMATRIX proj, world;
-
-	D3DXMatrixLookAtLH(&view, &camera->eye, &camera->look_at, &camera->up);
-	// カメラ行列を固定パイプラインへセット
-	graphics->GetDXDevice()->SetTransform(D3DTS_VIEW, &view);
-
-	// プロジェクション変換行列作成
-	D3DXMatrixPerspectiveFovLH(&proj,
-		D3DX_PI / 2,					// 視野角
-		(float)width / (float)height,	// アスペクト比
-		1.0f,						// ニアプレーン
-		5000.0f);					// ファープレーン
-
-									// 射影変換行列を固定パイプラインへセット
-	graphics->GetDXDevice()->SetTransform(D3DTS_PROJECTION, &proj);
-	graphics->SetRenderStateArray({
-		{ D3DRS_ZENABLE, TRUE }, // Ｚバッファ有効
-		{ D3DRS_LIGHTING, true }, // ライト有効
-		{ D3DRS_CULLMODE, D3DCULL_NONE }, // カリング無効化
-		{ D3DRS_AMBIENT, 0xffffffff }, // 環境光セット
-		{ D3DRS_ALPHABLENDENABLE, TRUE }, // アルファ・ブレンディングを行う
-		{ D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA }, // 透過処理を行う
-		{ D3DRS_SRCBLEND, D3DBLEND_SRCALPHA } // 半透明処理を行う
-	});
-
-	graphics->Render([&]() {
-		for (const auto& airplain : airplains) airplain->draw(graphics->GetDXDevice());
-		skydome->draw(graphics->GetDXDevice());
+	graphics->SetView(view); // カメラ行列を固定パイプラインへセット
+	graphics->SetProjection(proj); // 射影変換行列を固定パイプラインへセット
+	graphics->Render([&](LPDIRECT3DDEVICE9 device) {
+		for (const auto& airplain : airplains) airplain->draw(device);
+		skydome->draw(device);
 #ifdef _DEBUG
 		debug_font->DrawTextA(0, 0, debug_text.c_str());
 #endif // _DEBUG

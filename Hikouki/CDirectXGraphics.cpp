@@ -102,16 +102,27 @@ void CDirectXGraphics::SetRenderStateArray(std::vector<std::pair<D3DRENDERSTATET
 	for (const auto& option : options) m_lpd3ddevice->SetRenderState(option.first, option.second);
 }
 
-void CDirectXGraphics::Render(std::function<void(void)> render)
+void CDirectXGraphics::Render(std::function<void(LPDIRECT3DDEVICE9)> render)
 {
 	m_lpd3ddevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
 	m_lpd3ddevice->BeginScene();
-	render();
+	render(m_lpd3ddevice);
 	m_lpd3ddevice->EndScene();
 	if (m_lpd3ddevice->Present(NULL, NULL, NULL, NULL) != D3D_OK) { // バックバッファからプライマリバッファへ転送
 		m_lpd3ddevice->Reset(&m_d3dpp);
 	}
 }
+
+HRESULT CDirectXGraphics::SetProjection(D3DXMATRIX & proj)
+{
+	return m_lpd3ddevice->SetTransform(D3DTS_PROJECTION, &proj);
+}
+
+HRESULT CDirectXGraphics::SetView(D3DXMATRIX & view)
+{
+	return m_lpd3ddevice->SetTransform(D3DTS_VIEW, &view);
+}
+
 //******************************************************************************
 //	End of file.
 //******************************************************************************
