@@ -221,34 +221,23 @@ void GameController::render()
 
 									// 射影変換行列を固定パイプラインへセット
 	graphics->GetDXDevice()->SetTransform(D3DTS_PROJECTION, &proj);
-	// Ｚバッファ有効
-	graphics->GetDXDevice()->SetRenderState(D3DRS_ZENABLE, TRUE);
-	// ライト有効
-	graphics->GetDXDevice()->SetRenderState(D3DRS_LIGHTING, true);
-	// カリング無効化
-	graphics->GetDXDevice()->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-	// 環境光セット
-	graphics->GetDXDevice()->SetRenderState(D3DRS_AMBIENT, 0xffffffff);
+	graphics->SetRenderStateArray({
+		{ D3DRS_ZENABLE, TRUE }, // Ｚバッファ有効
+		{ D3DRS_LIGHTING, true }, // ライト有効
+		{ D3DRS_CULLMODE, D3DCULL_NONE }, // カリング無効化
+		{ D3DRS_AMBIENT, 0xffffffff }, // 環境光セット
+		{ D3DRS_ALPHABLENDENABLE, TRUE }, // アルファ・ブレンディングを行う
+		{ D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA }, // 透過処理を行う
+		{ D3DRS_SRCBLEND, D3DBLEND_SRCALPHA } // 半透明処理を行う
+	});
 
-	// ターゲットバッファのクリア、Ｚバッファのクリア
-	graphics->GetDXDevice()->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
-
-	// 描画の開始をDirectXに通知
-	graphics->GetDXDevice()->BeginScene();
-
-	for (const auto& airplain : airplains) airplain->draw(graphics->GetDXDevice());
-	skydome->draw(graphics->GetDXDevice());
-
+	graphics->Render([&]() {
+		for (const auto& airplain : airplains) airplain->draw(graphics->GetDXDevice());
+		skydome->draw(graphics->GetDXDevice());
 #ifdef _DEBUG
-	debug_font->DrawTextA(0, 0, debug_text.c_str());
+		debug_font->DrawTextA(0, 0, debug_text.c_str());
 #endif // _DEBUG
-
-
-	graphics->GetDXDevice()->EndScene();	// 描画の終了を待つ
-
-	if (graphics->GetDXDevice()->Present(NULL, NULL, NULL, NULL) != D3D_OK) { // バックバッファからプライマリバッファへ転送
-		graphics->GetDXDevice()->Reset(&graphics->GetDXD3dpp());
-	}
+	});
 }
 
 void GameController::setEvent()

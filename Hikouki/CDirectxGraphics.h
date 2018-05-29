@@ -11,6 +11,8 @@
 //-----------------------------------------------------------------------------
 #include	<d3d9.h>
 #include	<d3dx9.h>
+#include	<vector>
+#include <functional>
 
 //=============================================================================
 //!	@class	CDirectXGraphics
@@ -42,6 +44,8 @@ public:
 	D3DPRESENT_PARAMETERS GetDXD3dpp() const{							// プレゼンテーションパラメータＧＥＴ
 		return m_d3dpp;
 	}
+	void SetRenderStateArray(std::vector < std::pair<D3DRENDERSTATETYPE, DWORD>> options);
+	void Render(std::function<void(void)> render);
 };
 
 //******************************************************************************

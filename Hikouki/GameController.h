@@ -82,7 +82,6 @@ private:
 	std::string debug_text;
 #endif // _DEBUG
 
-
 public:
 	GameController(HINSTANCE, HWND, int, int, bool);
 	~GameController();
