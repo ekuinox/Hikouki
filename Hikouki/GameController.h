@@ -1,7 +1,5 @@
 #pragma once
 
-#include <Windows.h>
-#include <thread>
 #include "CDirectXGraphics.h"
 #include "XFileManager.h"
 #include "GameObject.h"
@@ -11,11 +9,13 @@
 #include <chrono>
 #include "Airplain.h"
 #include "Collider.h"
+#include "EventMachine.h"
 
 #ifdef _DEBUG
 #include "DebugConsole.h"
 #include "CDebugFont.h"
 #endif
+
 enum class CameraTypes : char {
 	FPS = 0,
 	TPS = 1,
@@ -41,13 +41,9 @@ constexpr CameraTypes operator++(CameraTypes& c, int)
 	return current;
 }
 
-class GameController {
+class GameController : public EventMachine {
 private:
 	CDirectXGraphics * graphics;
-	HANDLE event_handle;
-	bool end;
-	std::thread main_thread;
-
 	using Camera = struct _Camera {
 		D3DXVECTOR3 eye; // éãì_
 		D3DXVECTOR3 look_at; // íçéãì_
@@ -91,6 +87,4 @@ public:
 	void input();
 	void update();
 	void render();
-	void setEvent();
-	void setEndFlag();
 };

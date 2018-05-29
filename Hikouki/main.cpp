@@ -145,7 +145,7 @@ int APIENTRY WinMain(HINSTANCE 	hInstance, 		// アプリケーションのハンドル
 	}
 
 	// ゲーム終了フラグをセットする
-	game_controller->setEndFlag();
+	game_controller->SetEnd();
 
 	if( g_timerid ) timeKillEvent(g_timerid);	// マルチメディアタイマの終了
 	timeEndPeriod(1);							// タイマの分解能力もとに戻す
@@ -197,7 +197,7 @@ LRESULT WINAPI WndProc(	HWND hwnd, 		// ウィンドウハンドル
 //==============================================================================
 void CALLBACK TimerProc(UINT, UINT, DWORD, DWORD, DWORD)
 {
-	game_controller->setEvent();
+	game_controller->Set();
 }
 
 //******************************************************************************

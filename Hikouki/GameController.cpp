@@ -1,7 +1,7 @@
 #include "GameController.h"
 
 GameController::GameController(HINSTANCE hinst, HWND hwnd, int _width, int _height, bool fullscreen)
-	: end(false), under_controll(0), over_camera({ 0, 90, -100 }), view_type(CameraTypes::OVER)
+	: under_controll(0), over_camera({ 0, 90, -100 }), view_type(CameraTypes::OVER)
 {
 	init(hinst, hwnd, _width, _height, fullscreen);
 }
@@ -46,15 +46,6 @@ void GameController::init(HINSTANCE hinst, HWND hwnd, int _width, int _height, b
 	airplains.push_back(new Airplain(xfile_manager->get("Airplain"), graphics->GetDXDevice(), D3DXVECTOR3( 0.0, 0.0, 10.0f )));
 	airplains.push_back(new Airplain(xfile_manager->get("Airplain"), graphics->GetDXDevice(), D3DXVECTOR3( 0.0, 0.0, -10.0f)));
 
-
-	// イベントハンドル生成
-	event_handle = CreateEvent(NULL, false, false, NULL);
-	if (event_handle == NULL) {
-		throw "CreateEvent エラー";
-	}
-	// スレッド生成(ゲームメイン)
-	main_thread = std::thread([&](){ main(); });
-
 	// 初期設定
 	graphics->SetRenderStateArray({
 		{ D3DRS_ZENABLE, TRUE }, // Ｚバッファ有効
@@ -70,13 +61,12 @@ void GameController::init(HINSTANCE hinst, HWND hwnd, int _width, int _height, b
 	debug_font = new CDebugFont();
 	debug_font->CreateFontA(graphics->GetDXDevice());
 #endif
+	Start();
 }
 
 void GameController::uninit()
 {
-	main_thread.join();
-
-	CloseHandle(event_handle);
+	Stop();
 
 	if (graphics != NULL) {
 		graphics->Exit();
@@ -90,22 +80,9 @@ void GameController::uninit()
 
 void GameController::main()
 {
-	while (1) {
-		auto sts = WaitForSingleObject(event_handle, 1000);	// イベントフラグがセットされるのを待つ（1000msでタイムアウト）
-		if (sts == WAIT_FAILED) {
-			break;
-		}
-		else if (sts == WAIT_TIMEOUT) {
-			if (end) {
-				break;
-			}
-			continue;
-		}
-
-		input(); // 入力
-		update(); // 更新
-		render(); // 描画
-	}
+	input(); // 入力
+	update(); // 更新
+	render(); // 描画
 }
 
 void GameController::input()
@@ -158,8 +135,6 @@ void GameController::update()
 
 	auto colls = getCollisions({ airplains[0]->getBBox() }, { airplains[1]->getBBox() });
 	if (colls.size() > 0)
-//	if (airplains[0]->getBBox()->isCollision(airplains[1]->getBBox()))
-//	if (isCollision(airplains[0]->getBBox(), airplains[1]->getBBox()))
 	{
 #ifdef _DEBUG
 		debug_text = "あたっとる";
@@ -237,14 +212,4 @@ void GameController::render()
 		debug_font->DrawTextA(0, 0, debug_text.c_str());
 #endif // _DEBUG
 	});
-}
-
-void GameController::setEvent()
-{
-	if (!end) SetEvent(event_handle);
-}
-
-void GameController::setEndFlag()
-{
-	end = true;
 }
