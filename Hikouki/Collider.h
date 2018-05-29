@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "BoundingSphere.h"
 
 template <typename _T>
 std::vector<std::vector<_T>> combinations(std::vector<_T> v, int cnt = 2)
@@ -21,3 +22,10 @@ std::vector<std::vector<_T>> combinations(std::vector<_T> v, int cnt = 2)
 
 	return result;
 }
+
+float calculateDistance(const D3DXVECTOR3 &a, const D3DXVECTOR3 &b);
+
+bool isCollision(BoundingSphere* a, BoundingSphere* b);
+
+// Õ“Ë‚µ‚½bbox‚ÌƒyƒA‚ğ‚·‚×‚Ä•Ô‚·
+std::vector<std::pair<BoundingSphere*, BoundingSphere*>> getCollisions(std::vector<BoundingSphere*> a, std::vector<BoundingSphere*> b);

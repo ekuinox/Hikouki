@@ -10,6 +10,7 @@
 #include <vector>
 #include <chrono>
 #include "Airplain.h"
+#include "Collider.h"
 
 #ifdef _DEBUG
 #include "DebugConsole.h"

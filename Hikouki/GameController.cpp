@@ -129,7 +129,8 @@ void GameController::input()
 	if (keyboard->getTrigger(DIK_V)) view_type++;
 	if (keyboard->getTrigger(DIK_NUMPAD5)) airplains[under_controll]->switchExplosion();
 	if (keyboard->getTrigger(DIK_NUMPAD8)) airplains[under_controll]->switchDrawBBox();
-	if (keyboard->getTrigger(DIK_NUMPAD2)) airplains[under_controll]->addTrans({ 0, 0, -1 });
+	if (keyboard->getTrigger(DIK_NUMPAD6)) airplains[under_controll]->addTrans({ 0, 0, -1 });
+	if (keyboard->getTrigger(DIK_NUMPAD4)) airplains[under_controll]->addTrans({ 0, 0, 1 });
 	if (keyboard->getTrigger(DIK_SPACE)) airplains[under_controll]->setTrans({0, 0, 0});
 
 #ifdef _DEBUG
@@ -144,7 +145,10 @@ void GameController::update()
 		airplain->update();
 	}
 
-	if (airplains[0]->getBBox()->isCollision(airplains[1]->getBBox()))
+	auto colls = getCollisions({ airplains[0]->getBBox() }, { airplains[1]->getBBox() });
+	if (colls.size() > 0)
+//	if (airplains[0]->getBBox()->isCollision(airplains[1]->getBBox()))
+//	if (isCollision(airplains[0]->getBBox(), airplains[1]->getBBox()))
 	{
 #ifdef _DEBUG
 		debug_text = "‚ ‚½‚Á‚Æ‚é";
