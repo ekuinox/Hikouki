@@ -134,18 +134,21 @@ void GameController::update()
 	}
 
 	auto colls = getCollisions({ airplains[0]->getBBox() }, { airplains[1]->getBBox() });
-	if (colls.size() > 0)
-	{
 #ifdef _DEBUG
-		debug_text = "‚ ‚½‚Á‚Æ‚é";
-#endif // DEBUG
-	}
-	else
+	debug_text = "{\n    BBoxes:\n    {\n";
+	for (auto i = 0; i < 2; ++i)
 	{
-#ifdef _DEBUG
-		debug_text = "‚ ‚½‚Á‚Æ‚ç‚ñ";
-#endif // DEBUG
+		auto pos = airplains[i]->getBBox()->getPosition();
+		char line[255];
+		sprintf(line, "        Airplain[%d]: { X: %f, Y: %f, Z: %f, R: %f, Hit: %s }%s\n", i, pos.x, pos.y, pos.z, airplains[i]->getBBox()->getR(), colls.size() > 0 ? "TRUE" : "FALSE", i == 1 ? "" : ",");
+	//	debug_text = fmt::format("Airplain[{%d}] -> x: {%f}, y: {%f}, z: {%f}, r: {%f}, Hit: {%s}\n", i, pos.x, pos.y, pos.z, airplains[i]->getBBox()->getR(), colls.size() > 0 ? "TRUE" : "FALSE");
+		debug_text += line;
 	}
+	debug_text += "    },\n";
+	char line[255];
+	sprintf(line, "    Distance: %f\n}", calculateDistance(airplains[0]->getBBox()->getPosition(), airplains[1]->getBBox()->getPosition()));
+	debug_text += line;
+#endif
 
 	D3DXMATRIX mat;
 

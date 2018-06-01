@@ -37,6 +37,6 @@ public:
 		// 文字列のサイズを計算
 		m_pFont->DrawText(NULL,str,-1,&rect,DT_CALCRECT ,NULL);
 		// 文字列描画（赤色）
-		m_pFont->DrawText(NULL,str,-1,&rect,DT_LEFT | DT_BOTTOM,0xffff0000);
+		m_pFont->DrawText(NULL,str,-1,&rect,DT_LEFT | DT_BOTTOM,0xff550033);
 	}
 };
