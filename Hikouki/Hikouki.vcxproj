@@ -154,12 +154,12 @@
     <ClCompile Include="CDirectXGraphics.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="DebugConsole.cpp" />
-    <ClCompile Include="explosion.cpp" />
+    <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="input.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="mathutil.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MathUtil.cpp" />
     <ClCompile Include="XFileManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -172,12 +172,12 @@
     <ClInclude Include="Collider.h" />
     <ClInclude Include="DebugConsole.h" />
     <ClInclude Include="EventMachine.h" />
-    <ClInclude Include="explosion.h" />
+    <ClInclude Include="Explosion.h" />
     <ClInclude Include="GameController.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="input.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="KeyCode.h" />
-    <ClInclude Include="mathutil.h" />
+    <ClInclude Include="MathUtil.h" />
     <ClInclude Include="rxcpp\operators\rx-all.hpp" />
     <ClInclude Include="rxcpp\operators\rx-amb.hpp" />
     <ClInclude Include="rxcpp\operators\rx-any.hpp" />
