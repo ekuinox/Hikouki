@@ -1,24 +1,30 @@
 #include "input.h"
 
-Input::Input(HINSTANCE ins)
+Input::Input(HINSTANCE ins, HWND wnd)
 {
 	if (FAILED(DirectInput8Create(ins, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&input, NULL)))
 	{
 		throw "Init Input Error";
 	}
+
+	mouse = new Mouse(input, wnd);
+	keyboard = new Keyboard(input, wnd);
 }
 
 Input::~Input()
 {
 	if (input) input->Release();
+	delete mouse;
+	delete keyboard;
 }
 
-LPDIRECTINPUT8 Input::get()
+void Input::update()
 {
-	return input;
+	mouse->update();
+	keyboard->update();
 }
 
-Keyboard::Keyboard(LPDIRECTINPUT8 input, HWND wnd)
+Input::Keyboard::Keyboard(LPDIRECTINPUT8 input, HWND wnd)
 {
 	// デバイスオブジェクトを作成
 	if (FAILED(input->CreateDevice(GUID_SysKeyboard, &device, NULL)))
@@ -35,7 +41,7 @@ Keyboard::Keyboard(LPDIRECTINPUT8 input, HWND wnd)
 	device->Acquire();
 }
 
-Keyboard::~Keyboard()
+Input::Keyboard::~Keyboard()
 {
 	if (device)
 	{
@@ -44,7 +50,7 @@ Keyboard::~Keyboard()
 	}
 }
 
-void Keyboard::update()
+void Input::Keyboard::update()
 {
 	BYTE current[NUM_KEY_MAX];
 
@@ -90,27 +96,27 @@ void Keyboard::update()
 	}
 }
 
-bool Keyboard::getPress(int key)
+bool Input::Keyboard::getPress(int key)
 {
 	return (buff[key] & 0x80) ? true : false;
 }
 
-bool Keyboard::getTrigger(int key)
+bool Input::Keyboard::getTrigger(int key)
 {
 	return (state_trigger[key] & 0x80) ? true : false;
 }
 
-bool Keyboard::getRepeat(int key)
+bool Input::Keyboard::getRepeat(int key)
 {
 	return (state_repeat[key] & 0x80) ? true : false;
 }
 
-bool Keyboard::getRelease(int key)
+bool Input::Keyboard::getRelease(int key)
 {
 	return (state_release[key] & 0x80) ? true : false;
 }
 
-Mouse::Mouse(LPDIRECTINPUT8 input, HWND wnd)
+Input::Mouse::Mouse(LPDIRECTINPUT8 input, HWND wnd)
 {
 	// デバイスオブジェクトを作成
 	if (FAILED(input->CreateDevice(GUID_SysMouse, &device, NULL)))
@@ -136,10 +142,10 @@ Mouse::Mouse(LPDIRECTINPUT8 input, HWND wnd)
 	if (FAILED(device->SetProperty(DIPROP_AXISMODE, &diprop.diph)))
 		throw "Failed to set mouse prop";
 
-	if (FAILED(device->Acquire())) throw "Failed to acquire mouse";
+	device->Acquire();
 }
 
-Mouse::~Mouse()
+Input::Mouse::~Mouse()
 {
 	if (device)
 	{
@@ -148,7 +154,7 @@ Mouse::~Mouse()
 	}
 }
 
-void Mouse::update()
+void Input::Mouse::update()
 {
 	/*
 	DIMOUSESTATE current;
@@ -204,7 +210,7 @@ void Mouse::update()
 	}
 }
 
-DIMOUSESTATE Mouse::getState()
+DIMOUSESTATE Input::Mouse::getState()
 {
 	return buff;
 }

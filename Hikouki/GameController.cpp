@@ -17,9 +17,8 @@ void GameController::init(HINSTANCE hinst, HWND hwnd, int _width, int _height, b
 	height = _height;
 
 	// “ü—Í‰Šú‰»
-	input_device = new Input(hinst);
-	keyboard = new Keyboard(input_device->get(), hwnd);
-	mouse = new Mouse(input_device->get(), hwnd);
+	input_device = new Input(hinst, hwnd);
+
 
 #ifdef _DEBUG
 //	DebugConsole::create_console_window();
@@ -73,9 +72,7 @@ void GameController::uninit()
 		delete graphics;
 	}
 
-	delete keyboard;
 	delete input_device;
-	delete mouse;
 }
 
 void GameController::main()
@@ -87,10 +84,10 @@ void GameController::main()
 
 void GameController::input()
 {
-	keyboard->update();
+	input_device->keyboard->update();
 	try
 	{
-		mouse->update();
+		input_device->mouse->update();
 	}
 	catch (const char *e)
 	{
@@ -98,28 +95,28 @@ void GameController::input()
 		std::cout << e << std::endl;
 #endif
 	}
-	auto mouse_current_state = mouse->getState();
+	auto mouse_current_state = input_device->mouse->getState();
 
-	if (keyboard->getTrigger(DIK_ADD) && under_controll + 1 < airplains.size()) under_controll++;
-	if (keyboard->getTrigger(DIK_SUBTRACT) && under_controll > 0) under_controll--;
+	if (input_device->keyboard->getTrigger(DIK_ADD) && under_controll + 1 < airplains.size()) under_controll++;
+	if (input_device->keyboard->getTrigger(DIK_SUBTRACT) && under_controll > 0) under_controll--;
 
 	if (view_type == CameraTypes::OVER)
 	{
-		if (keyboard->getPress(DIK_UPARROW)) over_camera.elevation += 0.01f;
-		if (keyboard->getPress(DIK_DOWNARROW)) over_camera.elevation -= 0.01f;
-		if (keyboard->getPress(DIK_RIGHTARROW)) over_camera.azimuth -= 0.01f;
-		if (keyboard->getPress(DIK_LEFTARROW)) over_camera.azimuth += 0.01f;
-		if (keyboard->getPress(DIK_RETURN) && 0 < over_camera.distance) over_camera.distance -= 0.1f;
-		if (keyboard->getPress(DIK_BACKSPACE)) over_camera.distance += 0.1f;
+		if (input_device->keyboard->getPress(DIK_UPARROW)) over_camera.elevation += 0.01f;
+		if (input_device->keyboard->getPress(DIK_DOWNARROW)) over_camera.elevation -= 0.01f;
+		if (input_device->keyboard->getPress(DIK_RIGHTARROW)) over_camera.azimuth -= 0.01f;
+		if (input_device->keyboard->getPress(DIK_LEFTARROW)) over_camera.azimuth += 0.01f;
+		if (input_device->keyboard->getPress(DIK_RETURN) && 0 < over_camera.distance) over_camera.distance -= 0.1f;
+		if (input_device->keyboard->getPress(DIK_BACKSPACE)) over_camera.distance += 0.1f;
 		over_camera.distance -= mouse_current_state.lZ / 10;
 	}
 
-	if (keyboard->getTrigger(DIK_V)) view_type++;
-	if (keyboard->getTrigger(DIK_NUMPAD5)) airplains[under_controll]->switchExplosion();
-	if (keyboard->getTrigger(DIK_NUMPAD8)) airplains[under_controll]->switchDrawBBox();
-	if (keyboard->getTrigger(DIK_NUMPAD6)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, -1 });
-	if (keyboard->getTrigger(DIK_NUMPAD4)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, 1 });
-	if (keyboard->getTrigger(DIK_SPACE)) airplains[under_controll]->setTrans(D3DXVECTOR3{0, 0, 0});
+	if (input_device->keyboard->getTrigger(DIK_V)) view_type++;
+	if (input_device->keyboard->getTrigger(DIK_NUMPAD5)) airplains[under_controll]->switchExplosion();
+	if (input_device->keyboard->getTrigger(DIK_NUMPAD8)) airplains[under_controll]->switchDrawBBox();
+	if (input_device->keyboard->getTrigger(DIK_NUMPAD6)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, -1 });
+	if (input_device->keyboard->getTrigger(DIK_NUMPAD4)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, 1 });
+	if (input_device->keyboard->getTrigger(DIK_SPACE)) airplains[under_controll]->setTrans(D3DXVECTOR3{0, 0, 0});
 
 #ifdef _DEBUG
 	printf("%ld, %ld, %ld\n", mouse_current_state.lX, mouse_current_state.lY, mouse_current_state.lZ);

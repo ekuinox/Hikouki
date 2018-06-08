@@ -71,8 +71,6 @@ private:
 	D3DXMATRIX view, proj;
 
 	Input *input_device;
-	Keyboard *keyboard;
-	Mouse *mouse;
 #ifdef _DEBUG
 	CDebugFont *debug_font;
 	std::string debug_text;
