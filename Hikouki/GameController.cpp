@@ -84,8 +84,14 @@ void GameController::main()
 
 void GameController::input()
 {
-	input_device->update();
+	try
+	{
+		input_device->update();
+	}
+	catch (const char* e)
+	{
 
+	}
 	auto mouse_current_state = input_device->getMouseState();
 
 	if (input_device->getTrigger(KeyCode::Add) && under_controll + 1 < airplains.size()) under_controll++;
