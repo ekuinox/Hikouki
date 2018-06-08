@@ -31,9 +31,6 @@ void Airplain::update()
 {
 	if (!active) return;
 
-	auto current = system_clock::now();
-	if (std::chrono::duration_cast<std::chrono::microseconds>(current - latest_update).count() < 1) return;
-
 	if (explosion_flag)
 	{
 		explosion->Update();
@@ -49,8 +46,6 @@ void Airplain::update()
 		MakeWorldMatrix(mx, mat, angle, trans);
 		bbox->updatePosition(mat);
 	}
-
-	latest_update = current;
 }
 
 void Airplain::startExplosion()

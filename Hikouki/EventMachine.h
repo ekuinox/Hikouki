@@ -1,54 +1,53 @@
 #pragma once
 
-#include <Windows.h>
 #include <thread>
+#include <chrono>
+#include "rxcpp/rx.hpp"
+
+using namespace std::chrono;
 
 class EventMachine
 {
-protected:
-	HANDLE handle;
-	bool end;
-	std::thread thread;
 public:
-	EventMachine() : end(false) {}
+	enum class State
+	{
+		Ready,
+		Continue,
+		Exit,
+	};
+protected:
+	State state;
+	std::thread thread;
+	rxcpp::subjects::subject<State> subject;
+public:
+	EventMachine() : state(State::Ready) {}
 	void Start()
 	{
-		// イベントハンドル生成
-		handle = CreateEvent(NULL, false, false, NULL);
-		if (handle == NULL) {
-			throw "CreateEvent エラー";
-		}
 		// スレッド生成(ゲームメイン)
 		thread = std::thread([&]() { Loop(); });
 	}
 	void Loop()
 	{
-		while (1) {
-			auto sts = WaitForSingleObject(handle, 1000);	// イベントフラグがセットされるのを待つ（1000msでタイムアウト）
-			if (sts == WAIT_FAILED) {
-				break;
-			}
-			else if (sts == WAIT_TIMEOUT) {
-				if (end) {
-					break;
-				}
-				continue;
-			}
+		state = State::Continue;
+		while (state == State::Continue)
+		{
+			auto start = high_resolution_clock::now();
+			while (duration_cast<milliseconds>(high_resolution_clock::now() - start).count() < 1);
 			main();
+			subject.get_subscriber().on_next(state);
 		}
 	}
 	virtual void main() = 0;
-	void Set()
-	{
-		if (!end) SetEvent(handle);
-	}
 	void SetEnd()
 	{
-		end = true;
+		state = State::Exit;
 	}
 	void Stop()
 	{
 		thread.join();
-		CloseHandle(handle);
+	}
+	rxcpp::observable<State> get_obsseval()
+	{
+		return subject.get_observable();
 	}
 };

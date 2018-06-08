@@ -125,20 +125,22 @@ int APIENTRY WinMain(HINSTANCE 	hInstance, 		// アプリケーションのハンドル
 	ShowWindow(hwnd, nWinMode);
 	UpdateWindow(hwnd);
 
-	try{
+	try
+	{
 		game_controller = new GameController(hInstance, hwnd, SCREEN_X, SCREEN_Y, FULLSCREEN);
-	} catch (const char *err) {
+	}
+	catch (const char *err)
+	{
 		MessageBox(hwnd, "ERROR", err, MB_OK);
 	}
-
-	// イベントタイマーをセットする
-	timeBeginPeriod(1); // タイマの分解能力を１ｍｓにする
-	g_timerid = timeSetEvent(16, 1, TimerProc, 1, TIME_PERIODIC);
-
-	while(1){	// メッセージ･ループ
-		if( !GetMessage(&msg, NULL, 0, 0) ){	// メッセージを取得
+	while(1)
+	{	// メッセージ･ループ
+		if( !GetMessage(&msg, NULL, 0, 0) )
+		{	// メッセージを取得
 			break; 
-		}else{
+		}
+		else
+		{
 			TranslateMessage(&msg); 			// 文字メッセージへのコンバート）
 			DispatchMessage(&msg); 				// メッセージをWndProcへ送る
 		}
@@ -146,9 +148,6 @@ int APIENTRY WinMain(HINSTANCE 	hInstance, 		// アプリケーションのハンドル
 
 	// ゲーム終了フラグをセットする
 	game_controller->SetEnd();
-
-	if( g_timerid ) timeKillEvent(g_timerid);	// マルチメディアタイマの終了
-	timeEndPeriod(1);							// タイマの分解能力もとに戻す
 
 	delete game_controller;
 	return (int)msg.wParam;
@@ -184,22 +183,3 @@ LRESULT WINAPI WndProc(	HWND hwnd, 		// ウィンドウハンドル
 	}
 	return 0;
 }
-
-//==============================================================================
-//!	@fn		TimerProc
-//!	@brief	１６ｍｓ毎にイベントオブジェクトをセットする
-//!	@param	タイマＩＤ
-//!	@param	未使用
-//!	@param	未使用
-//!	@param	未使用
-//!	@param	未使用
-//!	@retval	なし
-//==============================================================================
-void CALLBACK TimerProc(UINT, UINT, DWORD, DWORD, DWORD)
-{
-	game_controller->Set();
-}
-
-//******************************************************************************
-//	End of file.
-//******************************************************************************

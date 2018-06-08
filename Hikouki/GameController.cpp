@@ -105,21 +105,21 @@ void GameController::input()
 
 	if (view_type == CameraTypes::OVER)
 	{
-		if (keyboard->getPress(DIK_UPARROW)) over_camera.elevation += 0.1f;
-		if (keyboard->getPress(DIK_DOWNARROW)) over_camera.elevation -= 0.1f;
-		if (keyboard->getPress(DIK_RIGHTARROW)) over_camera.azimuth -= 0.1f;
-		if (keyboard->getPress(DIK_LEFTARROW)) over_camera.azimuth += 0.1f;
-		if (keyboard->getPress(DIK_RETURN) && 0 < over_camera.distance) over_camera.distance -= 1.0f;
-		if (keyboard->getPress(DIK_BACKSPACE)) over_camera.distance += 1.0f;
+		if (keyboard->getPress(DIK_UPARROW)) over_camera.elevation += 0.01f;
+		if (keyboard->getPress(DIK_DOWNARROW)) over_camera.elevation -= 0.01f;
+		if (keyboard->getPress(DIK_RIGHTARROW)) over_camera.azimuth -= 0.01f;
+		if (keyboard->getPress(DIK_LEFTARROW)) over_camera.azimuth += 0.01f;
+		if (keyboard->getPress(DIK_RETURN) && 0 < over_camera.distance) over_camera.distance -= 0.1f;
+		if (keyboard->getPress(DIK_BACKSPACE)) over_camera.distance += 0.1f;
 		over_camera.distance -= mouse_current_state.lZ / 10;
 	}
 
 	if (keyboard->getTrigger(DIK_V)) view_type++;
 	if (keyboard->getTrigger(DIK_NUMPAD5)) airplains[under_controll]->switchExplosion();
 	if (keyboard->getTrigger(DIK_NUMPAD8)) airplains[under_controll]->switchDrawBBox();
-	if (keyboard->getTrigger(DIK_NUMPAD6)) airplains[under_controll]->addTrans({ 0, 0, -1 });
-	if (keyboard->getTrigger(DIK_NUMPAD4)) airplains[under_controll]->addTrans({ 0, 0, 1 });
-	if (keyboard->getTrigger(DIK_SPACE)) airplains[under_controll]->setTrans({0, 0, 0});
+	if (keyboard->getTrigger(DIK_NUMPAD6)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, -1 });
+	if (keyboard->getTrigger(DIK_NUMPAD4)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, 1 });
+	if (keyboard->getTrigger(DIK_SPACE)) airplains[under_controll]->setTrans(D3DXVECTOR3{0, 0, 0});
 
 #ifdef _DEBUG
 	printf("%ld, %ld, %ld\n", mouse_current_state.lX, mouse_current_state.lY, mouse_current_state.lZ);
@@ -146,7 +146,7 @@ void GameController::update()
 	}
 	debug_text += "    },\n";
 	char line[255];
-	sprintf(line, "    Distance: %f\n}", calculateDistance(airplains[0]->getBBox()->getPosition(), airplains[1]->getBBox()->getPosition()));
+	sprintf(line, "    Distance: %f\n} ", calculateDistance(airplains[0]->getBBox()->getPosition(), airplains[1]->getBBox()->getPosition()));
 	debug_text += line;
 #endif
 
