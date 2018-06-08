@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Airplain.cpp" />
+    <ClCompile Include="App.cpp" />
     <ClCompile Include="BoundingSphere.cpp" />
     <ClCompile Include="CDirect3DXFile.cpp" />
     <ClCompile Include="CDirectXGraphics.cpp" />
@@ -163,6 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Airplain.h" />
+    <ClInclude Include="App.h" />
     <ClInclude Include="BoundingSphere.h" />
     <ClInclude Include="CDebugFont.h" />
     <ClInclude Include="CDirect3DXFile.h" />

@@ -57,6 +57,9 @@
     <ClCompile Include="BoundingSphere.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="App.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CDirectxGraphics.h">
@@ -412,6 +415,9 @@
     </ClInclude>
     <ClInclude Include="rxcpp\subjects\rx-synchronize.hpp">
       <Filter>ヘッダー ファイル\rxcpp</Filter>
+    </ClInclude>
+    <ClInclude Include="App.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
