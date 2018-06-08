@@ -176,6 +176,7 @@
     <ClInclude Include="GameController.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="KeyCode.h" />
     <ClInclude Include="mathutil.h" />
     <ClInclude Include="rxcpp\operators\rx-all.hpp" />
     <ClInclude Include="rxcpp\operators\rx-amb.hpp" />

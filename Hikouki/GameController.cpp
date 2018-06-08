@@ -84,39 +84,30 @@ void GameController::main()
 
 void GameController::input()
 {
-	input_device->keyboard->update();
-	try
-	{
-		input_device->mouse->update();
-	}
-	catch (const char *e)
-	{
-#ifdef _DEBUG
-		std::cout << e << std::endl;
-#endif
-	}
-	auto mouse_current_state = input_device->mouse->getState();
+	input_device->update();
 
-	if (input_device->keyboard->getTrigger(DIK_ADD) && under_controll + 1 < airplains.size()) under_controll++;
-	if (input_device->keyboard->getTrigger(DIK_SUBTRACT) && under_controll > 0) under_controll--;
+	auto mouse_current_state = input_device->getMouseState();
+
+	if (input_device->getTrigger(KeyCode::Add) && under_controll + 1 < airplains.size()) under_controll++;
+	if (input_device->getTrigger(KeyCode::Subtract) && under_controll > 0) under_controll--;
 
 	if (view_type == CameraTypes::OVER)
 	{
-		if (input_device->keyboard->getPress(DIK_UPARROW)) over_camera.elevation += 0.01f;
-		if (input_device->keyboard->getPress(DIK_DOWNARROW)) over_camera.elevation -= 0.01f;
-		if (input_device->keyboard->getPress(DIK_RIGHTARROW)) over_camera.azimuth -= 0.01f;
-		if (input_device->keyboard->getPress(DIK_LEFTARROW)) over_camera.azimuth += 0.01f;
-		if (input_device->keyboard->getPress(DIK_RETURN) && 0 < over_camera.distance) over_camera.distance -= 0.1f;
-		if (input_device->keyboard->getPress(DIK_BACKSPACE)) over_camera.distance += 0.1f;
+		if (input_device->getPress(KeyCode::UpArrow)) over_camera.elevation += 0.01f;
+		if (input_device->getPress(KeyCode::DownArrow)) over_camera.elevation -= 0.01f;
+		if (input_device->getPress(KeyCode::RightArrow)) over_camera.azimuth -= 0.01f;
+		if (input_device->getPress(KeyCode::LeftArrow)) over_camera.azimuth += 0.01f;
+		if (input_device->getPress(KeyCode::Return) && 0 < over_camera.distance) over_camera.distance -= 0.1f;
+		if (input_device->getPress(KeyCode::BackSpace)) over_camera.distance += 0.1f;
 		over_camera.distance -= mouse_current_state.lZ / 10;
 	}
 
-	if (input_device->keyboard->getTrigger(DIK_V)) view_type++;
-	if (input_device->keyboard->getTrigger(DIK_NUMPAD5)) airplains[under_controll]->switchExplosion();
-	if (input_device->keyboard->getTrigger(DIK_NUMPAD8)) airplains[under_controll]->switchDrawBBox();
-	if (input_device->keyboard->getTrigger(DIK_NUMPAD6)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, -1 });
-	if (input_device->keyboard->getTrigger(DIK_NUMPAD4)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, 1 });
-	if (input_device->keyboard->getTrigger(DIK_SPACE)) airplains[under_controll]->setTrans(D3DXVECTOR3{0, 0, 0});
+	if (input_device->getTrigger(KeyCode::V)) view_type++;
+	if (input_device->getTrigger(KeyCode::Numpad5)) airplains[under_controll]->switchExplosion();
+	if (input_device->getTrigger(KeyCode::Numpad8)) airplains[under_controll]->switchDrawBBox();
+	if (input_device->getTrigger(KeyCode::Numpad6)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, -1 });
+	if (input_device->getTrigger(KeyCode::Numpad4)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, 1 });
+	if (input_device->getTrigger(KeyCode::Space)) airplains[under_controll]->setTrans(D3DXVECTOR3{0, 0, 0});
 
 #ifdef _DEBUG
 	printf("%ld, %ld, %ld\n", mouse_current_state.lX, mouse_current_state.lY, mouse_current_state.lZ);
