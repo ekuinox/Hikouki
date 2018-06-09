@@ -282,6 +282,7 @@
     <ClInclude Include="rxcpp\subjects\rx-replaysubject.hpp" />
     <ClInclude Include="rxcpp\subjects\rx-subject.hpp" />
     <ClInclude Include="rxcpp\subjects\rx-synchronize.hpp" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="XFileManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -34,6 +34,8 @@ void GameController::init(HINSTANCE hinst, HWND hwnd, int _width, int _height, b
 
 	camera = new Camera();
 
+	timer = new trau::Timer();
+
 	xfile_manager = new XFileManager(graphics->GetDXDevice());
 	xfile_manager->add({
 		{ "Airplain", "assets/f1.x" }, // 飛行機
@@ -42,8 +44,8 @@ void GameController::init(HINSTANCE hinst, HWND hwnd, int _width, int _height, b
 
 	skydome = new XFileObjectBase(xfile_manager->get("Skydome"));
 
-	airplains.push_back(new Airplain(xfile_manager->get("Airplain"), graphics->GetDXDevice(), D3DXVECTOR3( 0.0, 0.0, 10.0f )));
-	airplains.push_back(new Airplain(xfile_manager->get("Airplain"), graphics->GetDXDevice(), D3DXVECTOR3( 0.0, 0.0, -10.0f)));
+	airplains.push_back(new Airplain(xfile_manager->get("Airplain"), graphics->GetDXDevice(), D3DXVECTOR3( 0.0, 0.0, 10.0f ), timer));
+	airplains.push_back(new Airplain(xfile_manager->get("Airplain"), graphics->GetDXDevice(), D3DXVECTOR3( 0.0, 0.0, -10.0f), timer));
 
 	// 初期設定
 	graphics->SetRenderStateArray({
@@ -60,6 +62,7 @@ void GameController::init(HINSTANCE hinst, HWND hwnd, int _width, int _height, b
 	debug_font = new CDebugFont();
 	debug_font->CreateFontA(graphics->GetDXDevice());
 #endif
+
 	Start();
 }
 
@@ -77,9 +80,11 @@ void GameController::uninit()
 
 void GameController::main()
 {
-	input(); // 入力
-	update(); // 更新
-	render(); // 描画
+	timer->run([&] {
+		input(); // 入力
+		update(); // 更新
+		render(); // 描画
+	});
 }
 
 void GameController::input()
@@ -99,10 +104,10 @@ void GameController::input()
 
 	if (view_type == CameraTypes::OVER)
 	{
-		if (input_device->getPress(KeyCode::UpArrow)) over_camera.elevation += 0.01f;
-		if (input_device->getPress(KeyCode::DownArrow)) over_camera.elevation -= 0.01f;
-		if (input_device->getPress(KeyCode::RightArrow)) over_camera.azimuth -= 0.01f;
-		if (input_device->getPress(KeyCode::LeftArrow)) over_camera.azimuth += 0.01f;
+		if (input_device->getPress(KeyCode::UpArrow)) over_camera.elevation += 10.0f * timer->getMs();
+		if (input_device->getPress(KeyCode::DownArrow)) over_camera.elevation -= 10.0f * timer->getMs();
+		if (input_device->getPress(KeyCode::RightArrow)) over_camera.azimuth -= 10.0f * timer->getMs();
+		if (input_device->getPress(KeyCode::LeftArrow)) over_camera.azimuth += 10.0f * timer->getMs();
 		if (input_device->getPress(KeyCode::Return) && 0 < over_camera.distance) over_camera.distance -= 0.1f;
 		if (input_device->getPress(KeyCode::BackSpace)) over_camera.distance += 0.1f;
 		over_camera.distance -= mouse_current_state.lZ / 10;
@@ -111,8 +116,8 @@ void GameController::input()
 	if (input_device->getTrigger(KeyCode::V)) view_type++;
 	if (input_device->getTrigger(KeyCode::Numpad5)) airplains[under_controll]->switchExplosion();
 	if (input_device->getTrigger(KeyCode::Numpad8)) airplains[under_controll]->switchDrawBBox();
-	if (input_device->getTrigger(KeyCode::Numpad6)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, -1 });
-	if (input_device->getTrigger(KeyCode::Numpad4)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, 1 });
+	if (input_device->getTrigger(KeyCode::Numpad6)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, -10 });
+	if (input_device->getTrigger(KeyCode::Numpad4)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, 10 });
 	if (input_device->getTrigger(KeyCode::Space)) airplains[under_controll]->setTrans(D3DXVECTOR3{0, 0, 0});
 
 #ifdef _DEBUG
@@ -141,6 +146,9 @@ void GameController::update()
 	debug_text += "    },\n";
 	char line[255];
 	sprintf(line, "    Distance: %f\n} ", calculateDistance(airplains[0]->getBBox()->getPosition(), airplains[1]->getBBox()->getPosition()));
+	debug_text += line;
+
+	sprintf(line, "\n%f\n", timer->getMs());
 	debug_text += line;
 #endif
 

@@ -4,7 +4,6 @@
 #include <chrono>
 #include "rxcpp/rx.hpp"
 
-using namespace std::chrono;
 
 class EventMachine
 {
@@ -31,8 +30,6 @@ public:
 		state = State::Continue;
 		while (state == State::Continue)
 		{
-			auto start = high_resolution_clock::now();
-			while (duration_cast<milliseconds>(high_resolution_clock::now() - start).count() < 1);
 			main();
 			subject.get_subscriber().on_next(state);
 		}

@@ -10,6 +10,7 @@
 #include "Airplain.h"
 #include "Collider.h"
 #include "EventMachine.h"
+#include "Timer.h"
 
 #ifdef _DEBUG
 #include "DebugConsole.h"
@@ -75,6 +76,8 @@ private:
 	CDebugFont *debug_font;
 	std::string debug_text;
 #endif // _DEBUG
+
+	trau::Timer *timer;
 
 public:
 	GameController(HINSTANCE, HWND, int, int, bool);

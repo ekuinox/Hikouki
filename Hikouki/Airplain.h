@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "BoundingSphere.h"
 #include "explosion.h"
+#include "Timer.h"
 
 class Airplain : public XFileObjectBase {
 private:
@@ -10,9 +11,10 @@ private:
 	void startExplosion();
 	Explosion* explosion;
 	BoundingSphere *bbox;
+	trau::Timer *timer;
 public:
-	Airplain(CDirect3DXFile*, LPDIRECT3DDEVICE9);
-	Airplain(CDirect3DXFile*, LPDIRECT3DDEVICE9, D3DXVECTOR3);
+	Airplain(CDirect3DXFile*, LPDIRECT3DDEVICE9, trau::Timer*);
+	Airplain(CDirect3DXFile*, LPDIRECT3DDEVICE9, D3DXVECTOR3, trau::Timer*);
 	void draw(LPDIRECT3DDEVICE9) const;
 	void update();
 	void switchExplosion();

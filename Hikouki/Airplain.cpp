@@ -1,15 +1,15 @@
 #include "Airplain.h"
 #include "mathutil.h"
 
-Airplain::Airplain(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device)
+Airplain::Airplain(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, trau::Timer *timer)
 	: XFileObjectBase(_xfile),
 	explosion(new Explosion(xfile, device)), explosion_flag(false),
-	bbox(new BoundingSphere(xfile->GetMesh(), device)), drawing_bbox(true)
+	bbox(new BoundingSphere(xfile->GetMesh(), device)), drawing_bbox(true), timer(timer)
 {
 }
 
-Airplain::Airplain(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, D3DXVECTOR3 coord)
-	: Airplain(_xfile, device)
+Airplain::Airplain(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, D3DXVECTOR3 coord, trau::Timer *timer)
+	: Airplain(_xfile, device, timer)
 {
 	D3DXMatrixTranslation(&mat, coord.x, coord.y, coord.z);
 }
@@ -43,7 +43,7 @@ void Airplain::update()
 		angle.x = rand() % 2 - 1;
 		angle.y = rand() % 2 - 1;
 #endif
-		MakeWorldMatrix(mx, mat, angle, trans);
+		MakeWorldMatrix(mx, mat, angle, trans * timer->getMs());
 		bbox->updatePosition(mat);
 	}
 }
