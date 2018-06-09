@@ -10,8 +10,8 @@
 class App
 {
 private:
-	const char* title = "Title";
-	const char* name = "name";
+	static constexpr const char* title = "Title";
+	static constexpr const char* name = "name";
 	static constexpr unsigned width = 1280;
 	static constexpr unsigned height = 720;
 	static constexpr bool isFullscreen = false;
