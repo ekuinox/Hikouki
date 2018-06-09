@@ -1,5 +1,7 @@
 #include "App.h"
 
+rxcpp::subjects::subject<const WPARAM> App::subject;
+
 App::App(HINSTANCE _ins)
 	: ins(_ins)
 {
@@ -74,11 +76,16 @@ int App::run(int mode)
 
 	try
 	{
-		auto game_controller = new GameController(ins, wh, width, height, isFullscreen);
-
+		auto gameController = new GameController(ins, wh, width, height, isFullscreen);
+		bool isLoop = true;
 		MSG msg;
 
-		while (1)
+		subject.get_observable().subscribe([&isLoop](const WPARAM)
+		{
+			isLoop = false;
+		});
+
+		while (isLoop)
 		{	// メッセージ･ループ
 			if (!GetMessage(&msg, NULL, 0, 0))
 			{	// メッセージを取得
@@ -92,9 +99,9 @@ int App::run(int mode)
 		}
 
 		// ゲーム終了フラグをセットする
-		game_controller->SetEnd();
+		gameController->SetEnd();
 
-		delete game_controller;
+		delete gameController;
 
 		return static_cast<int>(msg.wParam);
 	}
@@ -117,6 +124,7 @@ LRESULT App::wndProc(HWND wh, UINT message, WPARAM w, LPARAM l)
 		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
+		subject.get_subscriber().on_next(w);
 		break;
 	default:
 		return DefWindowProc(wh, message, w, l);

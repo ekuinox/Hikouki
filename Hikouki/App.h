@@ -6,6 +6,7 @@
 
 #include <windows.h>
 #include "GameController.h"
+#include "rxcpp/rx.hpp"
 
 class App
 {
@@ -15,6 +16,7 @@ private:
 	static constexpr unsigned width = 1280;
 	static constexpr unsigned height = 720;
 	static constexpr bool isFullscreen = false;
+	static rxcpp::subjects::subject<const WPARAM> subject;
 	HWND wh;
 	HINSTANCE ins;
 	static LRESULT CALLBACK wndProc(HWND, UINT, WPARAM, LPARAM);
