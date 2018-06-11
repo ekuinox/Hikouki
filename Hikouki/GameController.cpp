@@ -47,6 +47,8 @@ void GameController::init(HINSTANCE hinst, HWND hwnd, int _width, int _height, b
 	airplains.push_back(new Airplain(xfile_manager->get("Airplain"), graphics->GetDXDevice(), D3DXVECTOR3( 0.0, 0.0, 10.0f ), timer));
 	airplains.push_back(new Airplain(xfile_manager->get("Airplain"), graphics->GetDXDevice(), D3DXVECTOR3( 0.0, 0.0, -10.0f), timer));
 
+	text_area = new trau::TextArea(graphics->GetDXDevice(), 0, 0, std::string("こんにちは"));
+
 	// 初期設定
 	graphics->SetRenderStateArray({
 		{ D3DRS_ZENABLE, TRUE }, // Ｚバッファ有効
@@ -57,12 +59,6 @@ void GameController::init(HINSTANCE hinst, HWND hwnd, int _width, int _height, b
 		{ D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA }, // 透過処理を行う
 		{ D3DRS_SRCBLEND, D3DBLEND_SRCALPHA } // 半透明処理を行う
 		});
-
-#ifdef _DEBUG
-	debug_font = new CDebugFont();
-	debug_font->CreateFontA(graphics->GetDXDevice());
-#endif
-
 	Start();
 }
 
@@ -134,22 +130,23 @@ void GameController::update()
 
 	auto colls = getCollisions({ airplains[0]->getBBox() }, { airplains[1]->getBBox() });
 #ifdef _DEBUG
-	debug_text = "{\n    BBoxes:\n    {\n";
+	text_area->text = "{\n    BBoxes:\n    {\n";
 	for (auto i = 0; i < 2; ++i)
 	{
 		auto pos = airplains[i]->getBBox()->getPosition();
 		char line[255];
 		sprintf(line, "        Airplain[%d]: { X: %f, Y: %f, Z: %f, R: %f, Hit: %s }%s\n", i, pos.x, pos.y, pos.z, airplains[i]->getBBox()->getR(), colls.size() > 0 ? "TRUE" : "FALSE", i == 1 ? "" : ",");
-	//	debug_text = fmt::format("Airplain[{%d}] -> x: {%f}, y: {%f}, z: {%f}, r: {%f}, Hit: {%s}\n", i, pos.x, pos.y, pos.z, airplains[i]->getBBox()->getR(), colls.size() > 0 ? "TRUE" : "FALSE");
-		debug_text += line;
+		text_area->text += line;
 	}
-	debug_text += "    },\n";
+	text_area->text += "    },\n";
 	char line[255];
 	sprintf(line, "    Distance: %f\n} ", calculateDistance(airplains[0]->getBBox()->getPosition(), airplains[1]->getBBox()->getPosition()));
-	debug_text += line;
+	text_area->text += line;
 
 	sprintf(line, "\n%f\n", timer->getMs());
-	debug_text += line;
+	text_area->text += line;
+
+	text_area->text += (boost::format("%1% %1%") % 5).str();
 #endif
 
 	D3DXMATRIX mat;
@@ -213,8 +210,8 @@ void GameController::render()
 	graphics->Render([&](LPDIRECT3DDEVICE9 device) {
 		for (const auto& airplain : airplains) airplain->draw(device);
 		skydome->draw(device);
+		text_area->draw(device);
 #ifdef _DEBUG
-		debug_font->DrawTextA(0, 0, debug_text.c_str());
 #endif // _DEBUG
 	});
 }

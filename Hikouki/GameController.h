@@ -11,6 +11,8 @@
 #include "Collider.h"
 #include "EventMachine.h"
 #include "Timer.h"
+#include "TextArea.h"
+#include <boost/format.hpp>
 
 #ifdef _DEBUG
 #include "DebugConsole.h"
@@ -59,6 +61,7 @@ private:
 	Camera *camera;
 	std::vector<Airplain*> airplains;
 	XFileObjectBase* skydome;
+	trau::TextArea *text_area;
 	XFileManager *xfile_manager;
 	int width, height;
 	int under_controll;
@@ -73,8 +76,6 @@ private:
 
 	Input *input_device;
 #ifdef _DEBUG
-	CDebugFont *debug_font;
-	std::string debug_text;
 #endif // _DEBUG
 
 	trau::Timer *timer;
