@@ -19,11 +19,6 @@ void GameController::init(HINSTANCE hinst, HWND hwnd, int _width, int _height, b
 	// 入力初期化
 	input_device = new Input(hinst, hwnd);
 
-
-#ifdef _DEBUG
-//	DebugConsole::create_console_window();
-#endif
-
 	graphics = new CDirectXGraphics();	// DirectX Graphicsオブジェクト生成
 
 	if (!graphics->Init(hwnd, fullscreen, width, height)) {	// DirectX Graphicsオブジェクト初期化
@@ -93,6 +88,7 @@ void GameController::input()
 	{
 
 	}
+
 	auto mouse_current_state = input_device->getMouseState();
 
 	if (input_device->getTrigger(KeyCode::Add) && under_controll + 1 < airplains.size()) under_controll++;
@@ -115,10 +111,6 @@ void GameController::input()
 	if (input_device->getTrigger(KeyCode::Numpad6)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, -10 });
 	if (input_device->getTrigger(KeyCode::Numpad4)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, 10 });
 	if (input_device->getTrigger(KeyCode::Space)) airplains[under_controll]->setTrans(D3DXVECTOR3{0, 0, 0});
-
-#ifdef _DEBUG
-	printf("%ld, %ld, %ld\n", mouse_current_state.lX, mouse_current_state.lY, mouse_current_state.lZ);
-#endif
 }
 
 void GameController::update()
@@ -129,25 +121,18 @@ void GameController::update()
 	}
 
 	auto colls = getCollisions({ airplains[0]->getBBox() }, { airplains[1]->getBBox() });
-#ifdef _DEBUG
-	text_area->text = "{\n    BBoxes:\n    {\n";
+	
+	text_area->text = "{\n    Airplain:\n    {\n";
 	for (auto i = 0; i < 2; ++i)
 	{
 		auto pos = airplains[i]->getBBox()->getPosition();
-		char line[255];
-		sprintf(line, "        Airplain[%d]: { X: %f, Y: %f, Z: %f, R: %f, Hit: %s }%s\n", i, pos.x, pos.y, pos.z, airplains[i]->getBBox()->getR(), colls.size() > 0 ? "TRUE" : "FALSE", i == 1 ? "" : ",");
-		text_area->text += line;
+		text_area->text += (boost::format(
+			"        { X: %2%, Y: %3%, Z: %4%, R: %5%, Hit: %6% }%7%\n"
+		) % i % pos.x % pos.y % pos.z % airplains[i]->getBBox()->getR() % (colls.size() > 0 ? "TRUE" : "FALSE") % (i == 1 ? "" : ",")).str();
 	}
-	text_area->text += "    },\n";
-	char line[255];
-	sprintf(line, "    Distance: %f\n} ", calculateDistance(airplains[0]->getBBox()->getPosition(), airplains[1]->getBBox()->getPosition()));
-	text_area->text += line;
-
-	sprintf(line, "\n%f\n", timer->getMs());
-	text_area->text += line;
-
-	text_area->text += (boost::format("%1% %1%") % 5).str();
-#endif
+	text_area->text += (boost::format(
+		"    },\n    Distance: %1%\n} \n%2%\n"
+	) % calculateDistance(airplains[0]->getBBox()->getPosition(), airplains[1]->getBBox()->getPosition()) % timer->getMs()).str();
 
 	D3DXMATRIX mat;
 
@@ -211,7 +196,5 @@ void GameController::render()
 		for (const auto& airplain : airplains) airplain->draw(device);
 		skydome->draw(device);
 		text_area->draw(device);
-#ifdef _DEBUG
-#endif // _DEBUG
 	});
 }

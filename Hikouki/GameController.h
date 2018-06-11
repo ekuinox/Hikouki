@@ -14,11 +14,6 @@
 #include "TextArea.h"
 #include <boost/format.hpp>
 
-#ifdef _DEBUG
-#include "DebugConsole.h"
-#include "CDebugFont.h"
-#endif
-
 enum class CameraTypes : char {
 	FPS = 0,
 	TPS = 1,
@@ -75,8 +70,6 @@ private:
 	D3DXMATRIX view, proj;
 
 	Input *input_device;
-#ifdef _DEBUG
-#endif // _DEBUG
 
 	trau::Timer *timer;
 
