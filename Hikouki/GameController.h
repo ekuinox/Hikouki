@@ -1,17 +1,21 @@
 #pragma once
 
+#ifndef ___GAME_CONTROLLER_H
+#define ___GAME_CONTROLLER_H
+
 #include "CDirectXGraphics.h"
 #include "XFileManager.h"
 #include "GameObject.h"
 #include "input.h"
 #include "mathutil.h"
-#include <vector>
-#include <chrono>
 #include "Airplain.h"
 #include "Collider.h"
 #include "EventMachine.h"
 #include "Timer.h"
 #include "TextArea.h"
+#include <vector>
+#include <chrono>
+#include <memory>
 #include <boost/format.hpp>
 
 enum class CameraTypes : char {
@@ -54,9 +58,11 @@ private:
 		};
 	};
 	Camera *camera;
-	std::vector<Airplain*> airplains;
-	XFileObjectBase* skydome;
-	trau::TextArea *text_area;
+
+	std::vector<std::shared_ptr<Airplain>> airplains;
+	std::vector<std::shared_ptr<trau::TextArea>> text_areas;
+	std::vector<std::shared_ptr<GameObject>> game_objects;
+
 	XFileManager *xfile_manager;
 	int width, height;
 	int under_controll;
@@ -83,3 +89,5 @@ public:
 	void update();
 	void render();
 };
+
+#endif

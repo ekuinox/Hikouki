@@ -1,6 +1,6 @@
 #include "GameObject.h"
 
-void GameObject::draw(const LPDIRECT3DDEVICE9&)
+void GameObject::draw(const LPDIRECT3DDEVICE9&) const
 {
 	if (!drawing) return;
 }

@@ -21,7 +21,7 @@ public:
 class GameObject : public GameObjectInterface
 {
 public:
-	virtual void draw(const LPDIRECT3DDEVICE9&);
+	virtual void draw(const LPDIRECT3DDEVICE9&) const;
 	virtual void update();
 	virtual void show();
 	virtual void hide();

@@ -37,12 +37,14 @@ void GameController::init(HINSTANCE hinst, HWND hwnd, int _width, int _height, b
 		{ "Skydome", "assets/skydome.x" } // スカイドーム
 		});
 
-	skydome = new XFileObjectBase(xfile_manager->get("Skydome"));
+	airplains.emplace_back(new Airplain(xfile_manager->get("Airplain"), graphics->GetDXDevice(), D3DXVECTOR3(0.0, 0.0, 10.0f), timer));
+	airplains.emplace_back(new Airplain(xfile_manager->get("Airplain"), graphics->GetDXDevice(), D3DXVECTOR3(0.0, 0.0, -10.0f), timer));
+	text_areas.emplace_back(new trau::TextArea(graphics->GetDXDevice(), 0, 0, std::string("こんにちは")));
 
-	airplains.push_back(new Airplain(xfile_manager->get("Airplain"), graphics->GetDXDevice(), D3DXVECTOR3( 0.0, 0.0, 10.0f ), timer));
-	airplains.push_back(new Airplain(xfile_manager->get("Airplain"), graphics->GetDXDevice(), D3DXVECTOR3( 0.0, 0.0, -10.0f), timer));
-
-	text_area = new trau::TextArea(graphics->GetDXDevice(), 0, 0, std::string("こんにちは"));
+	// ブチ込め
+	for (const auto& airplain : airplains) game_objects.emplace_back(airplain);
+	for (const auto& text_area : text_areas) game_objects.emplace_back(text_area);
+	game_objects.emplace_back(new XFileObjectBase(xfile_manager->get("Skydome")));
 
 	// 初期設定
 	graphics->SetRenderStateArray({
@@ -115,22 +117,19 @@ void GameController::input()
 
 void GameController::update()
 {
-	for (const auto& airplain : airplains)
-	{
-		airplain->update();
-	}
+	for (const auto& game_object : game_objects) game_object->update();
 
 	auto colls = getCollisions({ airplains[0]->getBBox() }, { airplains[1]->getBBox() });
 	
-	text_area->text = "{\n    Airplain:\n    {\n";
+	text_areas.front()->text = "{\n    Airplain:\n    {\n";
 	for (auto i = 0; i < 2; ++i)
 	{
 		auto pos = airplains[i]->getBBox()->getPosition();
-		text_area->text += (boost::format(
+		text_areas.front()->text += (boost::format(
 			"        { X: %2%, Y: %3%, Z: %4%, R: %5%, Hit: %6% }%7%\n"
 		) % i % pos.x % pos.y % pos.z % airplains[i]->getBBox()->getR() % (colls.size() > 0 ? "TRUE" : "FALSE") % (i == 1 ? "" : ",")).str();
 	}
-	text_area->text += (boost::format(
+	text_areas.front()->text += (boost::format(
 		"    },\n    Distance: %1%\n} \n%2%\n"
 	) % calculateDistance(airplains[0]->getBBox()->getPosition(), airplains[1]->getBBox()->getPosition()) % timer->getMs()).str();
 
@@ -193,8 +192,6 @@ void GameController::render()
 	graphics->SetView(view); // カメラ行列を固定パイプラインへセット
 	graphics->SetProjection(proj); // 射影変換行列を固定パイプラインへセット
 	graphics->Render([&](LPDIRECT3DDEVICE9 device) {
-		for (const auto& airplain : airplains) airplain->draw(device);
-		skydome->draw(device);
-		text_area->draw(device);
+		for (const auto& game_object : game_objects) game_object->draw(device);
 	});
 }
