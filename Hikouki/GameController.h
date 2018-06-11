@@ -13,51 +13,24 @@
 #include "EventMachine.h"
 #include "Timer.h"
 #include "TextArea.h"
+#include "Camera.h"
 #include <vector>
 #include <chrono>
 #include <memory>
+#include <tuple>
 #include <boost/format.hpp>
-
-enum class CameraTypes : char {
-	FPS = 0,
-	TPS = 1,
-	OVER = 2 // ÇÆÇÈÇÆÇÈÉJÉÅÉâ
-};
-
-constexpr CameraTypes operator++(CameraTypes& c, int)
-{
-	auto current = c;
-
-	switch (c)
-	{
-	case CameraTypes::FPS:
-		c = CameraTypes::TPS;
-		break;
-	case CameraTypes::TPS:
-		c = CameraTypes::OVER;
-		break;
-	case CameraTypes::OVER:
-		c = CameraTypes::FPS;
-		break;
-	}
-	return current;
-}
 
 class GameController : public EventMachine {
 private:
 	CDirectXGraphics * graphics;
-	using Camera = struct _Camera {
-		D3DXVECTOR3 eye; // éãì_
-		D3DXVECTOR3 look_at; // íçéãì_
-		D3DXVECTOR3 up;
-		_Camera() :
-			eye(D3DXVECTOR3(0.0, 0.0f, -80.0f)),
-			look_at(D3DXVECTOR3(0.0, 0.0f, 0.0f)),
-			up(D3DXVECTOR3(0.0, 1.0f, 0.0f))
-		{
-		};
-	};
-	Camera *camera;
+	
+	struct {
+		std::unique_ptr<trau::TPSCamera> tps;
+		std::unique_ptr<trau::FPSCamera> fps;
+		std::unique_ptr<trau::OverCamera> over;
+	} cameras;
+
+	trau::CameraTypes cam_types;
 
 	std::vector<std::shared_ptr<Airplain>> airplains;
 	std::vector<std::shared_ptr<trau::TextArea>> text_areas;
@@ -66,14 +39,6 @@ private:
 	XFileManager *xfile_manager;
 	int width, height;
 	int under_controll;
-	struct {
-		float azimuth; // ï˚à äp
-		float elevation; // ã¬äp
-		float distance; // ãóó£
-	} over_camera;
-
-	CameraTypes view_type;
-	D3DXMATRIX view, proj;
 
 	Input *input_device;
 

@@ -1,7 +1,7 @@
 #include "GameController.h"
 
 GameController::GameController(HINSTANCE hinst, HWND hwnd, int _width, int _height, bool fullscreen)
-	: under_controll(0), over_camera({ 0, 90, -100 }), view_type(CameraTypes::OVER)
+	: under_controll(0), cam_types(trau::CameraTypes::OVER)
 {
 	init(hinst, hwnd, _width, _height, fullscreen);
 }
@@ -25,10 +25,10 @@ void GameController::init(HINSTANCE hinst, HWND hwnd, int _width, int _height, b
 		throw "DirectX 初期化エラー";
 	}
 
-	constexpr float margin = 50.0f;
-
-	camera = new Camera();
-
+	cameras.fps = std::unique_ptr<trau::FPSCamera>(new trau::FPSCamera());
+	cameras.tps = std::unique_ptr<trau::TPSCamera>(new trau::TPSCamera());
+	cameras.over = std::unique_ptr<trau::OverCamera>(new trau::OverCamera());
+	
 	timer = new trau::Timer();
 
 	xfile_manager = new XFileManager(graphics->GetDXDevice());
@@ -56,6 +56,7 @@ void GameController::init(HINSTANCE hinst, HWND hwnd, int _width, int _height, b
 		{ D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA }, // 透過処理を行う
 		{ D3DRS_SRCBLEND, D3DBLEND_SRCALPHA } // 半透明処理を行う
 		});
+
 	Start();
 }
 
@@ -93,21 +94,22 @@ void GameController::input()
 
 	auto mouse_current_state = input_device->getMouseState();
 
+	if (input_device->getTrigger(KeyCode::V)) cam_types++;
+
 	if (input_device->getTrigger(KeyCode::Add) && under_controll + 1 < airplains.size()) under_controll++;
 	if (input_device->getTrigger(KeyCode::Subtract) && under_controll > 0) under_controll--;
 
-	if (view_type == CameraTypes::OVER)
+	if (cam_types == trau::CameraTypes::OVER)
 	{
-		if (input_device->getPress(KeyCode::UpArrow)) over_camera.elevation += 10.0f * timer->getMs();
-		if (input_device->getPress(KeyCode::DownArrow)) over_camera.elevation -= 10.0f * timer->getMs();
-		if (input_device->getPress(KeyCode::RightArrow)) over_camera.azimuth -= 10.0f * timer->getMs();
-		if (input_device->getPress(KeyCode::LeftArrow)) over_camera.azimuth += 10.0f * timer->getMs();
-		if (input_device->getPress(KeyCode::Return) && 0 < over_camera.distance) over_camera.distance -= 0.1f;
-		if (input_device->getPress(KeyCode::BackSpace)) over_camera.distance += 0.1f;
-		over_camera.distance -= mouse_current_state.lZ / 10;
+		if (input_device->getPress(KeyCode::UpArrow)) cameras.over->elevation += 10.0f * timer->getMs();
+		if (input_device->getPress(KeyCode::DownArrow)) cameras.over->elevation -= 10.0f * timer->getMs();
+		if (input_device->getPress(KeyCode::RightArrow)) cameras.over->azimuth -= 10.0f * timer->getMs();
+		if (input_device->getPress(KeyCode::LeftArrow)) cameras.over->azimuth += 10.0f * timer->getMs();
+		if (input_device->getPress(KeyCode::Return) && 0 < cameras.over->distance) cameras.over->distance -= 0.1f;
+		if (input_device->getPress(KeyCode::BackSpace)) cameras.over->distance += 0.1f;
+		cameras.over->distance -= mouse_current_state.lZ / 10;
 	}
-
-	if (input_device->getTrigger(KeyCode::V)) view_type++;
+	
 	if (input_device->getTrigger(KeyCode::Numpad5)) airplains[under_controll]->switchExplosion();
 	if (input_device->getTrigger(KeyCode::Numpad8)) airplains[under_controll]->switchDrawBBox();
 	if (input_device->getTrigger(KeyCode::Numpad6)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, -10 });
@@ -135,63 +137,20 @@ void GameController::update()
 
 	D3DXMATRIX mat;
 
-	switch (view_type)
-	{
-	case CameraTypes::OVER:
-#define OVER_CAMERA_FLAG 1
-#if OVER_CAMERA_FLAG == 1
-		camera->look_at = D3DXVECTOR3(0, 0, 0);
-		camera->eye = D3DXVECTOR3(
-			over_camera.distance * sin(over_camera.elevation) * cos(over_camera.azimuth),
-			over_camera.distance * cos(over_camera.elevation),
-			over_camera.distance * sin(over_camera.azimuth) * sin(over_camera.elevation)
-		);
-		camera->eye += camera->look_at;
-		camera->up = D3DXVECTOR3(0, 1, 0);
-#elif OVER_CAMERA_FLAG == 2
-		camera->look_at = D3DXVECTOR3(0, 0, 0);
-		camera->eye = D3DXVECTOR3(
-			over_camera.distance * sin(over_camera.elevation) * cos(over_camera.azimuth),
-			over_camera.distance * cos(over_camera.elevation),
-			over_camera.distance * sin(over_camera.azimuth) * sin(over_camera.elevation)
-		);
-		D3DXMatrixInverse(&mat, NULL, &view);
-		camera->up = D3DXVECTOR3(
-			mat._21,
-			mat._22,
-			mat._23
-		);
-#endif
-		break;
-	case CameraTypes::TPS:
-		camera->look_at = D3DXVECTOR3(airplains[under_controll]->getMat()._41, airplains[under_controll]->getMat()._42, airplains[under_controll]->getMat()._43);
-		camera->eye = camera->look_at - 10 * D3DXVECTOR3(airplains[under_controll]->getMat()._31, airplains[under_controll]->getMat()._32, airplains[under_controll]->getMat()._33);
-		camera->up = D3DXVECTOR3(airplains[under_controll]->getMat()._21, airplains[under_controll]->getMat()._22, airplains[under_controll]->getMat()._23);
-		break;
-	case CameraTypes::FPS:
-		camera->eye = 2 * D3DXVECTOR3(airplains[under_controll]->getMat()._41, airplains[under_controll]->getMat()._42, airplains[under_controll]->getMat()._43); // ずらさないと本体と被っちまうので
-		camera->look_at = camera->eye + 10 * D3DXVECTOR3(airplains[under_controll]->getMat()._31, airplains[under_controll]->getMat()._32, airplains[under_controll]->getMat()._33);
-		camera->up = D3DXVECTOR3(airplains[under_controll]->getMat()._21, airplains[under_controll]->getMat()._22, airplains[under_controll]->getMat()._23);
-		break;
-	}
-
-	D3DXMatrixLookAtLH(&view, &camera->eye, &camera->look_at, &camera->up);
-
-	// プロジェクション変換行列作成
-	D3DXMatrixPerspectiveFovLH(
-		&proj,
-		D3DX_PI / 2,					// 視野角
-		(float)width / (float)height,	// アスペクト比
-		1.0f,							// ニアプレーン
-		5000.0f							// ファープレーン
-	);
+	cameras.tps->update(airplains[under_controll]->getMat());
+	cameras.fps->update(airplains[under_controll]->getMat());
+	cameras.over->update();
 }
 
 void GameController::render()
 {
-	graphics->SetView(view); // カメラ行列を固定パイプラインへセット
-	graphics->SetProjection(proj); // 射影変換行列を固定パイプラインへセット
-	graphics->Render([&](LPDIRECT3DDEVICE9 device) {
+	graphics->SetCamera([&](const LPDIRECT3DDEVICE9 device) {
+		if (cam_types == trau::CameraTypes::FPS) cameras.fps->set(device);
+		else if (cam_types == trau::CameraTypes::TPS) cameras.tps->set(device);
+		else if (cam_types == trau::CameraTypes::OVER) cameras.over->set(device);
+	});
+		
+	graphics->Render([&](const LPDIRECT3DDEVICE9 device) {
 		for (const auto& game_object : game_objects) game_object->draw(device);
 	});
 }

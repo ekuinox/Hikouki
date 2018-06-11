@@ -102,7 +102,7 @@ void CDirectXGraphics::SetRenderStateArray(std::vector<std::pair<D3DRENDERSTATET
 	for (const auto& option : options) m_lpd3ddevice->SetRenderState(option.first, option.second);
 }
 
-void CDirectXGraphics::Render(std::function<void(LPDIRECT3DDEVICE9)> render)
+void CDirectXGraphics::Render(std::function<void(const LPDIRECT3DDEVICE9)> render)
 {
 	m_lpd3ddevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
 	m_lpd3ddevice->BeginScene();
@@ -113,14 +113,9 @@ void CDirectXGraphics::Render(std::function<void(LPDIRECT3DDEVICE9)> render)
 	}
 }
 
-HRESULT CDirectXGraphics::SetProjection(D3DXMATRIX & proj)
+void CDirectXGraphics::SetCamera(std::function<void(const LPDIRECT3DDEVICE9)> set)
 {
-	return m_lpd3ddevice->SetTransform(D3DTS_PROJECTION, &proj);
-}
-
-HRESULT CDirectXGraphics::SetView(D3DXMATRIX & view)
-{
-	return m_lpd3ddevice->SetTransform(D3DTS_VIEW, &view);
+	set(m_lpd3ddevice);
 }
 
 //******************************************************************************

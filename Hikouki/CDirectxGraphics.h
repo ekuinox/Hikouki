@@ -45,9 +45,8 @@ public:
 		return m_d3dpp;
 	}
 	void SetRenderStateArray(std::vector < std::pair<D3DRENDERSTATETYPE, DWORD>> options);
-	void Render(std::function<void(LPDIRECT3DDEVICE9)> render);
-	HRESULT SetProjection(D3DXMATRIX& proj);
-	HRESULT SetView(D3DXMATRIX& view);
+	void Render(std::function<void(const LPDIRECT3DDEVICE9)> render);
+	void SetCamera(std::function<void(const LPDIRECT3DDEVICE9)> set);
 };
 
 //******************************************************************************
