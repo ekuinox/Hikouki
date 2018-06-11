@@ -24,7 +24,7 @@ trau::TextArea::TextArea(LPDIRECT3DDEVICE9 device)
 {
 }
 
-void trau::TextArea::draw(LPDIRECT3DDEVICE9) const
+void trau::TextArea::draw(const LPDIRECT3DDEVICE9&) const
 {
 	if (!drawing) return;
 
@@ -32,29 +32,4 @@ void trau::TextArea::draw(LPDIRECT3DDEVICE9) const
 	font->DrawText(NULL, text.c_str(), -1, rect, DT_CALCRECT, NULL);
 	// •`‰æ
 	font->DrawText(NULL, text.c_str(), -1, rect, DT_LEFT | DT_BOTTOM, _color);
-}
-
-void trau::TextArea::update()
-{
-	if (!active) return;
-}
-
-void trau::TextArea::show()
-{
-	drawing = true;
-}
-
-void trau::TextArea::hide()
-{
-	drawing = false;
-}
-
-void trau::TextArea::enable()
-{
-	active = true;
-}
-
-void trau::TextArea::disable()
-{
-	active = false;
 }

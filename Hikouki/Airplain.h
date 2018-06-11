@@ -1,7 +1,7 @@
 #pragma once
-#include "GameObject.h"
+#include "XFileObjectBase.h"
 #include "BoundingSphere.h"
-#include "explosion.h"
+#include "Explosion.h"
 #include "Timer.h"
 
 class Airplain : public XFileObjectBase {
@@ -15,7 +15,7 @@ private:
 public:
 	Airplain(CDirect3DXFile*, LPDIRECT3DDEVICE9, trau::Timer*);
 	Airplain(CDirect3DXFile*, LPDIRECT3DDEVICE9, D3DXVECTOR3, trau::Timer*);
-	void draw(LPDIRECT3DDEVICE9) const;
+	void draw(const LPDIRECT3DDEVICE9&) const;
 	void update();
 	void switchExplosion();
 	void switchDrawBBox();

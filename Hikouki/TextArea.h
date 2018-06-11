@@ -8,7 +8,7 @@
 
 namespace trau
 {
-	class TextArea : public GameObjectInterface
+	class TextArea : public GameObject
 	{
 	private:
 		static constexpr struct { int width, height; } _size = { 0, 10 }; // ÉtÉHÉìÉgÇÃçÇÇ≥Ç∆ïù
@@ -25,12 +25,7 @@ namespace trau
 		TextArea(LPDIRECT3DDEVICE9, int, int, const std::string&);
 		TextArea(LPDIRECT3DDEVICE9, int, int);
 		TextArea(LPDIRECT3DDEVICE9);
-		void draw(LPDIRECT3DDEVICE9) const;
-		void update();
-		void show();
-		void hide();
-		void enable();
-		void disable();
+		void draw(const LPDIRECT3DDEVICE9&) const;
 
 		std::string text;
 	};

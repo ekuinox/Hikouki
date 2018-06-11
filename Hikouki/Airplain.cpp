@@ -14,7 +14,7 @@ Airplain::Airplain(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, D3DXVECTOR3
 	D3DXMatrixTranslation(&mat, coord.x, coord.y, coord.z);
 }
 
-void Airplain::draw(LPDIRECT3DDEVICE9 device) const
+void Airplain::draw(const LPDIRECT3DDEVICE9& device) const
 {
 	if (!drawing) return;
 	if (explosion_flag)
