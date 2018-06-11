@@ -79,7 +79,7 @@ public:
 	void Uninit();
 	void Start();
 	void Update();
-	void Draw(LPDIRECT3DDEVICE9 device);
+	void Draw(const LPDIRECT3DDEVICE9& device);
 	void TriangleTransforms(const D3DXMATRIX& mat);
 	void XfileToTriangle(LPD3DXMESH mesh, LPDIRECT3DDEVICE9 device);
 };

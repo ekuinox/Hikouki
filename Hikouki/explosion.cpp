@@ -1,5 +1,5 @@
 #include	"CDirect3DXFile.h"
-#include	"explosion.h"
+#include	"Explosion.h"
 
 Explosion::Explosion()
 {
@@ -104,7 +104,7 @@ void Explosion::Update()
 
 }
 
-void Explosion::Draw(LPDIRECT3DDEVICE9 device)
+void Explosion::Draw(const LPDIRECT3DDEVICE9& device)
 {
 	device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
