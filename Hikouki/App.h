@@ -6,7 +6,7 @@
 
 #include <windows.h>
 #include "GameController.h"
-#include "rxcpp/rx.hpp"
+#include <rxcpp/rx.hpp>
 
 class App
 {

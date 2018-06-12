@@ -72,22 +72,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include\;C:\boost\Include\;C:\boost\include\boost-1_67\;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include\;C:\boost\include\boost-1_67\;C:\rxcpp\Rx\v2\src\;</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(DXSDK_DIR)\Lib\x86;C:\boost\lib;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include\;C:\boost\Include\;C:\boost\include\boost-1_67\;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include\;C:\boost\include\boost-1_67\;C:\rxcpp\Rx\v2\src\;</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;;$(DXSDK_DIR)\Lib\x64;C:\boost\lib;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include\;C:\boost\Include\;C:\boost\include\boost-1_67\;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include\;C:\boost\include\boost-1_67\;C:\rxcpp\Rx\v2\src\;</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(DXSDK_DIR)\Lib\x86;C:\boost\lib;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include\;C:\boost\Include\;C:\boost\include\boost-1_67\;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include\;C:\boost\include\boost-1_67\;C:\rxcpp\Rx\v2\src\;</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;;$(DXSDK_DIR)\Lib\x64;C:\boost\lib;</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -179,110 +179,6 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="KeyCode.h" />
     <ClInclude Include="MathUtil.h" />
-    <ClInclude Include="rxcpp\operators\rx-all.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-amb.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-any.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-buffer_count.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-buffer_time.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-buffer_time_count.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-combine_latest.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-concat.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-concat_map.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-connect_forever.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-debounce.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-delay.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-distinct.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-distinct_until_changed.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-element_at.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-filter.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-finally.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-flat_map.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-group_by.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-ignore_elements.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-lift.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-map.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-merge.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-merge_delay_error.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-multicast.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-observe_on.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-on_error_resume_next.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-pairwise.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-publish.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-reduce.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-ref_count.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-repeat.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-replay.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-retry-repeat-common.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-retry.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-sample_time.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-scan.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-sequence_equal.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-skip.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-skip_last.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-skip_until.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-skip_while.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-start_with.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-subscribe.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-subscribe_on.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-switch_if_empty.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-switch_on_next.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-take.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-take_last.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-take_until.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-take_while.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-tap.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-timeout.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-timestamp.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-time_interval.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-window.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-window_time.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-window_time_count.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-window_toggle.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-with_latest_from.hpp" />
-    <ClInclude Include="rxcpp\operators\rx-zip.hpp" />
-    <ClInclude Include="rxcpp\rx-composite_exception.hpp" />
-    <ClInclude Include="rxcpp\rx-connectable_observable.hpp" />
-    <ClInclude Include="rxcpp\rx-coordination.hpp" />
-    <ClInclude Include="rxcpp\rx-coroutine.hpp" />
-    <ClInclude Include="rxcpp\rx-grouped_observable.hpp" />
-    <ClInclude Include="rxcpp\rx-includes.hpp" />
-    <ClInclude Include="rxcpp\rx-lite.hpp" />
-    <ClInclude Include="rxcpp\rx-notification.hpp" />
-    <ClInclude Include="rxcpp\rx-observable.hpp" />
-    <ClInclude Include="rxcpp\rx-observer.hpp" />
-    <ClInclude Include="rxcpp\rx-operators.hpp" />
-    <ClInclude Include="rxcpp\rx-predef.hpp" />
-    <ClInclude Include="rxcpp\rx-scheduler.hpp" />
-    <ClInclude Include="rxcpp\rx-sources.hpp" />
-    <ClInclude Include="rxcpp\rx-subjects.hpp" />
-    <ClInclude Include="rxcpp\rx-subscriber.hpp" />
-    <ClInclude Include="rxcpp\rx-subscription.hpp" />
-    <ClInclude Include="rxcpp\rx-test.hpp" />
-    <ClInclude Include="rxcpp\rx-trace.hpp" />
-    <ClInclude Include="rxcpp\rx-util.hpp" />
-    <ClInclude Include="rxcpp\rx.hpp" />
-    <ClInclude Include="rxcpp\schedulers\rx-currentthread.hpp" />
-    <ClInclude Include="rxcpp\schedulers\rx-eventloop.hpp" />
-    <ClInclude Include="rxcpp\schedulers\rx-immediate.hpp" />
-    <ClInclude Include="rxcpp\schedulers\rx-newthread.hpp" />
-    <ClInclude Include="rxcpp\schedulers\rx-runloop.hpp" />
-    <ClInclude Include="rxcpp\schedulers\rx-sameworker.hpp" />
-    <ClInclude Include="rxcpp\schedulers\rx-test.hpp" />
-    <ClInclude Include="rxcpp\schedulers\rx-virtualtime.hpp" />
-    <ClInclude Include="rxcpp\sources\rx-create.hpp" />
-    <ClInclude Include="rxcpp\sources\rx-defer.hpp" />
-    <ClInclude Include="rxcpp\sources\rx-empty.hpp" />
-    <ClInclude Include="rxcpp\sources\rx-error.hpp" />
-    <ClInclude Include="rxcpp\sources\rx-interval.hpp" />
-    <ClInclude Include="rxcpp\sources\rx-iterate.hpp" />
-    <ClInclude Include="rxcpp\sources\rx-never.hpp" />
-    <ClInclude Include="rxcpp\sources\rx-range.hpp" />
-    <ClInclude Include="rxcpp\sources\rx-scope.hpp" />
-    <ClInclude Include="rxcpp\sources\rx-timer.hpp" />
-    <ClInclude Include="rxcpp\subjects\rx-behavior.hpp" />
-    <ClInclude Include="rxcpp\subjects\rx-replaysubject.hpp" />
-    <ClInclude Include="rxcpp\subjects\rx-subject.hpp" />
-    <ClInclude Include="rxcpp\subjects\rx-synchronize.hpp" />
     <ClInclude Include="TextArea.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="XFileManager.h" />
