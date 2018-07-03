@@ -159,6 +159,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MainScene.cpp" />
     <ClCompile Include="MathUtil.cpp" />
     <ClCompile Include="TextArea.cpp" />
     <ClCompile Include="XFileManager.cpp" />
@@ -178,7 +179,9 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="KeyCode.h" />
+    <ClInclude Include="MainScene.h" />
     <ClInclude Include="MathUtil.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="TextArea.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="XFileManager.h" />
