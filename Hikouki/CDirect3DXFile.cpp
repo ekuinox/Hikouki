@@ -31,38 +31,32 @@ bool CDirect3DXFile::LoadXFile( const char *xfilename, LPDIRECT3DDEVICE9 lpd3dde
 	HRESULT			hr;
 	unsigned int	i;
 
-	// Ｘファイルを読み込む
-	hr = D3DXLoadMeshFromX(	xfilename,				// Ｘファイル名
-							D3DXMESH_SYSTEMMEM,		// 読み込みメモリ
-							lpd3ddevice,			// デバイスオブジェクト
-							NULL,
-							&pd3dxmtrlbuffer,		// マテリアルバッファ
-							&pd3dxmtrlbuffer2,		// マテリアルバッファ2
-							&m_nummaterial,			// マテリアル数
-							&m_lpmesh);				// メッシュ
-
-	if( SUCCEEDED(hr) ){
+	if (SUCCEEDED(
+		D3DXLoadMeshFromX(xfilename, D3DXMESH_SYSTEMMEM, lpd3ddevice, NULL, &pd3dxmtrlbuffer, &pd3dxmtrlbuffer2, &m_nummaterial, &m_lpmesh))
+		)
+	{
 		D3DXMATERIAL	*d3dxmaterials = (D3DXMATERIAL*)pd3dxmtrlbuffer->GetBufferPointer();	// マテリアルのアドレスを取得
 		m_lpmeshmaterials = new D3DMATERIAL9[m_nummaterial];		// マテリアルコンテナの作成
 		m_lpmeshtextures = new LPDIRECT3DTEXTURE9[m_nummaterial];	// テクスチャコンテナの生成
-		
-		for( i=0 ; i<m_nummaterial ; i++ ){
+
+		for (i = 0; i<m_nummaterial; i++) {
 			m_lpmeshmaterials[i] = d3dxmaterials[i].MatD3D;
 			m_lpmeshmaterials[i].Emissive = m_lpmeshmaterials[i].Specular = m_lpmeshmaterials[i].Ambient = m_lpmeshmaterials[i].Diffuse;
 
-			hr = D3DXCreateTextureFromFile(	lpd3ddevice,
-											d3dxmaterials[i].pTextureFilename,
-											&m_lpmeshtextures[i]);
-			if( FAILED(hr) ){
-				m_lpmeshtextures[i]=NULL;
+			hr = D3DXCreateTextureFromFile(lpd3ddevice,
+				d3dxmaterials[i].pTextureFilename,
+				&m_lpmeshtextures[i]);
+			if (FAILED(hr)) {
+				m_lpmeshtextures[i] = NULL;
 			}
 		}
 		pd3dxmtrlbuffer->Release();		// マテリアルバッファのリリース
 		pd3dxmtrlbuffer2->Release();	// マテリアルバッファのリリース
-	}else{
-		return false;
 	}
-	return true;
+	else
+	{
+		throw std::runtime_error("XFileの読み込みに失敗しました．");
+	}
 }
 
 //==============================================================================

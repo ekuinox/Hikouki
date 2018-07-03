@@ -107,7 +107,12 @@ int App::run(int mode)
 	}
 	catch (const char *err)
 	{
-		MessageBox(wh, "ERROR", err, MB_OK);
+		MessageBox(wh, err, "ERROR", MB_OK);
+		return 0;
+	}
+	catch (std::runtime_error e)
+	{
+		MessageBox(wh, e.what(), "ERROR", MB_OK);
 		return 0;
 	}
 }
