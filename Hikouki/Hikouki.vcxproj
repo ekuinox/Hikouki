@@ -18,6 +18,47 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Airplain.h" />
+    <ClInclude Include="src\App.h" />
+    <ClInclude Include="src\BoundingSphere.h" />
+    <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\CDirect3DXFile.h" />
+    <ClInclude Include="src\CDirectxGraphics.h" />
+    <ClInclude Include="src\Collider.h" />
+    <ClInclude Include="src\EventMachine.h" />
+    <ClInclude Include="src\Explosion.h" />
+    <ClInclude Include="src\GameController.h" />
+    <ClInclude Include="src\GameObject.h" />
+    <ClInclude Include="src\Input.h" />
+    <ClInclude Include="src\KeyCode.h" />
+    <ClInclude Include="src\MainScene.h" />
+    <ClInclude Include="src\MathUtil.h" />
+    <ClInclude Include="src\Scene.h" />
+    <ClInclude Include="src\TextArea.h" />
+    <ClInclude Include="src\Timer.h" />
+    <ClInclude Include="src\XFileManager.h" />
+    <ClInclude Include="src\XFileObjectBase.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Airplain.cpp" />
+    <ClCompile Include="src\App.cpp" />
+    <ClCompile Include="src\BoundingSphere.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\CDirect3DXFile.cpp" />
+    <ClCompile Include="src\CDirectXGraphics.cpp" />
+    <ClCompile Include="src\Collider.cpp" />
+    <ClCompile Include="src\Explosion.cpp" />
+    <ClCompile Include="src\GameController.cpp" />
+    <ClCompile Include="src\GameObject.cpp" />
+    <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\MainScene.cpp" />
+    <ClCompile Include="src\MathUtil.cpp" />
+    <ClCompile Include="src\TextArea.cpp" />
+    <ClCompile Include="src\XFileManager.cpp" />
+    <ClCompile Include="src\XFileObjectBase.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{A3EB2C02-8B67-4659-8D94-89F079995ED4}</ProjectGuid>
@@ -146,47 +187,6 @@
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Airplain.cpp" />
-    <ClCompile Include="App.cpp" />
-    <ClCompile Include="BoundingSphere.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="CDirect3DXFile.cpp" />
-    <ClCompile Include="CDirectXGraphics.cpp" />
-    <ClCompile Include="Collider.cpp" />
-    <ClCompile Include="Explosion.cpp" />
-    <ClCompile Include="GameController.cpp" />
-    <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="Input.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="MainScene.cpp" />
-    <ClCompile Include="MathUtil.cpp" />
-    <ClCompile Include="TextArea.cpp" />
-    <ClCompile Include="XFileManager.cpp" />
-    <ClCompile Include="XFileObjectBase.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Airplain.h" />
-    <ClInclude Include="App.h" />
-    <ClInclude Include="BoundingSphere.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="CDirect3DXFile.h" />
-    <ClInclude Include="CDirectxGraphics.h" />
-    <ClInclude Include="Collider.h" />
-    <ClInclude Include="EventMachine.h" />
-    <ClInclude Include="Explosion.h" />
-    <ClInclude Include="GameController.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="KeyCode.h" />
-    <ClInclude Include="MainScene.h" />
-    <ClInclude Include="MathUtil.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="TextArea.h" />
-    <ClInclude Include="Timer.h" />
-    <ClInclude Include="XFileManager.h" />
-    <ClInclude Include="XFileObjectBase.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
