@@ -1,4 +1,6 @@
 #include "GameController.h"
+#include "MainScene.h"
+#include "TitleScene.h"
 
 GameController::GameController(HINSTANCE hinst, HWND hwnd, int _width, int _height, bool fullscreen)
 	: width(_width), height(_height)
@@ -16,7 +18,10 @@ GameController::GameController(HINSTANCE hinst, HWND hwnd, int _width, int _heig
 
 	xFileManager = new XFileManager(graphics->GetDXDevice());
 
-	currentScene = std::unique_ptr<MainScene>(new MainScene(graphics, xFileManager, inputDevice, timer));
+	scenes.emplace_back(std::unique_ptr<TitleScene>(new TitleScene(graphics, xFileManager, inputDevice, timer)));
+	scenes.emplace_back(std::unique_ptr<MainScene>(new MainScene(graphics, xFileManager, inputDevice, timer)));
+
+	currentSceneIndex = 0;
 
 	Start();
 }
@@ -26,7 +31,7 @@ GameController::~GameController()
 	Stop();
 
 	if (graphics != nullptr) {
-		currentScene.release();
+		scenes.clear();
 		graphics->Exit();
 		delete graphics;
 	}
@@ -36,5 +41,10 @@ GameController::~GameController()
 
 void GameController::main()
 {
-	currentScene->exec();
+	if (scenes[currentSceneIndex]->exec() == Scene::State::Exit) {
+		currentSceneIndex++;
+		if (currentSceneIndex == scenes.size()) {
+			state = State::Exit;
+		}
+	}
 }

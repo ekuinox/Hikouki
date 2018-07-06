@@ -10,17 +10,16 @@
 #include "Timer.h"
 #include <vector>
 #include "Scene.h"
-#include "MainScene.h"
 
 class GameController : public EventMachine {
 private:
 	CDirectXGraphics * graphics;
 	Input *inputDevice;
 	trau::Timer *timer;
-	std::unique_ptr<Scene> currentScene;
+	int currentSceneIndex;
+	std::vector<std::unique_ptr<Scene>> scenes;
 	XFileManager *xFileManager;
 	int width, height;
-
 public:
 	GameController(HINSTANCE, HWND, int, int, bool);
 	~GameController();

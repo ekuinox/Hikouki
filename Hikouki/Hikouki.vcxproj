@@ -34,9 +34,11 @@
     <ClInclude Include="src\KeyCode.h" />
     <ClInclude Include="src\MainScene.h" />
     <ClInclude Include="src\MathUtil.h" />
+    <ClInclude Include="src\Plain2D.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\TextArea.h" />
     <ClInclude Include="src\Timer.h" />
+    <ClInclude Include="src\TitleScene.h" />
     <ClInclude Include="src\XFileManager.h" />
     <ClInclude Include="src\XFileObjectBase.h" />
   </ItemGroup>
@@ -55,7 +57,9 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MainScene.cpp" />
     <ClCompile Include="src\MathUtil.cpp" />
+    <ClCompile Include="src\Plain2D.cpp" />
     <ClCompile Include="src\TextArea.cpp" />
+    <ClCompile Include="src\TitleScene.cpp" />
     <ClCompile Include="src\XFileManager.cpp" />
     <ClCompile Include="src\XFileObjectBase.cpp" />
   </ItemGroup>

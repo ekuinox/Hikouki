@@ -43,6 +43,9 @@ public:
 	{
 		thread.join();
 	}
+	State getState() {
+		return state;
+	}
 	rxcpp::observable<State> get_obsseval()
 	{
 		return subject.get_observable();

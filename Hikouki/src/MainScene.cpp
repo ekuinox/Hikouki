@@ -83,6 +83,8 @@ void MainScene::input()
 	if (inputDevice->getTrigger(KeyCode::Numpad6)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, -10 });
 	if (inputDevice->getTrigger(KeyCode::Numpad4)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, 10 });
 	if (inputDevice->getTrigger(KeyCode::Space)) airplains[under_controll]->setTrans(D3DXVECTOR3{ 0, 0, 0 });
+
+	if (inputDevice->getTrigger(KeyCode::Return)) state = State::Exit;
 }
 
 void MainScene::update()

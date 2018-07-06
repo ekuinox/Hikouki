@@ -85,7 +85,7 @@ int App::run(int mode)
 			isLoop = false;
 		});
 
-		while (isLoop)
+		while (isLoop && gameController->getState() != EventMachine::State::Exit)
 		{	// メッセージ･ループ
 			if (!GetMessage(&msg, NULL, 0, 0))
 			{	// メッセージを取得
