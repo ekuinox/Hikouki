@@ -106,21 +106,6 @@ void Explosion::Update()
 
 void Explosion::Draw(const LPDIRECT3DDEVICE9& device)
 {
-	device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-	device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-
-	device->SetRenderState(D3DRS_LIGHTING, true);			//   光源計算オン（頂点の色が有効になる）
-
-															// テクスチャステージステート
-	device->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
-	device->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
-	device->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
-
-	device->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-	device->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-	device->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
-
 	device->SetTexture(0, tex);
 
 	for (int i = 0; i < num_face; i++) {
