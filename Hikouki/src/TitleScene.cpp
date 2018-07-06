@@ -8,7 +8,7 @@ TitleScene::TitleScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager,
 		throw std::runtime_error("テクスチャ読み込み失敗!");
 	}
 
-	gameObjects.emplace_back(new Plain2D({ 400, 300 }, { 200, 200 }, Plain2D::TextureSets{ texture, 0.0f, 0.0f, 1.0f, 1.0f }));
+	gameObjects.emplace_back(new Plain2D({ graphics->GetWidth() / 2.0f, graphics->GetHeight() / 2.0f }, { 200, 200 }, { texture, 0.0f, 0.0f, 1.0f, 1.0f }));
 }
 
 TitleScene::~TitleScene()

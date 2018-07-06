@@ -118,6 +118,16 @@ void CDirectXGraphics::SetCamera(std::function<void(const LPDIRECT3DDEVICE9)> se
 	set(m_lpd3ddevice);
 }
 
+int CDirectXGraphics::GetWidth()
+{
+	return m_width;
+}
+
+int CDirectXGraphics::GetHeight()
+{
+	return m_height;
+}
+
 //******************************************************************************
 //	End of file.
 //******************************************************************************

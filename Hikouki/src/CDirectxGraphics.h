@@ -47,6 +47,8 @@ public:
 	void SetRenderStateArray(std::vector < std::pair<D3DRENDERSTATETYPE, DWORD>> options);
 	void Render(std::function<void(const LPDIRECT3DDEVICE9)> render);
 	void SetCamera(std::function<void(const LPDIRECT3DDEVICE9)> set);
+	int GetWidth();
+	int GetHeight();
 };
 
 //******************************************************************************
