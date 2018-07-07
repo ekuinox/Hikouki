@@ -29,3 +29,13 @@ void GameObject::disable()
 {
 	active = false;
 }
+
+unsigned int GameObject::getLayer()
+{
+	return layer;
+}
+
+unsigned int GameObject::getPriority()
+{
+	return priority;
+}

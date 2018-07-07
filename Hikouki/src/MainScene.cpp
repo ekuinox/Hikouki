@@ -1,4 +1,6 @@
 #include "MainScene.h"
+#include "Plain2D.h"
+#include <algorithm>
 
 MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, Input* _input, trau::Timer* _timer)
 	: Scene(_graphics, _xfileManager, _input, _timer), under_controll(0), cam_types(trau::CameraTypes::OVER)
@@ -18,9 +20,9 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 	text_areas.emplace_back(new trau::TextArea(graphics->GetDXDevice(), 0, 0, std::string("‚±‚ñ‚É‚¿‚Í")));
 
 	// ƒuƒ`‚ß
-	for (const auto& airplain : airplains) game_objects.emplace_back(airplain);
-	for (const auto& text_area : text_areas) game_objects.emplace_back(text_area);
-	game_objects.emplace_back(new XFileObjectBase(xfile_manager->get("Skydome")));
+	for (const auto& airplain : airplains) gameObjects.emplace_back(airplain);
+	for (const auto& text_area : text_areas) gameObjects.emplace_back(text_area);
+	gameObjects.emplace_back(new XFileObjectBase(xfile_manager->get("Skydome")));
 
 	// ‰Šúİ’è
 	graphics->SetRenderStateArray({
@@ -37,8 +39,10 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 Scene::State MainScene::exec()
 {
 	timer->run([&] {
+		sortGameObjectsPriority();
 		input(); // “ü—Í
 		update(); // XV
+		sortGameObjectsLayer();
 		render(); // •`‰æ
 	});
 	return state;
@@ -47,6 +51,22 @@ Scene::State MainScene::exec()
 Scene::State MainScene::getState()
 {
 	return state;
+}
+
+void MainScene::sortGameObjectsLayer()
+{
+	// •`‰æ‡‚È‚Ì‚Å~‡‚É‚·‚é
+	std::sort(gameObjects.begin(), gameObjects.end(), [](const std::shared_ptr<GameObject>& a, const std::shared_ptr<GameObject>& b) {
+		return a->getLayer() > b->getLayer();
+	});
+}
+
+void MainScene::sortGameObjectsPriority()
+{
+	// updateˆ—‡‚È‚Ì‚Å¸‡‚É‚·‚é
+	std::sort(gameObjects.begin(), gameObjects.end(), [](const std::shared_ptr<GameObject>& a, const std::shared_ptr<GameObject>& b) {
+		return a->getPriority() < b->getPriority();
+	});
 }
 
 void MainScene::input()
@@ -89,7 +109,7 @@ void MainScene::input()
 
 void MainScene::update()
 {
-	for (const auto& game_object : game_objects) game_object->update();
+	for (const auto& gameObject : gameObjects) gameObject->update();
 
 	auto colls = getCollisions({ airplains[0]->getBBox() }, { airplains[1]->getBBox() });
 
@@ -121,6 +141,6 @@ void MainScene::render()
 	});
 
 	graphics->Render([&](const LPDIRECT3DDEVICE9 device) {
-		for (const auto& game_object : game_objects) game_object->draw(device);
+		for (const auto& gameObject : gameObjects) gameObject->draw(device);
 	});
 }

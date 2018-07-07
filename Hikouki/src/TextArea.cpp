@@ -12,6 +12,7 @@ trau::TextArea::TextArea(LPDIRECT3DDEVICE9 device, int _x, int _y, const std::st
 		FIXED_PITCH | FF_MODERN, // ピッチとファミリーインデックス
 		_font_name, &font
 	));
+	layer = 0;
 }
 
 trau::TextArea::TextArea(LPDIRECT3DDEVICE9 device, int _x, int _y)

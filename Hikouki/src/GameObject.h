@@ -7,8 +7,10 @@
 
 class GameObjectInterface {
 protected:
-	bool drawing; // 描画するかのフラグ
-	bool active; // 更新するかのフラグ
+	bool drawing = false; // 描画するかのフラグ
+	bool active = false; // 更新するかのフラグ
+	unsigned int layer = UINT_MAX; // 描画優先度
+	unsigned int priority = UINT_MAX; // 更新処理優先度
 public:
 	virtual void draw(const LPDIRECT3DDEVICE9&) const = 0;
 	virtual void update() = 0;
@@ -16,6 +18,8 @@ public:
 	virtual void hide() = 0;
 	virtual void enable() = 0;
 	virtual void disable() = 0;
+	virtual unsigned int getLayer() = 0;
+	virtual unsigned int getPriority() = 0;
 };
 
 class GameObject : public GameObjectInterface
@@ -27,6 +31,8 @@ public:
 	virtual void hide();
 	virtual void enable();
 	virtual void disable();
+	virtual unsigned int getLayer();
+	virtual unsigned int getPriority();
 };
 
 #endif

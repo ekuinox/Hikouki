@@ -29,12 +29,14 @@ private:
 
 	std::vector<std::shared_ptr<Airplain>> airplains;
 	std::vector<std::shared_ptr<trau::TextArea>> text_areas;
-	std::vector<std::shared_ptr<GameObject>> game_objects;
+	std::vector<std::shared_ptr<GameObject>> gameObjects;
 
 	XFileManager *xfile_manager;
 	int width, height;
 	int under_controll;
 
+	void sortGameObjectsLayer();
+	void sortGameObjectsPriority();
 	void input();
 	void update();
 	void render();
