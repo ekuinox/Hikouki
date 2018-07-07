@@ -7,8 +7,8 @@
 
 using json = nlohmann::json;
 
-EnemyAirplane::EnemyAirplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, D3DXVECTOR3 coord, trau::Timer *timer, const char * file)
-	: Airplane(_xfile, device, coord, timer)
+EnemyAirplane::EnemyAirplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, trau::Timer *timer, const char * file)
+	: Airplane(_xfile, device, timer)
 {
 	std::random_device seed_gen;
 	std::mt19937 _engine(seed_gen());
@@ -41,6 +41,8 @@ EnemyAirplane::EnemyAirplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, D
 	}
 
 	moveTimelineIndex = 0;
+
+	D3DXMatrixTranslation(&mat, data["defaultPositions"][0]["x"], data["defaultPositions"][0]["y"], data["defaultPositions"][0]["z"]);
 }
 
 void EnemyAirplane::update()
