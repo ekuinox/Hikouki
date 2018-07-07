@@ -1,12 +1,13 @@
 #include "EnemyAirplane.h"
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <nlohmann/json.hpp>
 #include "../Utils/MathUtil.h"
 
-EnemyAirplane::EnemyAirplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, trau::Timer *timer)
-	: EnemyAirplane(_xfile, device, {}, timer)
-{
-}
+using json = nlohmann::json;
 
-EnemyAirplane::EnemyAirplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, D3DXVECTOR3 coord, trau::Timer *timer)
+EnemyAirplane::EnemyAirplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, D3DXVECTOR3 coord, trau::Timer *timer, const char * file)
 	: Airplane(_xfile, device, coord, timer)
 {
 	std::random_device seed_gen;
@@ -14,12 +15,31 @@ EnemyAirplane::EnemyAirplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, D
 	randomEngine = _engine;
 	trans.z = 20.0f;
 	rotationTimer = std::unique_ptr<trau::Timer>(new trau::Timer());
-	moveTimeline = {
-		Moves{ 1.0f, { 0, 0, 0 }, { 20, 0, 0 } },
-		Moves{ 5.0f, { 0, 0, 0 }, { -20, 0, 0 } },
-		Moves{ 3.0f, { 0, 0, 0 }, { 0, 30, 0 } },
-		Moves{ 6.0f, { 0, 0, 0 }, { 5, 0, 0 } },
-	};
+
+	// json load
+
+	std::ifstream fin(file);
+
+	if (!fin) throw "read file error";
+	
+	std::stringstream strstream;
+	strstream << fin.rdbuf();
+	fin.close();
+
+	auto data = json::parse(strstream.str());
+
+	// JSONのエラーチェックを行わない
+	for (const auto& moves : data["moveTimeline"])
+	{
+		moveTimeline.emplace_back(
+			Moves{ 
+				moves["span"],
+				{ moves["trans"]["x"], moves["trans"]["x"], moves["trans"]["z"] },
+				{ moves["angle"]["x"], moves["angle"]["x"], moves["angle"]["z"] }
+			}
+		);
+	}
+
 	moveTimelineIndex = 0;
 }
 

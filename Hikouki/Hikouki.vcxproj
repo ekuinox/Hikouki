@@ -65,6 +65,9 @@
     <ClCompile Include="src\Utils\Input.cpp" />
     <ClCompile Include="src\Utils\MathUtil.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\GameObjectConfig\enemy.json" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{A3EB2C02-8B67-4659-8D94-89F079995ED4}</ProjectGuid>
@@ -119,22 +122,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include\;C:\boost\include\boost-1_67\;C:\rxcpp\Rx\v2\src\;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include\;C:\boost\include\boost-1_67\;C:\rxcpp\Rx\v2\src\;C:\cpp-includes;</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(DXSDK_DIR)\Lib\x86;C:\boost\lib;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include\;C:\boost\include\boost-1_67\;C:\rxcpp\Rx\v2\src\;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include\;C:\boost\include\boost-1_67\;C:\rxcpp\Rx\v2\src\;C:\cpp-includes;</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;;$(DXSDK_DIR)\Lib\x64;C:\boost\lib;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include\;C:\boost\include\boost-1_67\;C:\rxcpp\Rx\v2\src\;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include\;C:\boost\include\boost-1_67\;C:\rxcpp\Rx\v2\src\;C:\cpp-includes;</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(DXSDK_DIR)\Lib\x86;C:\boost\lib;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include\;C:\boost\include\boost-1_67\;C:\rxcpp\Rx\v2\src\;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include\;C:\boost\include\boost-1_67\;C:\rxcpp\Rx\v2\src\;C:\cpp-includes;</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;;$(DXSDK_DIR)\Lib\x64;C:\boost\lib;</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

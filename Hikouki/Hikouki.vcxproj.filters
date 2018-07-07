@@ -49,6 +49,9 @@
     <Filter Include="ソース ファイル\Utils">
       <UniqueIdentifier>{31b9783c-8ee2-4de8-81db-2e172e749d51}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソース ファイル\GameObjectConfig">
+      <UniqueIdentifier>{5968bc81-04c9-45c0-b657-c8a797a1c1af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\App.h">
@@ -182,5 +185,10 @@
     <ClCompile Include="src\GameObject\EnemyAirplane.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\GameObjectConfig\enemy.json">
+      <Filter>リソース ファイル\GameObjectConfig</Filter>
+    </None>
   </ItemGroup>
 </Project>

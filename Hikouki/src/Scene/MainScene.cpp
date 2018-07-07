@@ -23,7 +23,7 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 	for (const auto& airplane : airplanes) gameObjects.emplace_back(airplane);
 	for (const auto& text_area : text_areas) gameObjects.emplace_back(text_area);
 	gameObjects.emplace_back(new XFileObjectBase(xfile_manager->get("Skydome")));
-	gameObjects.emplace_back(new EnemyAirplane(xfile_manager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3(0.0, 0.0, 0.0f), timer));
+	gameObjects.emplace_back(new EnemyAirplane(xfile_manager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3(0.0, 0.0, 0.0f), timer, "assets/GameObjectConfig/enemy.json"));
 
 	// ‰ŠúÝ’è
 	graphics->SetRenderStateArray({
