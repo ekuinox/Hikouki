@@ -123,6 +123,9 @@
     <ClInclude Include="src\GameObject\EnemyAirplane.h">
       <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utils\Utils.h">
+      <Filter>ヘッダー ファイル\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp">

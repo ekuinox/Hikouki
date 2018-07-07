@@ -42,6 +42,7 @@
     <ClInclude Include="src\Utils\Input.h" />
     <ClInclude Include="src\Utils\KeyCode.h" />
     <ClInclude Include="src\Utils\MathUtil.h" />
+    <ClInclude Include="src\Utils\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp" />

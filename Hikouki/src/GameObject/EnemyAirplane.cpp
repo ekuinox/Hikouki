@@ -4,8 +4,10 @@
 #include <sstream>
 #include <nlohmann/json.hpp>
 #include "../Utils/MathUtil.h"
+#include "../Utils/Utils.h"
 
 using json = nlohmann::json;
+using trau::utils::choice;
 
 EnemyAirplane::EnemyAirplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, trau::Timer *timer, const char * file)
 	: Airplane(_xfile, device, timer)
@@ -42,7 +44,9 @@ EnemyAirplane::EnemyAirplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, t
 
 	moveTimelineIndex = 0;
 
-	D3DXMatrixTranslation(&mat, data["defaultPositions"][0]["x"], data["defaultPositions"][0]["y"], data["defaultPositions"][0]["z"]);
+	const auto& coord = choice(data["defaultPositions"]);
+
+	D3DXMatrixTranslation(&mat, coord["x"], coord["y"], coord["z"]);
 }
 
 void EnemyAirplane::update()
