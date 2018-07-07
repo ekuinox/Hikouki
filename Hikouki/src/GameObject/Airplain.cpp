@@ -1,5 +1,5 @@
 #include "Airplain.h"
-#include "mathutil.h"
+#include "../Utils/MathUtil.h"
 
 Airplain::Airplain(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, trau::Timer *timer)
 	: XFileObjectBase(_xfile),

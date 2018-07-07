@@ -19,49 +19,49 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Airplain.h" />
     <ClInclude Include="src\App.h" />
-    <ClInclude Include="src\BoundingSphere.h" />
-    <ClInclude Include="src\Camera.h" />
-    <ClInclude Include="src\CDirect3DXFile.h" />
-    <ClInclude Include="src\CDirectxGraphics.h" />
-    <ClInclude Include="src\Collider.h" />
-    <ClInclude Include="src\EventMachine.h" />
-    <ClInclude Include="src\Explosion.h" />
-    <ClInclude Include="src\GameController.h" />
-    <ClInclude Include="src\GameObject.h" />
-    <ClInclude Include="src\Input.h" />
-    <ClInclude Include="src\KeyCode.h" />
-    <ClInclude Include="src\MainScene.h" />
-    <ClInclude Include="src\MathUtil.h" />
-    <ClInclude Include="src\Plain2D.h" />
-    <ClInclude Include="src\Scene.h" />
-    <ClInclude Include="src\TextArea.h" />
-    <ClInclude Include="src\Timer.h" />
-    <ClInclude Include="src\TitleScene.h" />
-    <ClInclude Include="src\XFileManager.h" />
-    <ClInclude Include="src\XFileObjectBase.h" />
+    <ClInclude Include="src\GameObjectAttachments\BoundingSphere.h" />
+    <ClInclude Include="src\GameObjectAttachments\Collider.h" />
+    <ClInclude Include="src\GameObjectAttachments\Explosion.h" />
+    <ClInclude Include="src\GameObject\Airplain.h" />
+    <ClInclude Include="src\GameObject\GameObject.h" />
+    <ClInclude Include="src\GameObject\Plain2D.h" />
+    <ClInclude Include="src\GameObject\TextArea.h" />
+    <ClInclude Include="src\GameObject\XFileObjectBase.h" />
+    <ClInclude Include="src\Manager\CDirectxGraphics.h" />
+    <ClInclude Include="src\Manager\EventMachine.h" />
+    <ClInclude Include="src\Manager\GameController.h" />
+    <ClInclude Include="src\Manager\XFileManager.h" />
+    <ClInclude Include="src\SceneAttachments\Camera.h" />
+    <ClInclude Include="src\SceneAttachments\Timer.h" />
+    <ClInclude Include="src\Scene\MainScene.h" />
+    <ClInclude Include="src\Scene\Scene.h" />
+    <ClInclude Include="src\Scene\TitleScene.h" />
+    <ClInclude Include="src\Utils\CDirect3DXFile.h" />
+    <ClInclude Include="src\Utils\Input.h" />
+    <ClInclude Include="src\Utils\KeyCode.h" />
+    <ClInclude Include="src\Utils\MathUtil.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Airplain.cpp" />
     <ClCompile Include="src\App.cpp" />
-    <ClCompile Include="src\BoundingSphere.cpp" />
-    <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\CDirect3DXFile.cpp" />
-    <ClCompile Include="src\CDirectXGraphics.cpp" />
-    <ClCompile Include="src\Collider.cpp" />
-    <ClCompile Include="src\Explosion.cpp" />
-    <ClCompile Include="src\GameController.cpp" />
-    <ClCompile Include="src\GameObject.cpp" />
-    <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\GameObjectAttachments\BoundingSphere.cpp" />
+    <ClCompile Include="src\GameObjectAttachments\Collider.cpp" />
+    <ClCompile Include="src\GameObjectAttachments\Explosion.cpp" />
+    <ClCompile Include="src\GameObject\Airplain.cpp" />
+    <ClCompile Include="src\GameObject\GameObject.cpp" />
+    <ClCompile Include="src\GameObject\Plain2D.cpp" />
+    <ClCompile Include="src\GameObject\TextArea.cpp" />
+    <ClCompile Include="src\GameObject\XFileObjectBase.cpp" />
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\MainScene.cpp" />
-    <ClCompile Include="src\MathUtil.cpp" />
-    <ClCompile Include="src\Plain2D.cpp" />
-    <ClCompile Include="src\TextArea.cpp" />
-    <ClCompile Include="src\TitleScene.cpp" />
-    <ClCompile Include="src\XFileManager.cpp" />
-    <ClCompile Include="src\XFileObjectBase.cpp" />
+    <ClCompile Include="src\Manager\CDirectXGraphics.cpp" />
+    <ClCompile Include="src\Manager\GameController.cpp" />
+    <ClCompile Include="src\Manager\XFileManager.cpp" />
+    <ClCompile Include="src\SceneAttachments\Camera.cpp" />
+    <ClCompile Include="src\Scene\MainScene.cpp" />
+    <ClCompile Include="src\Scene\TitleScene.cpp" />
+    <ClCompile Include="src\Utils\CDirect3DXFile.cpp" />
+    <ClCompile Include="src\Utils\Input.cpp" />
+    <ClCompile Include="src\Utils\MathUtil.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

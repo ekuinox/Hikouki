@@ -4,7 +4,7 @@
 #define ___TITLE_SCENE_H
 
 #include "Scene.h"
-#include "Plain2D.h"
+#include "../GameObject/Plain2D.h"
 #include <vector>
 #include <memory>
 

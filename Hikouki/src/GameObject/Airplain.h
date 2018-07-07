@@ -1,8 +1,8 @@
 #pragma once
 #include "XFileObjectBase.h"
-#include "BoundingSphere.h"
-#include "Explosion.h"
-#include "Timer.h"
+#include "../GameObjectAttachments/BoundingSphere.h"
+#include "../GameObjectAttachments/Explosion.h"
+#include "../SceneAttachments/Timer.h"
 
 class Airplain : public XFileObjectBase {
 private:

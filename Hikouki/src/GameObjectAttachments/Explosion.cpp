@@ -1,5 +1,5 @@
-#include	"CDirect3DXFile.h"
-#include	"Explosion.h"
+#include "Explosion.h"
+#include "../Utils/CDirect3DXFile.h"
 
 Explosion::Explosion()
 {

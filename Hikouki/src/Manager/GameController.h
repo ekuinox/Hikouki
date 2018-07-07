@@ -3,13 +3,13 @@
 #ifndef ___GAME_CONTROLLER_H
 #define ___GAME_CONTROLLER_H
 
+#include <vector>
 #include "CDirectXGraphics.h"
 #include "XFileManager.h"
-#include "input.h"
 #include "EventMachine.h"
-#include "Timer.h"
-#include <vector>
-#include "Scene.h"
+#include "../Utils/Input.h"
+#include "../Scene/Scene.h"
+#include "../SceneAttachments/Timer.h"
 
 class GameController : public EventMachine {
 private:

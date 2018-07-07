@@ -4,7 +4,6 @@
 #include <chrono>
 #include "rxcpp/rx.hpp"
 
-
 class EventMachine
 {
 public:

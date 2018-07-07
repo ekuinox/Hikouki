@@ -4,7 +4,7 @@
 #define ___X_FILE_OBJECT_BASE_H
 
 #include "GameObject.h"
-#include "CDirect3DXFile.h"
+#include "../Utils/CDirect3DXFile.h"
 
 class XFileObjectBase : public GameObject {
 protected:

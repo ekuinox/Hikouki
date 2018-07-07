@@ -2,10 +2,10 @@
 
 #ifndef ___SCENE_H
 
-#include "CDirectXGraphics.h"
-#include "XFileManager.h"
-#include "input.h"
-#include "Timer.h"
+#include "../Manager/CDirectxGraphics.h"
+#include "../Manager/XFileManager.h"
+#include "../Utils/Input.h"
+#include "../SceneAttachments/Timer.h"
 
 class Scene {
 public:

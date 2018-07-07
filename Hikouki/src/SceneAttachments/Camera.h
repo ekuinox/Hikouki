@@ -5,7 +5,7 @@
 
 #include <memory>
 #include <d3dx9.h>
-#include "XFileObjectBase.h"
+#include "../GameObject/XFileObjectBase.h"
 
 namespace trau
 {

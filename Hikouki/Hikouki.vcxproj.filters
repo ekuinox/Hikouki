@@ -13,132 +13,168 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Utils">
+      <UniqueIdentifier>{5d377ac8-f928-4b0f-99ef-8b51cd098be0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameObject">
+      <UniqueIdentifier>{78f66f53-302d-475a-993f-b31524248fd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameObjectAttachments">
+      <UniqueIdentifier>{415fab7a-9648-4dfd-a410-d4b0e9ccb92c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Scene">
+      <UniqueIdentifier>{3de8d9d9-91a1-47b7-912f-a84f2c6397b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\SceneAttachments">
+      <UniqueIdentifier>{035fcf23-6e7c-456f-8585-01c3566e481b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Manager">
+      <UniqueIdentifier>{ff8ae0af-2685-49b6-a0a0-1e2ce6ab33c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObject">
+      <UniqueIdentifier>{33761e38-dc47-4a66-b4d1-7dfac717fe48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObjectAttachments">
+      <UniqueIdentifier>{083ce338-4f24-40df-8631-8112a6014425}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene">
+      <UniqueIdentifier>{9d9e196d-27d1-49e3-b466-800cbe061b43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\SceneAttachments">
+      <UniqueIdentifier>{1230de1f-c35c-4ca9-bfbc-298c08a04963}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Manager">
+      <UniqueIdentifier>{b67b4fc9-322e-45f8-9db5-15104581f032}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Utils">
+      <UniqueIdentifier>{31b9783c-8ee2-4de8-81db-2e172e749d51}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\XFileManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\XFileObjectBase.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Airplain.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="src\App.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="src\BoundingSphere.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="src\Utils\KeyCode.h">
+      <Filter>ヘッダー ファイル\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\Camera.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="src\Utils\MathUtil.h">
+      <Filter>ヘッダー ファイル\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\CDirect3DXFile.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="src\Utils\CDirect3DXFile.h">
+      <Filter>ヘッダー ファイル\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\CDirectxGraphics.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="src\SceneAttachments\Camera.h">
+      <Filter>ヘッダー ファイル\SceneAttachments</Filter>
     </ClInclude>
-    <ClInclude Include="src\Collider.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="src\SceneAttachments\Timer.h">
+      <Filter>ヘッダー ファイル\SceneAttachments</Filter>
     </ClInclude>
-    <ClInclude Include="src\EventMachine.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="src\Scene\Scene.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameController.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="src\Scene\TitleScene.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameObject.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="src\Scene\MainScene.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\KeyCode.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="src\Manager\GameController.h">
+      <Filter>ヘッダー ファイル\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="src\MainScene.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="src\Manager\XFileManager.h">
+      <Filter>ヘッダー ファイル\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="src\MathUtil.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="src\Manager\CDirectxGraphics.h">
+      <Filter>ヘッダー ファイル\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scene.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="src\Manager\EventMachine.h">
+      <Filter>ヘッダー ファイル\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="src\TextArea.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="src\GameObjectAttachments\Collider.h">
+      <Filter>ヘッダー ファイル\GameObjectAttachments</Filter>
     </ClInclude>
-    <ClInclude Include="src\Timer.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="src\GameObjectAttachments\Explosion.h">
+      <Filter>ヘッダー ファイル\GameObjectAttachments</Filter>
     </ClInclude>
-    <ClInclude Include="src\Input.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="src\GameObjectAttachments\BoundingSphere.h">
+      <Filter>ヘッダー ファイル\GameObjectAttachments</Filter>
     </ClInclude>
-    <ClInclude Include="src\Explosion.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="src\GameObject\TextArea.h">
+      <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="src\TitleScene.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="src\GameObject\XFileObjectBase.h">
+      <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="src\Plain2D.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="src\GameObject\Airplain.h">
+      <Filter>ヘッダー ファイル\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameObject\GameObject.h">
+      <Filter>ヘッダー ファイル\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameObject\Plain2D.h">
+      <Filter>ヘッダー ファイル\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\Input.h">
+      <Filter>ヘッダー ファイル\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Collider.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameController.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameObject.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MainScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MathUtil.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TextArea.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\XFileManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\XFileObjectBase.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Airplain.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="src\App.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\BoundingSphere.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Camera.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CDirect3DXFile.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CDirectXGraphics.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Explosion.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="src\Main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\Input.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="src\GameObject\Plain2D.cpp">
+      <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="src\TitleScene.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="src\GameObject\TextArea.cpp">
+      <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="src\Plain2D.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="src\GameObject\XFileObjectBase.cpp">
+      <Filter>ソース ファイル\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObject\Airplain.cpp">
+      <Filter>ソース ファイル\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObject\GameObject.cpp">
+      <Filter>ソース ファイル\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObjectAttachments\Collider.cpp">
+      <Filter>ソース ファイル\GameObjectAttachments</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObjectAttachments\Explosion.cpp">
+      <Filter>ソース ファイル\GameObjectAttachments</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObjectAttachments\BoundingSphere.cpp">
+      <Filter>ソース ファイル\GameObjectAttachments</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Manager\XFileManager.cpp">
+      <Filter>ソース ファイル\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Manager\CDirectXGraphics.cpp">
+      <Filter>ソース ファイル\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Manager\GameController.cpp">
+      <Filter>ソース ファイル\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneAttachments\Camera.cpp">
+      <Filter>ソース ファイル\SceneAttachments</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\MainScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\TitleScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\Input.cpp">
+      <Filter>ソース ファイル\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\MathUtil.cpp">
+      <Filter>ソース ファイル\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\CDirect3DXFile.cpp">
+      <Filter>ソース ファイル\Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

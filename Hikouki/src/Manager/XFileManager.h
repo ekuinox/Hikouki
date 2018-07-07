@@ -1,5 +1,5 @@
 #pragma once
-#include "CDirect3DXFile.h"
+#include "../Utils/CDirect3DXFile.h"
 #include <vector>
 #include <map>
 

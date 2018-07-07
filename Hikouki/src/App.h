@@ -5,8 +5,8 @@
 #pragma comment(lib, "winmm.lib")			// ƒŠƒ“ƒN‘ÎÛƒ‰ƒCƒuƒ‰ƒŠ‚Éwinmm.lib‚ğ’Ç‰Á
 
 #include <windows.h>
-#include "GameController.h"
 #include <rxcpp/rx.hpp>
+#include "./Manager/GameController.h"
 
 class App
 {

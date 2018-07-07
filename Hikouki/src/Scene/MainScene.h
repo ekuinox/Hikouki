@@ -6,11 +6,11 @@
 
 #include <memory>
 #include <vector>
-#include "Collider.h"
-#include "GameObject.h"
-#include "Airplain.h"
-#include "Camera.h"
-#include "TextArea.h"
+#include "../GameObject/GameObject.h"
+#include "../GameObject/Airplain.h"
+#include "../GameObject/TextArea.h"
+#include "../GameObjectAttachments/Collider.h"
+#include "../SceneAttachments/Camera.h"
 #include <boost/format.hpp>
 
 class MainScene : public Scene {

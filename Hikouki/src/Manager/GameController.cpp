@@ -1,6 +1,6 @@
 #include "GameController.h"
-#include "MainScene.h"
-#include "TitleScene.h"
+#include "../Scene/MainScene.h"
+#include "../Scene/TitleScene.h"
 
 GameController::GameController(HINSTANCE hinst, HWND hwnd, int _width, int _height, bool fullscreen)
 	: width(_width), height(_height)

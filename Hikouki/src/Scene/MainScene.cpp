@@ -1,5 +1,4 @@
 #include "MainScene.h"
-#include "Plain2D.h"
 #include <algorithm>
 
 MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, Input* _input, trau::Timer* _timer)
