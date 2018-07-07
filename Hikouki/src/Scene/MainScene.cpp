@@ -10,16 +10,16 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 
 	xfile_manager = new XFileManager(graphics->GetDXDevice());
 	xfile_manager->add({
-		{ "Airplain", "assets/f1.x" }, // 飛行機
+		{ "Airplane", "assets/f1.x" }, // 飛行機
 		{ "Skydome", "assets/skydome.x" } // スカイドーム
 		});
 
-	airplains.emplace_back(new Airplain(xfile_manager->get("Airplain"), graphics->GetDXDevice(), D3DXVECTOR3(0.0, 0.0, 10.0f), timer));
-	airplains.emplace_back(new Airplain(xfile_manager->get("Airplain"), graphics->GetDXDevice(), D3DXVECTOR3(0.0, 0.0, -10.0f), timer));
+	airplanes.emplace_back(new Airplane(xfile_manager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3(0.0, 0.0, 10.0f), timer));
+	airplanes.emplace_back(new Airplane(xfile_manager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3(0.0, 0.0, -10.0f), timer));
 	text_areas.emplace_back(new trau::TextArea(graphics->GetDXDevice(), 0, 0, std::string("こんにちは")));
 
 	// ブチ込め
-	for (const auto& airplain : airplains) gameObjects.emplace_back(airplain);
+	for (const auto& airplane : airplanes) gameObjects.emplace_back(airplane);
 	for (const auto& text_area : text_areas) gameObjects.emplace_back(text_area);
 	gameObjects.emplace_back(new XFileObjectBase(xfile_manager->get("Skydome")));
 
@@ -83,7 +83,7 @@ void MainScene::input()
 
 	if (inputDevice->getTrigger(KeyCode::V)) cam_types++;
 
-	if (inputDevice->getTrigger(KeyCode::Add) && under_controll + 1 < airplains.size()) under_controll++;
+	if (inputDevice->getTrigger(KeyCode::Add) && under_controll + 1 < airplanes.size()) under_controll++;
 	if (inputDevice->getTrigger(KeyCode::Subtract) && under_controll > 0) under_controll--;
 
 	if (cam_types == trau::CameraTypes::OVER)
@@ -97,11 +97,11 @@ void MainScene::input()
 		cameras.over->distance -= mouse_current_state.lZ / 10;
 	}
 
-	if (inputDevice->getTrigger(KeyCode::Numpad5)) airplains[under_controll]->switchExplosion();
-	if (inputDevice->getTrigger(KeyCode::Numpad8)) airplains[under_controll]->switchDrawBBox();
-	if (inputDevice->getTrigger(KeyCode::Numpad6)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, -10 });
-	if (inputDevice->getTrigger(KeyCode::Numpad4)) airplains[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, 10 });
-	if (inputDevice->getTrigger(KeyCode::Space)) airplains[under_controll]->setTrans(D3DXVECTOR3{ 0, 0, 0 });
+	if (inputDevice->getTrigger(KeyCode::Numpad5)) airplanes[under_controll]->switchExplosion();
+	if (inputDevice->getTrigger(KeyCode::Numpad8)) airplanes[under_controll]->switchDrawBBox();
+	if (inputDevice->getTrigger(KeyCode::Numpad6)) airplanes[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, -10 });
+	if (inputDevice->getTrigger(KeyCode::Numpad4)) airplanes[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, 10 });
+	if (inputDevice->getTrigger(KeyCode::Space)) airplanes[under_controll]->setTrans(D3DXVECTOR3{ 0, 0, 0 });
 
 	if (inputDevice->getTrigger(KeyCode::Return)) state = State::Exit;
 }
@@ -110,24 +110,24 @@ void MainScene::update()
 {
 	for (const auto& gameObject : gameObjects) gameObject->update();
 
-	auto colls = getCollisions({ airplains[0]->getBBox() }, { airplains[1]->getBBox() });
+	auto colls = getCollisions({ airplanes[0]->getBBox() }, { airplanes[1]->getBBox() });
 
-	text_areas.front()->text = "{\n    Airplain:\n    {\n";
+	text_areas.front()->text = "{\n    Airplane:\n    {\n";
 	for (auto i = 0; i < 2; ++i)
 	{
-		auto pos = airplains[i]->getBBox()->getPosition();
+		auto pos = airplanes[i]->getBBox()->getPosition();
 		text_areas.front()->text += (boost::format(
 			"        { X: %2%, Y: %3%, Z: %4%, R: %5%, Hit: %6% }%7%\n"
-		) % i % pos.x % pos.y % pos.z % airplains[i]->getBBox()->getR() % (colls.size() > 0 ? "TRUE" : "FALSE") % (i == 1 ? "" : ",")).str();
+		) % i % pos.x % pos.y % pos.z % airplanes[i]->getBBox()->getR() % (colls.size() > 0 ? "TRUE" : "FALSE") % (i == 1 ? "" : ",")).str();
 	}
 	text_areas.front()->text += (boost::format(
 		"    },\n    Distance: %1%\n} \n%2%\n"
-	) % calculateDistance(airplains[0]->getBBox()->getPosition(), airplains[1]->getBBox()->getPosition()) % timer->getMs()).str();
+	) % calculateDistance(airplanes[0]->getBBox()->getPosition(), airplanes[1]->getBBox()->getPosition()) % timer->getMs()).str();
 
 	D3DXMATRIX mat;
 
-	cameras.tps->update(airplains[under_controll]->getMat());
-	cameras.fps->update(airplains[under_controll]->getMat());
+	cameras.tps->update(airplanes[under_controll]->getMat());
+	cameras.fps->update(airplanes[under_controll]->getMat());
 	cameras.over->update();
 }
 

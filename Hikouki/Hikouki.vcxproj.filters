@@ -105,9 +105,6 @@
     <ClInclude Include="src\GameObject\XFileObjectBase.h">
       <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameObject\Airplain.h">
-      <Filter>ヘッダー ファイル\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="src\GameObject\GameObject.h">
       <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
@@ -116,6 +113,9 @@
     </ClInclude>
     <ClInclude Include="src\Utils\Input.h">
       <Filter>ヘッダー ファイル\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameObject\Airplane.h">
+      <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -132,9 +132,6 @@
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="src\GameObject\XFileObjectBase.cpp">
-      <Filter>ソース ファイル\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameObject\Airplain.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="src\GameObject\GameObject.cpp">
@@ -175,6 +172,9 @@
     </ClCompile>
     <ClCompile Include="src\Utils\CDirect3DXFile.cpp">
       <Filter>ソース ファイル\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObject\Airplane.cpp">
+      <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -4,7 +4,7 @@
 #include "../GameObjectAttachments/Explosion.h"
 #include "../SceneAttachments/Timer.h"
 
-class Airplain : public XFileObjectBase {
+class Airplane : public XFileObjectBase {
 private:
 	bool drawing_bbox;
 	bool explosion_flag;
@@ -13,8 +13,8 @@ private:
 	BoundingSphere *bbox;
 	trau::Timer *timer;
 public:
-	Airplain(CDirect3DXFile*, LPDIRECT3DDEVICE9, trau::Timer*);
-	Airplain(CDirect3DXFile*, LPDIRECT3DDEVICE9, D3DXVECTOR3, trau::Timer*);
+	Airplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, trau::Timer*);
+	Airplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, D3DXVECTOR3, trau::Timer*);
 	void draw(const LPDIRECT3DDEVICE9&) const;
 	void update();
 	void switchExplosion();

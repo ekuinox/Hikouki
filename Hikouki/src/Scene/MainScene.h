@@ -7,7 +7,7 @@
 #include <memory>
 #include <vector>
 #include "../GameObject/GameObject.h"
-#include "../GameObject/Airplain.h"
+#include "../GameObject/Airplane.h"
 #include "../GameObject/TextArea.h"
 #include "../GameObjectAttachments/Collider.h"
 #include "../SceneAttachments/Camera.h"
@@ -27,7 +27,7 @@ private:
 
 	trau::CameraTypes cam_types;
 
-	std::vector<std::shared_ptr<Airplain>> airplains;
+	std::vector<std::shared_ptr<Airplane>> airplanes;
 	std::vector<std::shared_ptr<trau::TextArea>> text_areas;
 	std::vector<std::shared_ptr<GameObject>> gameObjects;
 

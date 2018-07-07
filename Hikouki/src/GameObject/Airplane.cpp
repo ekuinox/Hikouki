@@ -1,20 +1,20 @@
-#include "Airplain.h"
+#include "Airplane.h"
 #include "../Utils/MathUtil.h"
 
-Airplain::Airplain(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, trau::Timer *timer)
+Airplane::Airplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, trau::Timer *timer)
 	: XFileObjectBase(_xfile),
 	explosion(new Explosion(xfile, device)), explosion_flag(false),
 	bbox(new BoundingSphere(xfile->GetMesh(), device)), drawing_bbox(true), timer(timer)
 {
 }
 
-Airplain::Airplain(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, D3DXVECTOR3 coord, trau::Timer *timer)
-	: Airplain(_xfile, device, timer)
+Airplane::Airplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, D3DXVECTOR3 coord, trau::Timer *timer)
+	: Airplane(_xfile, device, timer)
 {
 	D3DXMatrixTranslation(&mat, coord.x, coord.y, coord.z);
 }
 
-void Airplain::draw(const LPDIRECT3DDEVICE9& device) const
+void Airplane::draw(const LPDIRECT3DDEVICE9& device) const
 {
 	if (!drawing) return;
 	if (explosion_flag)
@@ -27,7 +27,7 @@ void Airplain::draw(const LPDIRECT3DDEVICE9& device) const
 	if (drawing_bbox) bbox->draw(device);
 }
 
-void Airplain::update()
+void Airplane::update()
 {
 	if (!active) return;
 
@@ -48,7 +48,7 @@ void Airplain::update()
 	}
 }
 
-void Airplain::startExplosion()
+void Airplane::startExplosion()
 {
 	if (explosion_flag) {
 		explosion->TriangleTransforms(mat);
@@ -56,33 +56,33 @@ void Airplain::startExplosion()
 	}
 }
 
-void Airplain::switchExplosion()
+void Airplane::switchExplosion()
 {
 	explosion_flag = !explosion_flag;
 	startExplosion();
 }
 
-void Airplain::switchDrawBBox()
+void Airplane::switchDrawBBox()
 {
 	switchDrawBBox(!drawing_bbox);
 }
 
-void Airplain::switchDrawBBox(bool new_drawing_bbox)
+void Airplane::switchDrawBBox(bool new_drawing_bbox)
 {
 	drawing_bbox = new_drawing_bbox;
 }
 
-BoundingSphere* Airplain::getBBox()
+BoundingSphere* Airplane::getBBox()
 {
 	return bbox;
 }
 
-void Airplain::addTrans(D3DXVECTOR3 v)
+void Airplane::addTrans(D3DXVECTOR3 v)
 {
 	trans += v;
 }
 
-void Airplain::setTrans(D3DXVECTOR3 v)
+void Airplane::setTrans(D3DXVECTOR3 v)
 {
 	trans = v;
 }
