@@ -61,3 +61,8 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+
+# ASSETS
+*.tga linguist-vendored
+*.x linguist-vendored
+*.json linguist-vendored
