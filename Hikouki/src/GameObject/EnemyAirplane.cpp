@@ -14,6 +14,13 @@ EnemyAirplane::EnemyAirplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, D
 	randomEngine = _engine;
 	trans.z = 20.0f;
 	rotationTimer = std::unique_ptr<trau::Timer>(new trau::Timer());
+	moveTimeline = {
+		Moves{ 1.0f, { 0, 0, 0 }, { 20, 0, 0 } },
+		Moves{ 5.0f, { 0, 0, 0 }, { -20, 0, 0 } },
+		Moves{ 3.0f, { 0, 0, 0 }, { 0, 30, 0 } },
+		Moves{ 6.0f, { 0, 0, 0 }, { 5, 0, 0 } },
+	};
+	moveTimelineIndex = 0;
 }
 
 void EnemyAirplane::update()
@@ -27,22 +34,16 @@ void EnemyAirplane::update()
 	else
 	{
 		rotationTimer->end();
-		if (rotationTimer->getSeconds() > rotationSpanSeconds)
+		if (rotationTimer->getSeconds() > moveTimeline[moveTimelineIndex].span)
 		{
 			rotationTimer->start();
-			switch (randomEngine() % 3)
-			{
-			case 0:
-				angle.x += (randomEngine() % 20) * randomEngine() % 2 == 0 ? -1 : 1;
-				break;
-			case 1:
-				angle.y += (randomEngine() % 20) * randomEngine() % 2 == 0 ? -1 : 1;
-				break;
-			case 2:
-				angle.z += (randomEngine() % 20) * randomEngine() % 2 == 0 ? -1 : 1;
-				break;
-			}
+			trans += moveTimeline[moveTimelineIndex].trans;
+			angle += moveTimeline[moveTimelineIndex].angle;
+			
+			moveTimelineIndex++;
+			if (moveTimeline.size() == moveTimelineIndex) moveTimelineIndex = 0;
 		}
+
 		
 		D3DXMATRIX mx;
 		MakeWorldMatrix(mx, mat, angle * timer->getSeconds(), trans * timer->getSeconds());
