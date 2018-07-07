@@ -31,7 +31,7 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 		{ D3DRS_ALPHABLENDENABLE, TRUE }, // アルファ・ブレンディングを行う
 		{ D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA }, // 透過処理を行う
 		{ D3DRS_SRCBLEND, D3DBLEND_SRCALPHA } // 半透明処理を行う
-		});
+	});
 }
 
 Scene::State MainScene::exec()
