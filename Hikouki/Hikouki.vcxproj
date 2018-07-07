@@ -24,6 +24,7 @@
     <ClInclude Include="src\GameObjectAttachments\Collider.h" />
     <ClInclude Include="src\GameObjectAttachments\Explosion.h" />
     <ClInclude Include="src\GameObject\Airplane.h" />
+    <ClInclude Include="src\GameObject\EnemyAirplane.h" />
     <ClInclude Include="src\GameObject\GameObject.h" />
     <ClInclude Include="src\GameObject\Plain2D.h" />
     <ClInclude Include="src\GameObject\TextArea.h" />
@@ -48,6 +49,7 @@
     <ClCompile Include="src\GameObjectAttachments\Collider.cpp" />
     <ClCompile Include="src\GameObjectAttachments\Explosion.cpp" />
     <ClCompile Include="src\GameObject\Airplane.cpp" />
+    <ClCompile Include="src\GameObject\EnemyAirplane.cpp" />
     <ClCompile Include="src\GameObject\GameObject.cpp" />
     <ClCompile Include="src\GameObject\Plain2D.cpp" />
     <ClCompile Include="src\GameObject\TextArea.cpp" />

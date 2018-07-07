@@ -26,7 +26,7 @@ namespace trau
 		{
 			diff = clock::now() - started;
 		}
-		auto getMs() -> float
+		auto getSeconds() -> float
 		{
 			return duration_cast<nanoseconds>(diff).count() / 1000000000.0f;
 		}
@@ -34,6 +34,10 @@ namespace trau
 		auto getDiff() -> _T
 		{
 			return duration_cast<_T>(diff);
+		}
+		auto getCurrentMs() -> float
+		{
+			return duration_cast<nanoseconds>(clock::now() - started).count() / 1000000000.0f;
 		}
 		auto run(std::function<void(void)> func) -> void
 		{

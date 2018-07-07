@@ -43,7 +43,7 @@ void Airplane::update()
 		angle.x = rand() % 2 - 1;
 		angle.y = rand() % 2 - 1;
 #endif
-		MakeWorldMatrix(mx, mat, angle, trans * timer->getMs());
+		MakeWorldMatrix(mx, mat, angle, trans * timer->getSeconds());
 		bbox->updatePosition(mat);
 	}
 }

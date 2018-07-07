@@ -117,6 +117,9 @@
     <ClInclude Include="src\GameObject\Airplane.h">
       <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="src\GameObject\EnemyAirplane.h">
+      <Filter>ヘッダー ファイル\GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp">
@@ -174,6 +177,9 @@
       <Filter>ソース ファイル\Utils</Filter>
     </ClCompile>
     <ClCompile Include="src\GameObject\Airplane.cpp">
+      <Filter>ソース ファイル\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObject\EnemyAirplane.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,5 +1,6 @@
 #include "MainScene.h"
 #include <algorithm>
+#include "../GameObject/EnemyAirplane.h"
 
 MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, Input* _input, trau::Timer* _timer)
 	: Scene(_graphics, _xfileManager, _input, _timer), under_controll(0), cam_types(trau::CameraTypes::OVER)
@@ -22,6 +23,7 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 	for (const auto& airplane : airplanes) gameObjects.emplace_back(airplane);
 	for (const auto& text_area : text_areas) gameObjects.emplace_back(text_area);
 	gameObjects.emplace_back(new XFileObjectBase(xfile_manager->get("Skydome")));
+	gameObjects.emplace_back(new EnemyAirplane(xfile_manager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3(0.0, 0.0, 0.0f), timer));
 
 	// ‰ŠúÝ’è
 	graphics->SetRenderStateArray({
@@ -88,10 +90,10 @@ void MainScene::input()
 
 	if (cam_types == trau::CameraTypes::OVER)
 	{
-		if (inputDevice->getPress(KeyCode::UpArrow)) cameras.over->elevation += 10.0f * timer->getMs();
-		if (inputDevice->getPress(KeyCode::DownArrow)) cameras.over->elevation -= 10.0f * timer->getMs();
-		if (inputDevice->getPress(KeyCode::RightArrow)) cameras.over->azimuth -= 10.0f * timer->getMs();
-		if (inputDevice->getPress(KeyCode::LeftArrow)) cameras.over->azimuth += 10.0f * timer->getMs();
+		if (inputDevice->getPress(KeyCode::UpArrow)) cameras.over->elevation += 10.0f * timer->getSeconds();
+		if (inputDevice->getPress(KeyCode::DownArrow)) cameras.over->elevation -= 10.0f * timer->getSeconds();
+		if (inputDevice->getPress(KeyCode::RightArrow)) cameras.over->azimuth -= 10.0f * timer->getSeconds();
+		if (inputDevice->getPress(KeyCode::LeftArrow)) cameras.over->azimuth += 10.0f * timer->getSeconds();
 		if (inputDevice->getPress(KeyCode::Return) && 0 < cameras.over->distance) cameras.over->distance -= 0.1f;
 		if (inputDevice->getPress(KeyCode::BackSpace)) cameras.over->distance += 0.1f;
 		cameras.over->distance -= mouse_current_state.lZ / 10;
@@ -122,7 +124,7 @@ void MainScene::update()
 	}
 	text_areas.front()->text += (boost::format(
 		"    },\n    Distance: %1%\n} \n%2%\n"
-	) % calculateDistance(airplanes[0]->getBBox()->getPosition(), airplanes[1]->getBBox()->getPosition()) % timer->getMs()).str();
+	) % calculateDistance(airplanes[0]->getBBox()->getPosition(), airplanes[1]->getBBox()->getPosition()) % timer->getSeconds()).str();
 
 	D3DXMATRIX mat;
 

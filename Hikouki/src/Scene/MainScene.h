@@ -6,12 +6,12 @@
 
 #include <memory>
 #include <vector>
+#include <boost/format.hpp>
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Airplane.h"
 #include "../GameObject/TextArea.h"
 #include "../GameObjectAttachments/Collider.h"
 #include "../SceneAttachments/Camera.h"
-#include <boost/format.hpp>
 
 class MainScene : public Scene {
 public:
