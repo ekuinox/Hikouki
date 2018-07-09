@@ -14,8 +14,6 @@ HomingMissile::HomingMissile(CDirect3DXFile * _xfile, XFileObjectBase * _target,
 
 void HomingMissile::update()
 {
-	const auto missileSpeed = 10.0f * timer->getSeconds();
-	
 	auto targetVector = target->getPos() - position;
 	auto zDir = velocity;
 
@@ -31,8 +29,7 @@ void HomingMissile::update()
 
 	D3DXMatrixRotationQuaternion(&mat, &attitude);
 
-	velocity = D3DXVECTOR3(mat._31, mat._32, mat._33);
-	velocity *= missileSpeed;
+	velocity = D3DXVECTOR3(mat._31, mat._32, mat._33) * missileSpeed * timer->getSeconds();
 
 	position += velocity;
 
