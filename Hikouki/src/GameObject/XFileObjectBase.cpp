@@ -4,12 +4,7 @@ XFileObjectBase::XFileObjectBase(CDirect3DXFile *_xfile)
 	: xfile(_xfile), angle(0, 0, 0), trans(0, 0, 0)
 {
 	if (!xfile->GetMesh()) throw "CDirect3DXFileがセットされていないのでは...?";
-	mat = { //（単位行列で初期化）
-		1.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
-	};
+	D3DXMatrixIdentity(&mat);
 	show();
 	enable();
 }
