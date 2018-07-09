@@ -29,3 +29,8 @@ D3DXMATRIX XFileObjectBase::getMat() const
 {
 	return mat;
 }
+
+D3DXVECTOR3 XFileObjectBase::getPos() const
+{
+	return D3DXVECTOR3(mat._41, mat._44, mat._43);
+}

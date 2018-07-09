@@ -15,6 +15,7 @@ public:
 	XFileObjectBase(CDirect3DXFile*);
 	virtual void draw(const LPDIRECT3DDEVICE9&) const;
 	D3DXMATRIX getMat() const;
+	D3DXVECTOR3 getPos() const;
 };
 
 #endif
