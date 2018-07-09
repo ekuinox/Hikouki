@@ -2,10 +2,12 @@
 #include "../Utils/MathUtil.h"
 
 Airplane::Airplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, trau::Timer *timer)
-	: XFileObjectBase(_xfile),
-	explosion(new Explosion(xfile, device)), explosion_flag(false),
+	: XFileObjectBase(_xfile), explosion_flag(false),
 	bbox(new BoundingSphere(xfile->GetMesh(), device)), drawing_bbox(true), timer(timer)
 {
+	LPDIRECT3DTEXTURE9 texture;
+	D3DXCreateTextureFromFile(device, "assets/koa_1.tga", &texture);
+	explosion = new Explosion(xfile->GetMesh(), texture, device, timer);
 }
 
 Airplane::Airplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, D3DXVECTOR3 coord, trau::Timer *timer)
@@ -19,7 +21,7 @@ void Airplane::draw(const LPDIRECT3DDEVICE9& device) const
 	if (!drawing) return;
 	if (explosion_flag)
 	{
-		explosion->Draw(device);
+		explosion->draw(device);
 		return;
 	}
 	device->SetTransform(D3DTS_WORLD, &mat);
@@ -33,7 +35,7 @@ void Airplane::update()
 
 	if (explosion_flag)
 	{
-		explosion->Update();
+		explosion->update();
 	}
 	else
 	{
@@ -51,8 +53,7 @@ void Airplane::update()
 void Airplane::startExplosion()
 {
 	if (explosion_flag) {
-		explosion->TriangleTransforms(mat);
-		explosion->Start();
+		explosion->triangleTransforms(mat);
 	}
 }
 

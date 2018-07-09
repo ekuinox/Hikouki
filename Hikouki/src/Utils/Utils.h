@@ -9,8 +9,8 @@ namespace trau
 {
 	namespace utils
 	{
-		std::random_device seedGen;
-		std::mt19937 randomEngine(seedGen());
+		static std::random_device seedGen;
+		static std::mt19937 randomEngine(seedGen());
 
 		template <class T>
 		const T& choice(const T& container)

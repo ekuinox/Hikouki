@@ -55,7 +55,7 @@ void EnemyAirplane::update()
 
 	if (explosion_flag)
 	{
-		explosion->Update();
+		explosion->update();
 	}
 	else
 	{

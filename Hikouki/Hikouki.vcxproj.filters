@@ -96,9 +96,6 @@
     <ClInclude Include="src\GameObjectAttachments\Collider.h">
       <Filter>ヘッダー ファイル\GameObjectAttachments</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameObjectAttachments\Explosion.h">
-      <Filter>ヘッダー ファイル\GameObjectAttachments</Filter>
-    </ClInclude>
     <ClInclude Include="src\GameObjectAttachments\BoundingSphere.h">
       <Filter>ヘッダー ファイル\GameObjectAttachments</Filter>
     </ClInclude>
@@ -129,6 +126,9 @@
     <ClInclude Include="src\GameObject\HomingMissile.h">
       <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="src\GameObject\Explosion.h">
+      <Filter>ヘッダー ファイル\GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp">
@@ -150,9 +150,6 @@
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="src\GameObjectAttachments\Collider.cpp">
-      <Filter>ソース ファイル\GameObjectAttachments</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameObjectAttachments\Explosion.cpp">
       <Filter>ソース ファイル\GameObjectAttachments</Filter>
     </ClCompile>
     <ClCompile Include="src\GameObjectAttachments\BoundingSphere.cpp">
@@ -192,6 +189,9 @@
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="src\GameObject\HomingMissile.cpp">
+      <Filter>ソース ファイル\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObject\Explosion.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
