@@ -19,6 +19,7 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 	airplanes.emplace_back(new Airplane(xfile_manager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3(0.0, 0.0, 10.0f), timer));
 	airplanes.emplace_back(new Airplane(xfile_manager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3(0.0, 0.0, -10.0f), timer));
 	text_areas.emplace_back(new trau::TextArea(graphics->GetDXDevice(), 0, 0, std::string("‚±‚ñ‚É‚¿‚Í")));
+	text_areas.emplace_back(new trau::TextArea(graphics->GetDXDevice(), graphics->GetWidth() - 100, 0, std::string("")));
 
 	// ƒuƒ`ž‚ß
 	for (const auto& airplane : airplanes) gameObjects.emplace_back(airplane);
@@ -78,37 +79,37 @@ void MainScene::input()
 	try
 	{
 		inputDevice->update();
+
+		auto mouse_current_state = inputDevice->getMouseState();
+
+		if (inputDevice->getTrigger(KeyCode::V)) cam_types++;
+
+		if (inputDevice->getTrigger(KeyCode::Add) && under_controll + 1 < airplanes.size()) under_controll++;
+		if (inputDevice->getTrigger(KeyCode::Subtract) && under_controll > 0) under_controll--;
+
+		if (cam_types == trau::CameraTypes::OVER)
+		{
+			if (inputDevice->getPress(KeyCode::UpArrow)) cameras.over->elevation += 10.0f * timer->getSeconds();
+			if (inputDevice->getPress(KeyCode::DownArrow)) cameras.over->elevation -= 10.0f * timer->getSeconds();
+			if (inputDevice->getPress(KeyCode::RightArrow)) cameras.over->azimuth -= 10.0f * timer->getSeconds();
+			if (inputDevice->getPress(KeyCode::LeftArrow)) cameras.over->azimuth += 10.0f * timer->getSeconds();
+			if (inputDevice->getPress(KeyCode::Return) && 0 < cameras.over->distance) cameras.over->distance -= 0.1f;
+			if (inputDevice->getPress(KeyCode::BackSpace)) cameras.over->distance += 0.1f;
+			cameras.over->distance -= mouse_current_state.lZ / 10;
+		}
+
+		if (inputDevice->getTrigger(KeyCode::Numpad5)) airplanes[under_controll]->switchExplosion();
+		if (inputDevice->getTrigger(KeyCode::Numpad8)) airplanes[under_controll]->switchDrawBBox();
+		if (inputDevice->getTrigger(KeyCode::Numpad6)) airplanes[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, -10 });
+		if (inputDevice->getTrigger(KeyCode::Numpad4)) airplanes[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, 10 });
+		if (inputDevice->getTrigger(KeyCode::Space)) airplanes[under_controll]->setTrans(D3DXVECTOR3{ 0, 0, 0 });
+
+		if (inputDevice->getTrigger(KeyCode::Return)) state = State::Exit;
 	}
 	catch (const char* e)
 	{
-		
+		text_areas.back()->text = e;
 	}
-
-	auto mouse_current_state = inputDevice->getMouseState();
-
-	if (inputDevice->getTrigger(KeyCode::V)) cam_types++;
-
-	if (inputDevice->getTrigger(KeyCode::Add) && under_controll + 1 < airplanes.size()) under_controll++;
-	if (inputDevice->getTrigger(KeyCode::Subtract) && under_controll > 0) under_controll--;
-
-	if (cam_types == trau::CameraTypes::OVER)
-	{
-		if (inputDevice->getPress(KeyCode::UpArrow)) cameras.over->elevation += 10.0f * timer->getSeconds();
-		if (inputDevice->getPress(KeyCode::DownArrow)) cameras.over->elevation -= 10.0f * timer->getSeconds();
-		if (inputDevice->getPress(KeyCode::RightArrow)) cameras.over->azimuth -= 10.0f * timer->getSeconds();
-		if (inputDevice->getPress(KeyCode::LeftArrow)) cameras.over->azimuth += 10.0f * timer->getSeconds();
-		if (inputDevice->getPress(KeyCode::Return) && 0 < cameras.over->distance) cameras.over->distance -= 0.1f;
-		if (inputDevice->getPress(KeyCode::BackSpace)) cameras.over->distance += 0.1f;
-		cameras.over->distance -= mouse_current_state.lZ / 10;
-	}
-
-	if (inputDevice->getTrigger(KeyCode::Numpad5)) airplanes[under_controll]->switchExplosion();
-	if (inputDevice->getTrigger(KeyCode::Numpad8)) airplanes[under_controll]->switchDrawBBox();
-	if (inputDevice->getTrigger(KeyCode::Numpad6)) airplanes[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, -10 });
-	if (inputDevice->getTrigger(KeyCode::Numpad4)) airplanes[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, 10 });
-	if (inputDevice->getTrigger(KeyCode::Space)) airplanes[under_controll]->setTrans(D3DXVECTOR3{ 0, 0, 0 });
-
-	if (inputDevice->getTrigger(KeyCode::Return)) state = State::Exit;
 }
 
 void MainScene::update()
