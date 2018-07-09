@@ -1,6 +1,7 @@
 #include "MainScene.h"
 #include <algorithm>
 #include "../GameObject/EnemyAirplane.h"
+#include "../GameObject/HomingMissile.h"
 
 MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, Input* _input, trau::Timer* _timer)
 	: Scene(_graphics, _xfileManager, _input, _timer), under_controll(0), cam_types(trau::CameraTypes::OVER)
@@ -23,7 +24,9 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 	for (const auto& airplane : airplanes) gameObjects.emplace_back(airplane);
 	for (const auto& text_area : text_areas) gameObjects.emplace_back(text_area);
 	gameObjects.emplace_back(new XFileObjectBase(xfile_manager->get("Skydome")));
-	gameObjects.emplace_back(new EnemyAirplane(xfile_manager->get("Airplane"), graphics->GetDXDevice(), timer, "assets/GameObjectConfig/enemy.json"));
+	const auto& enemyAirplane = std::shared_ptr<EnemyAirplane>(new EnemyAirplane(xfile_manager->get("Airplane"), graphics->GetDXDevice(), timer, "assets/GameObjectConfig/enemy.json"));
+	gameObjects.emplace_back(enemyAirplane);
+	gameObjects.emplace_back(new HomingMissile(xfile_manager->get("Airplane"), enemyAirplane, 360.0f, D3DXVECTOR3{0, -20, 0}, D3DXVECTOR3{ 0, 0, 1 }, timer));
 
 	// ‰ŠúÝ’è
 	graphics->SetRenderStateArray({

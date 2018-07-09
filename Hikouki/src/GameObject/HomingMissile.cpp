@@ -1,15 +1,20 @@
 #include "HomingMissile.h"
 
-HomingMissile::HomingMissile(CDirect3DXFile * _xfile, XFileObjectBase * _target, const float & maxAngle, const D3DXVECTOR3 & _velocity)
-	: XFileObjectBase(_xfile), target(_target), velocity(_velocity), addRotMax(D3DX_PI * maxAngle / 180.0f), position(_target->getPos())
+HomingMissile::HomingMissile(CDirect3DXFile * _xfile, std::shared_ptr<XFileObjectBase> _target, const float & maxAngle, const D3DXVECTOR3& _position, const D3DXVECTOR3 & _velocity, trau::Timer * _timer)
+	: XFileObjectBase(_xfile), target(_target), velocity(_velocity), addRotMax(D3DX_PI * maxAngle / 180.0f), position(_position), timer(_timer)
 {
-	mat = target->getMat();
+	D3DXQuaternionIdentity(&attitude);
 	D3DXQuaternionRotationMatrix(&attitude, &mat);
+}
+
+HomingMissile::HomingMissile(CDirect3DXFile * _xfile, XFileObjectBase * _target, const float & maxAngle, const D3DXVECTOR3& _position, const D3DXVECTOR3 & _velocity, trau::Timer * _timer)
+	: HomingMissile(_xfile, _target, maxAngle, _position, _velocity, _timer)
+{
 }
 
 void HomingMissile::update()
 {
-	auto missileSpeed = 3.0f;
+	const auto missileSpeed = 10.0f * timer->getSeconds();
 	
 	auto targetVector = target->getPos() - position;
 	auto zDir = velocity;
@@ -21,7 +26,7 @@ void HomingMissile::update()
 	auto targetAttitude = RotationArc(zDir, targetVector, dot);
 	auto diffAngle = acos(dot);
 
-	if (diffAngle <= addRotMax) attitude = attitude * targetAttitude;
+	if (addRotMax >= diffAngle) attitude *= targetAttitude;
 	else D3DXQuaternionSlerp(&attitude, &attitude, &(attitude * targetAttitude), addRotMax / diffAngle);
 
 	D3DXMatrixRotationQuaternion(&mat, &attitude);
@@ -39,20 +44,19 @@ void HomingMissile::update()
 const D3DXQUATERNION & HomingMissile::RotationArc(D3DXVECTOR3 v0, D3DXVECTOR3 v1, double & d)
 {
 	D3DXVECTOR3 axis;
-	D3DXQUATERNION q;
 
 	D3DXVec3Cross(&axis, &v0, &v1);
 
 	d = D3DXVec3Dot(&v0, &v1);
 	if (d > 1.0) d = 1.0;
-	if (d < 1.0) d = -1.0;
+	if (d < -1.0) d = -1.0;
 
-	auto s = static_cast<float>(sqrt((1 + d) * 2));
+	const auto& s = static_cast<float>(sqrt((1 + d) * 2));
 
 	return D3DXQUATERNION(
-		axis.x / 2,
-		axis.y / 2,
-		axis.z / 2,
+		axis.x / s,
+		axis.y / s,
+		axis.z / s,
 		s / 2
 	);
 }
