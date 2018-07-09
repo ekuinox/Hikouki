@@ -18,10 +18,7 @@ void XFileObjectBase::draw(const LPDIRECT3DDEVICE9& device) const
 {
 	if (!drawing) return;
 
-	D3DXMATRIX world;
-
-	D3DXMatrixIdentity(&world);
-	device->SetTransform(D3DTS_WORLD, &world);
+	device->SetTransform(D3DTS_WORLD, &mat);
 	xfile->Draw(device);
 }
 
