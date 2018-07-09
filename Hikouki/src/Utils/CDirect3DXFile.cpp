@@ -157,6 +157,11 @@ void CDirect3DXFile::DrawAxis(LPDIRECT3DDEVICE9 lpd3ddevice)
 	lpd3ddevice->SetRenderState(D3DRS_LIGHTING,true);	//   光源計算ON
 }
 
+LPDIRECT3DTEXTURE9 * CDirect3DXFile::GetTextures()
+{
+	return m_lpmeshtextures;
+}
+
 //==============================================================================
 //!	@fn		GetMesh
 //!	@brief	メッシュオブジェクトポインタを戻す

@@ -2,12 +2,9 @@
 #include "../Utils/MathUtil.h"
 
 Airplane::Airplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, trau::Timer *timer)
-	: XFileObjectBase(_xfile), explosion_flag(false),
+	: XFileObjectBase(_xfile), explosion_flag(false), explosion(new Explosion(xfile->GetMesh(), xfile->GetTextures()[0], device, timer)),
 	bbox(new BoundingSphere(xfile->GetMesh(), device)), drawing_bbox(true), timer(timer)
 {
-	LPDIRECT3DTEXTURE9 texture;
-	D3DXCreateTextureFromFile(device, "assets/koa_1.tga", &texture);
-	explosion = new Explosion(xfile->GetMesh(), texture, device, timer);
 }
 
 Airplane::Airplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, D3DXVECTOR3 coord, trau::Timer *timer)

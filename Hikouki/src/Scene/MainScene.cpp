@@ -81,7 +81,7 @@ void MainScene::input()
 	}
 	catch (const char* e)
 	{
-
+		
 	}
 
 	auto mouse_current_state = inputDevice->getMouseState();

@@ -40,6 +40,7 @@ public:
 	void Draw(LPDIRECT3DDEVICE9 lpd3ddevice);
 	void DrawWithAxis(LPDIRECT3DDEVICE9 lpd3ddevice);
 	void DrawAxis(LPDIRECT3DDEVICE9 lpd3ddevice);
+	LPDIRECT3DTEXTURE9* GetTextures();
 };
 
 //******************************************************************************
