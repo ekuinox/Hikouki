@@ -10,11 +10,8 @@ using json = nlohmann::json;
 using trau::utils::choice;
 
 EnemyAirplane::EnemyAirplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, trau::Timer *timer, const char * file)
-	: Airplane(_xfile, device, timer)
+	: Airplane(_xfile, device, timer), randomEngine(std::mt19937(std::random_device()()))
 {
-	std::random_device seed_gen;
-	std::mt19937 _engine(seed_gen());
-	randomEngine = _engine;
 	trans.z = 20.0f;
 	rotationTimer = std::unique_ptr<trau::Timer>(new trau::Timer());
 
@@ -22,7 +19,7 @@ EnemyAirplane::EnemyAirplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, t
 
 	std::ifstream fin(file);
 
-	if (!fin) throw "read file error";
+	if (!fin) throw std::runtime_error("[EnemyAirplane] Read JSON File Error");
 	
 	std::stringstream strstream;
 	strstream << fin.rdbuf();
