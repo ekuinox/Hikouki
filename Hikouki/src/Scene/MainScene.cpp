@@ -130,6 +130,8 @@ void MainScene::update()
 		"    },\n    Distance: %1%\n} \n%2%\n"
 	) % calculateDistance(airplanes[0]->getBBox()->getPosition(), airplanes[1]->getBBox()->getPosition()) % timer->getSeconds()).str();
 
+	text_areas.front()->text += (boost::format("\n%1%") % airplanes[0]->getUUID()).str();
+
 	D3DXMATRIX mat;
 
 	cameras.tps->update(airplanes[underControll]->getMat());

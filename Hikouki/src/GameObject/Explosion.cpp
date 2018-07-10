@@ -1,7 +1,7 @@
 #include "Explosion.h"
 
 Explosion::Explosion(const LPD3DXMESH& mesh, const LPDIRECT3DTEXTURE9& tex, const LPDIRECT3DDEVICE9& device)
-	: vertex(nullptr), numVertexes(0), connect(nullptr), numFaces(0), triangle(nullptr), texture(tex)
+	: GameObject(), vertex(nullptr), numVertexes(0), connect(nullptr), numFaces(0), triangle(nullptr), texture(tex)
 {
 	createTriangleFromMesh(mesh, device);
 }

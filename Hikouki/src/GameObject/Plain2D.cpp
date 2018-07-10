@@ -1,7 +1,7 @@
 #include "Plain2D.h"
 
 Plain2D::Plain2D(const D3DVECTOR & _center, const D3DVECTOR & _size, const TextureSets & _texture)
-	: center(_center), size(_size), texture(_texture)
+	: GameObject(), center(_center), size(_size), texture(_texture)
 {
 }
 

@@ -1,5 +1,10 @@
 #include "GameObject.h"
 
+GameObject::GameObject()
+	: GameObjectInterface()
+{
+}
+
 void GameObject::draw(const LPDIRECT3DDEVICE9&) const
 {
 	if (!drawing) return;
@@ -38,4 +43,9 @@ unsigned int GameObject::getLayer()
 unsigned int GameObject::getPriority()
 {
 	return priority;
+}
+
+std::string GameObject::getUUID()
+{
+	return uuid;
 }

@@ -1,7 +1,7 @@
 #include "XFileObjectBase.h"
 
 XFileObjectBase::XFileObjectBase(CDirect3DXFile *_xfile)
-	: xfile(_xfile), angle(0, 0, 0), trans(0, 0, 0)
+	: GameObject(), xfile(_xfile), angle(0, 0, 0), trans(0, 0, 0)
 {
 	if (!xfile->GetMesh()) throw "CDirect3DXFile‚ªƒZƒbƒg‚³‚ê‚Ä‚¢‚È‚¢‚Ì‚Å‚Í...?";
 	D3DXMatrixIdentity(&mat);

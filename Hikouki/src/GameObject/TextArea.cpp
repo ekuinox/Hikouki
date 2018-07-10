@@ -1,7 +1,7 @@
 #include "TextArea.h"
 
 trau::TextArea::TextArea(LPDIRECT3DDEVICE9 device, int _x, int _y, const std::string & _text)
-	: rect(new RECT{ _x, _y, 0, 0 }), text(_text)
+	: GameObject(), rect(new RECT{ _x, _y, 0, 0 }), text(_text)
 {
 	active = drawing = SUCCEEDED(D3DXCreateFont(
 		device, _size.height, _size.width, _thickness,
