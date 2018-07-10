@@ -12,7 +12,7 @@ public:
 		D3DXVECTOR3 trans, angle;
 	};
 	EnemyAirplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, trau::Timer*, const char *);
-	void update();
+	void update(const UpdateDetail&);
 private:
 	static constexpr auto rotationSpanSeconds = 1.0f;
 	std::mt19937 randomEngine;

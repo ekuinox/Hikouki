@@ -114,7 +114,7 @@ void MainScene::input()
 
 void MainScene::update()
 {
-	for (const auto& gameObject : gameObjects) gameObject->update();
+	for (const auto& gameObject : gameObjects) gameObject->update({timer, inputDevice});
 
 	auto colls = getCollisions({ airplanes[0]->getBBox() }, { airplanes[1]->getBBox() });
 

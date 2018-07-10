@@ -26,13 +26,13 @@ void Airplane::draw(const LPDIRECT3DDEVICE9& device) const
 	if (drawing_bbox) bbox->draw(device);
 }
 
-void Airplane::update()
+void Airplane::update(const UpdateDetail& detail)
 {
 	if (!active) return;
 
 	if (explosion_flag)
 	{
-		explosion->update();
+		explosion->update(detail);
 	}
 	else
 	{

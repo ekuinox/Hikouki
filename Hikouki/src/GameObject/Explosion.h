@@ -14,7 +14,7 @@ public:
 	Explosion(const LPD3DXMESH& mesh, const LPDIRECT3DTEXTURE9& tex, const LPDIRECT3DDEVICE9& device, trau::Timer *_timer);
 	~Explosion();
 	void draw(const LPDIRECT3DDEVICE9&) const;
-	void update();
+	void update(const UpdateDetail&);
 	void triangleTransforms(const D3DXMATRIX& mat);
 private:
 	struct Connect {

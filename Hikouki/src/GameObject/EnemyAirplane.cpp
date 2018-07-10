@@ -46,13 +46,13 @@ EnemyAirplane::EnemyAirplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, t
 	D3DXMatrixTranslation(&mat, coord["x"], coord["y"], coord["z"]);
 }
 
-void EnemyAirplane::update()
+void EnemyAirplane::update(const UpdateDetail& detail)
 {
 	if (!active) return;
 
 	if (explosion_flag)
 	{
-		explosion->update();
+		explosion->update(detail);
 	}
 	else
 	{

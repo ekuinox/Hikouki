@@ -5,7 +5,7 @@ void GameObject::draw(const LPDIRECT3DDEVICE9&) const
 	if (!drawing) return;
 }
 
-void GameObject::update()
+void GameObject::update(const UpdateDetail & detail)
 {
 	if (!active) return;
 }

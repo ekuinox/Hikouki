@@ -16,7 +16,7 @@ public:
 	Airplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, trau::Timer*);
 	Airplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, D3DXVECTOR3, trau::Timer*);
 	void draw(const LPDIRECT3DDEVICE9&) const;
-	virtual void update();
+	virtual void update(const UpdateDetail&);
 	void switchExplosion();
 	void switchDrawBBox();
 	void switchDrawBBox(bool);

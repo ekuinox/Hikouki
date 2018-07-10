@@ -7,7 +7,7 @@ HomingMissile::HomingMissile(CDirect3DXFile * _xfile, std::shared_ptr<XFileObjec
 	D3DXQuaternionRotationMatrix(&attitude, &mat);
 }
 
-void HomingMissile::update()
+void HomingMissile::update(const UpdateDetail& detail)
 {
 	auto targetVector = target->getPos() - position;
 	auto zDir = velocity;

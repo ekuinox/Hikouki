@@ -4,6 +4,8 @@
 #define ___GAME_OBJECT_H
 
 #include <d3dx9.h>
+#include "../Utils/Input.h"
+#include "../SceneAttachments/Timer.h"
 
 class GameObjectInterface {
 protected:
@@ -12,8 +14,12 @@ protected:
 	unsigned int layer = UINT_MAX; // •`‰æ—Dæ“x
 	unsigned int priority = UINT_MAX; // XVˆ——Dæ“x
 public:
+	struct UpdateDetail {
+		trau::Timer * timer;
+		Input * input;
+	};
 	virtual void draw(const LPDIRECT3DDEVICE9&) const = 0;
-	virtual void update() = 0;
+	virtual void update(const UpdateDetail&) = 0;
 	virtual void show() = 0;
 	virtual void hide() = 0;
 	virtual void enable() = 0;
@@ -26,7 +32,7 @@ class GameObject : public GameObjectInterface
 {
 public:
 	virtual void draw(const LPDIRECT3DDEVICE9&) const;
-	virtual void update();
+	virtual void update(const UpdateDetail&);
 	virtual void show();
 	virtual void hide();
 	virtual void enable();

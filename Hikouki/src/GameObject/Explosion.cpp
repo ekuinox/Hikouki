@@ -24,7 +24,7 @@ void Explosion::draw(const LPDIRECT3DDEVICE9& device) const
 	}
 }
 
-void Explosion::update()
+void Explosion::update(const UpdateDetail& detail)
 {
 	D3DXMATRIX mat;
 
