@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <memory>
+#include <typeinfo>
 #include <d3dx9.h>
 #include "../Utils/Input.h"
 #include "../Utils/Utils.h"
@@ -31,9 +32,9 @@ public:
 	virtual void hide() = 0;
 	virtual void enable() = 0;
 	virtual void disable() = 0;
-	virtual unsigned int getLayer() = 0;
-	virtual unsigned int getPriority() = 0;
-	std::string getUUID() {	return uuid; }
+	virtual unsigned int getLayer() const = 0;
+	virtual unsigned int getPriority() const = 0;
+	std::string getUUID() const { return uuid; }
 };
 
 class GameObject : public GameObjectInterface
@@ -46,8 +47,8 @@ public:
 	virtual void hide();
 	virtual void enable();
 	virtual void disable();
-	virtual unsigned int getLayer();
-	virtual unsigned int getPriority();
+	virtual unsigned int getLayer() const;
+	virtual unsigned int getPriority() const;
 };
 
 #endif

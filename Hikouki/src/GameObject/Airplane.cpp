@@ -30,6 +30,21 @@ void Airplane::update(const UpdateDetail& detail)
 {
 	if (!active) return;
 
+	for (const auto& gameObject : detail.gameObjects)
+	{
+		if (gameObject->getUUID() == getUUID()) break; // ©•ª‚ğœŠO
+
+		// ‚È```````‚ñ‚à‚í‚©‚ç‚ñ
+
+		/*
+		const auto hashCode = typeid(*gameObject).hash_code();
+		if (hashCode == typeid(Airplane).hash_code())
+		{
+			const auto& a = *std::static_pointer_cast<Airplane>(gameObject);
+		}
+		*/
+	}
+
 	if (explosion_flag)
 	{
 		explosion->update(detail);

@@ -35,12 +35,12 @@ void GameObject::disable()
 	active = false;
 }
 
-unsigned int GameObject::getLayer()
+unsigned int GameObject::getLayer() const
 {
 	return layer;
 }
 
-unsigned int GameObject::getPriority()
+unsigned int GameObject::getPriority() const
 {
 	return priority;
 }
