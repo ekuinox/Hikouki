@@ -46,7 +46,7 @@ void BoundingSphere::calculateBoundingSphere(const LPD3DXMESH mesh, const LPDIRE
 			
 			// 頂点をすべて取り出す
 			auto work = (float*)data; // ワーク用のポインタ
-			for (auto i = 0; i < vertexes_count; i++)
+			for (unsigned int i = 0; i < vertexes_count; i++)
 			{
 				// 座標の取得
 				vertexes.x[i] = *work++;
@@ -55,7 +55,7 @@ void BoundingSphere::calculateBoundingSphere(const LPD3DXMESH mesh, const LPDIRE
 			}
 
 			// XYZについてそれぞれ最大値最小値を求める
-			for (auto i = 0; i < vertexes_count; i++)
+			for (unsigned int i = 0; i < vertexes_count; i++)
 			{
 				if (i == 0)
 				{
@@ -79,7 +79,7 @@ void BoundingSphere::calculateBoundingSphere(const LPD3DXMESH mesh, const LPDIRE
 			};
 			
 			// 全頂点と中心座標との距離を求める
-			for (auto i = 0; i < vertexes_count; i++)
+			for (unsigned int i = 0; i < vertexes_count; i++)
 			{
 				auto distance
 					= (vertexes.x[i] - center_position.x) * (vertexes.x[i] - center_position.x)
@@ -116,9 +116,9 @@ void BoundingSphere::createBoxMesh(const LPDIRECT3DDEVICE9 device)
 {
 	D3DXCreateBox(
 		device,
-		fabs(hitdata.max.x - hitdata.min.x),
-		fabs(hitdata.max.y - hitdata.min.y),
-		fabs(hitdata.max.z - hitdata.min.z),
+		fabsf(hitdata.max.x - hitdata.min.x),
+		fabsf(hitdata.max.y - hitdata.min.y),
+		fabsf(hitdata.max.z - hitdata.min.z),
 		&box_mesh,
 		nullptr
 	);
@@ -126,10 +126,10 @@ void BoundingSphere::createBoxMesh(const LPDIRECT3DDEVICE9 device)
 
 float BoundingSphere::calculateDistance(D3DXVECTOR3 & a, D3DXVECTOR3 & b)
 {
-	return sqrt(
-		fabs(pow(a.x - b.x, 2))
-		+ fabs(pow(a.y - b.y, 2))
-		+ fabs(pow(a.z - b.z, 2))
+	return sqrtf(
+		fabsf(powf(a.x - b.x, 2))
+		+ fabsf(powf(a.y - b.y, 2))
+		+ fabsf(powf(a.z - b.z, 2))
 	);
 }
 
