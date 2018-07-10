@@ -61,7 +61,7 @@ Scene::State MainScene::getState()
 void MainScene::sortGameObjectsLayer()
 {
 	// •`‰æ‡‚È‚Ì‚Å~‡‚É‚·‚é
-	std::sort(gameObjects.begin(), gameObjects.end(), [](const std::shared_ptr<GameObject>& a, const std::shared_ptr<GameObject>& b) {
+	std::sort(gameObjects.begin(), gameObjects.end(), [](const std::shared_ptr<GameObjectInterface>& a, const std::shared_ptr<GameObjectInterface>& b) {
 		return a->getLayer() > b->getLayer();
 	});
 }
@@ -69,7 +69,7 @@ void MainScene::sortGameObjectsLayer()
 void MainScene::sortGameObjectsPriority()
 {
 	// updateˆ—‡‚È‚Ì‚Å¸‡‚É‚·‚é
-	std::sort(gameObjects.begin(), gameObjects.end(), [](const std::shared_ptr<GameObject>& a, const std::shared_ptr<GameObject>& b) {
+	std::sort(gameObjects.begin(), gameObjects.end(), [](const std::shared_ptr<GameObjectInterface>& a, const std::shared_ptr<GameObjectInterface>& b) {
 		return a->getPriority() < b->getPriority();
 	});
 }
@@ -114,7 +114,7 @@ void MainScene::input()
 
 void MainScene::update()
 {
-	for (const auto& gameObject : gameObjects) gameObject->update({timer, inputDevice});
+	for (const auto& gameObject : gameObjects) gameObject->update({ timer, inputDevice, gameObjects });
 
 	auto colls = Collider::getCollisions({ airplanes[0]->getBBox() }, { airplanes[1]->getBBox() });
 

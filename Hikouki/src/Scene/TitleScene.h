@@ -19,7 +19,7 @@ private:
 	void update();
 	void render();
 
-	std::vector<std::shared_ptr<GameObject>> gameObjects;
+	std::vector<std::shared_ptr<GameObjectInterface>> gameObjects;
 };
 
 #endif

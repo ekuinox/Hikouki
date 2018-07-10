@@ -47,7 +47,7 @@ void TitleScene::input()
 
 void TitleScene::update()
 {
-	for (const auto& gameObject : gameObjects) gameObject->update({ timer, inputDevice });
+	for (const auto& gameObject : gameObjects) gameObject->update({ timer, inputDevice, gameObjects });
 }
 
 void TitleScene::render()

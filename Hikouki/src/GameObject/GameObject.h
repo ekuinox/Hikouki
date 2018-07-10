@@ -3,6 +3,8 @@
 #ifndef ___GAME_OBJECT_H
 #define ___GAME_OBJECT_H
 
+#include <vector>
+#include <memory>
 #include <d3dx9.h>
 #include "../Utils/Input.h"
 #include "../Utils/Utils.h"
@@ -19,6 +21,7 @@ public:
 	struct UpdateDetail {
 		trau::Timer * timer;
 		Input * input;
+		std::vector<std::shared_ptr<GameObjectInterface>> gameObjects;
 	};
 	GameObjectInterface()
 	{

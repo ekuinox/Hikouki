@@ -29,7 +29,7 @@ private:
 
 	std::vector<std::shared_ptr<Airplane>> airplanes;
 	std::vector<std::shared_ptr<trau::TextArea>> text_areas;
-	std::vector<std::shared_ptr<GameObject>> gameObjects;
+	std::vector<std::shared_ptr<GameObjectInterface>> gameObjects;
 
 	XFileManager *xfile_manager;
 	int width, height;
