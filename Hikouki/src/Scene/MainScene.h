@@ -10,7 +10,6 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Airplane.h"
 #include "../GameObject/TextArea.h"
-#include "../GameObjectAttachments/Collider.h"
 #include "../SceneAttachments/Camera.h"
 
 class MainScene : public Scene {

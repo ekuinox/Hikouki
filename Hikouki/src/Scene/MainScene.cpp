@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "../GameObject/EnemyAirplane.h"
 #include "../GameObject/HomingMissile.h"
+#include "../GameObjectAttachments/Collider.h"
 
 MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, Input* _input, trau::Timer* _timer)
 	: Scene(_graphics, _xfileManager, _input, _timer), underControll(0), camType(trau::CameraTypes::OVER)
