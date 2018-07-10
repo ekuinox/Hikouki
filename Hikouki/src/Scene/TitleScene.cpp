@@ -53,6 +53,6 @@ void TitleScene::update()
 void TitleScene::render()
 {
 	graphics->Render([&](const LPDIRECT3DDEVICE9 device) {
-		for (const auto& game_object : gameObjects) game_object->draw(device);
+		for (const auto& gameObject : gameObjects) gameObject->draw(device);
 	});
 }

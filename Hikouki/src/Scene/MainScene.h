@@ -25,13 +25,12 @@ private:
 		std::unique_ptr<trau::OverCamera> over;
 	} cameras;
 
-	trau::CameraTypes cam_types;
+	trau::CameraTypes camType;
 
 	std::vector<std::shared_ptr<Airplane>> airplanes;
-	std::vector<std::shared_ptr<trau::TextArea>> text_areas;
+	std::vector<std::shared_ptr<trau::TextArea>> textAreas;
 	std::vector<std::shared_ptr<GameObjectInterface>> gameObjects;
 
-	XFileManager *xfile_manager;
 	int width, height;
 	unsigned int underControll;
 
