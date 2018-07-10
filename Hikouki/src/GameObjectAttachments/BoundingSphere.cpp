@@ -208,7 +208,7 @@ const D3DXVECTOR3 & BoundingSphere::getPosition()
 	return position;
 }
 
-const HITDATA & BoundingSphere::getHitData()
+const BoundingSphere::HITDATA & BoundingSphere::getHitData()
 {
 	return hitdata;
 }

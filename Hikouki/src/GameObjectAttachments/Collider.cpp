@@ -1,6 +1,6 @@
 #include "Collider.h"
 
-float calculateDistance(const D3DXVECTOR3 & a, const D3DXVECTOR3 & b)
+float Collider::calculateDistance(const D3DXVECTOR3 & a, const D3DXVECTOR3 & b)
 {
 	return sqrt(
 		fabs(pow(a.x - b.x, 2))
@@ -9,13 +9,13 @@ float calculateDistance(const D3DXVECTOR3 & a, const D3DXVECTOR3 & b)
 	);
 }
 
-bool isCollision(BoundingSphere * a, BoundingSphere * b)
+bool Collider::isCollision(BoundingSphere * a, BoundingSphere * b)
 {
 	// ”¼Œa‚Ì˜a‚Æ’†S“¯Žm‚Ì‚Ì‹——£‚ð”äŠr‚·‚é
 	return calculateDistance(a->getPosition(), b->getPosition()) < (a->getHitData().r + b->getHitData().r);
 }
 
-std::vector<std::pair<BoundingSphere*, BoundingSphere*>> getCollisions(std::vector<BoundingSphere*> a, std::vector<BoundingSphere*> b)
+std::vector<std::pair<BoundingSphere*, BoundingSphere*>> Collider::getCollisions(std::vector<BoundingSphere*> a, std::vector<BoundingSphere*> b)
 {
 	std::vector<std::pair<BoundingSphere*, BoundingSphere*>> result;
 	for (const auto& _a : a)

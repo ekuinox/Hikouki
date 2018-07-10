@@ -6,7 +6,6 @@
 #include "../Utils/MathUtil.h"
 #include "../Utils/Utils.h"
 
-using json = nlohmann::json;
 using trau::utils::choice;
 
 EnemyAirplane::EnemyAirplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, const char * file)
@@ -25,7 +24,7 @@ EnemyAirplane::EnemyAirplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, c
 	strstream << fin.rdbuf();
 	fin.close();
 
-	auto data = json::parse(strstream.str());
+	auto data = nlohmann::json::parse(strstream.str());
 
 	// JSONのエラーチェックを行わない
 	for (const auto& moves : data["moveTimeline"])

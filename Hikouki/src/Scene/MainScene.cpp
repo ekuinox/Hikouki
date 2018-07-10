@@ -116,7 +116,7 @@ void MainScene::update()
 {
 	for (const auto& gameObject : gameObjects) gameObject->update({timer, inputDevice});
 
-	auto colls = getCollisions({ airplanes[0]->getBBox() }, { airplanes[1]->getBBox() });
+	auto colls = Collider::getCollisions({ airplanes[0]->getBBox() }, { airplanes[1]->getBBox() });
 
 	text_areas.front()->text = "{\n    Airplane:\n    {\n";
 	for (auto i = 0; i < 2; ++i)
@@ -128,7 +128,7 @@ void MainScene::update()
 	}
 	text_areas.front()->text += (boost::format(
 		"    },\n    Distance: %1%\n} \n%2%\n"
-	) % calculateDistance(airplanes[0]->getBBox()->getPosition(), airplanes[1]->getBBox()->getPosition()) % timer->getSeconds()).str();
+	) % Collider::calculateDistance(airplanes[0]->getBBox()->getPosition(), airplanes[1]->getBBox()->getPosition()) % timer->getSeconds()).str();
 
 	text_areas.front()->text += (boost::format("\n%1%") % airplanes[0]->getUUID()).str();
 

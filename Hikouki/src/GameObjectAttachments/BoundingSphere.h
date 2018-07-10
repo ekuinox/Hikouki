@@ -2,12 +2,12 @@
 
 #include <d3dx9.h>
 
-using HITDATA = struct {
-	D3DXVECTOR3 max, min, pos;
-	float r;
-};;
-
 class BoundingSphere {
+public:
+	using HITDATA = struct {
+		D3DXVECTOR3 max, min, pos;
+		float r;
+	};
 private:
 	HITDATA hitdata;
 	D3DXVECTOR3 position;
