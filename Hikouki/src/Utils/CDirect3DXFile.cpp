@@ -24,29 +24,24 @@ CDirect3DXFile::CDirect3DXFile(const char* xfilename, LPDIRECT3DDEVICE9 lpd3ddev
 //!	@retval	TRUE　成功終了/FALSE　失敗終了
 //!	@note	
 //==============================================================================
-bool CDirect3DXFile::LoadXFile( const char *xfilename, LPDIRECT3DDEVICE9 lpd3ddevice )
+void CDirect3DXFile::LoadXFile( const char *xfilename, LPDIRECT3DDEVICE9 lpd3ddevice )
 {
-	LPD3DXBUFFER	pd3dxmtrlbuffer;
-	LPD3DXBUFFER	pd3dxmtrlbuffer2;
-	HRESULT			hr;
-	unsigned int	i;
+	LPD3DXBUFFER pd3dxmtrlbuffer;
+	LPD3DXBUFFER pd3dxmtrlbuffer2;
 
-	if (SUCCEEDED(
-		D3DXLoadMeshFromX(xfilename, D3DXMESH_SYSTEMMEM, lpd3ddevice, NULL, &pd3dxmtrlbuffer, &pd3dxmtrlbuffer2, &m_nummaterial, &m_lpmesh))
-		)
+	if (SUCCEEDED(D3DXLoadMeshFromX(xfilename, D3DXMESH_SYSTEMMEM, lpd3ddevice, NULL, &pd3dxmtrlbuffer, &pd3dxmtrlbuffer2, &m_nummaterial, &m_lpmesh)))
 	{
 		D3DXMATERIAL	*d3dxmaterials = (D3DXMATERIAL*)pd3dxmtrlbuffer->GetBufferPointer();	// マテリアルのアドレスを取得
 		m_lpmeshmaterials = new D3DMATERIAL9[m_nummaterial];		// マテリアルコンテナの作成
 		m_lpmeshtextures = new LPDIRECT3DTEXTURE9[m_nummaterial];	// テクスチャコンテナの生成
 
-		for (i = 0; i<m_nummaterial; i++) {
+		for (unsigned int i = 0; i < m_nummaterial; ++i)
+		{
 			m_lpmeshmaterials[i] = d3dxmaterials[i].MatD3D;
 			m_lpmeshmaterials[i].Emissive = m_lpmeshmaterials[i].Specular = m_lpmeshmaterials[i].Ambient = m_lpmeshmaterials[i].Diffuse;
 
-			hr = D3DXCreateTextureFromFile(lpd3ddevice,
-				d3dxmaterials[i].pTextureFilename,
-				&m_lpmeshtextures[i]);
-			if (FAILED(hr)) {
+			if (FAILED(D3DXCreateTextureFromFile(lpd3ddevice, d3dxmaterials[i].pTextureFilename, &m_lpmeshtextures[i])))
+			{
 				m_lpmeshtextures[i] = NULL;
 			}
 		}
@@ -68,24 +63,26 @@ bool CDirect3DXFile::LoadXFile( const char *xfilename, LPDIRECT3DDEVICE9 lpd3dde
 //==============================================================================
 void CDirect3DXFile::UnLoadXFile()
 {
-	unsigned int i;
-
-	if(m_lpmeshmaterials!=NULL){	// マテリアルオブジェクトの解放
+	if (m_lpmeshmaterials!=NULL)	// マテリアルオブジェクトの解放
+	{
 		delete [] m_lpmeshmaterials;
 		m_lpmeshmaterials=NULL;
 	}
 
-	if(m_lpmeshtextures!=NULL){		// テクスチャオブジェクトの解放
-		for( i=0 ; i<m_nummaterial ; i++ ){
-			if(m_lpmeshtextures[i]!=NULL)	m_lpmeshtextures[i]->Release();
+	if (m_lpmeshtextures!=NULL)		// テクスチャオブジェクトの解放
+	{
+		for (unsigned int i = 0 ; i < m_nummaterial; ++i)
+		{
+			if (m_lpmeshtextures[i]!=NULL) m_lpmeshtextures[i]->Release();
 		}
 		delete [] m_lpmeshtextures;
-		m_lpmeshtextures=NULL;
+		m_lpmeshtextures = NULL;
 	}
 
-	if(m_lpmesh!=NULL){		// メッシュ解放
+	if (m_lpmesh != NULL)		// メッシュ解放
+	{
 		m_lpmesh->Release();
-		m_lpmesh=NULL;
+		m_lpmesh = NULL;
 	}
 }
 
@@ -98,8 +95,8 @@ void CDirect3DXFile::UnLoadXFile()
 //==============================================================================
 void CDirect3DXFile::Draw(LPDIRECT3DDEVICE9 lpd3ddevice)
 {
-	unsigned int i;
-	for( i=0 ; i<m_nummaterial ; i++ ){
+	for (unsigned int i = 0 ; i < m_nummaterial; ++i)
+	{
 		lpd3ddevice->SetMaterial(&m_lpmeshmaterials[i]);	// マテリアルのセット
 		lpd3ddevice->SetTexture(0,m_lpmeshtextures[i]);		// テクスチャのセット
 		m_lpmesh->DrawSubset(i);							// サブセットの描画
@@ -115,11 +112,10 @@ void CDirect3DXFile::Draw(LPDIRECT3DDEVICE9 lpd3ddevice)
 //==============================================================================
 void CDirect3DXFile::DrawWithAxis(LPDIRECT3DDEVICE9 lpd3ddevice)
 {
-	unsigned int i;
-
 	DrawAxis(lpd3ddevice);	// ３軸の描画
 
-	for(i=0;i<m_nummaterial;i++){	// サブセットの描画
+	for (unsigned int i = 0; i < m_nummaterial; ++i)	// サブセットの描画
+	{
 		lpd3ddevice->SetMaterial(&m_lpmeshmaterials[i]);	// マテリアルのセット
 		lpd3ddevice->SetTexture(0,m_lpmeshtextures[i]);		// テクスチャのセット
 		m_lpmesh->DrawSubset(i);							// サブセットの描画
@@ -141,19 +137,19 @@ void CDirect3DXFile::DrawAxis(LPDIRECT3DDEVICE9 lpd3ddevice)
 	};
 
 	// ３軸の頂点データ
-	struct	VERTEXDATA	linevertices[6]={
-		-400,   0,   0,  D3DCOLOR_XRGB(255,0,0),	// Ｘ軸始点 赤
-		 400,   0,   0,  D3DCOLOR_XRGB(255,0,0),	// Ｘ軸終点 赤
-		   0,-400,   0,  D3DCOLOR_XRGB(0,255,0),	// Ｙ軸始点 緑
-		   0, 400,   0,  D3DCOLOR_XRGB(0,255,0),	// Ｙ軸終点 緑
-		   0,   0,-400,  D3DCOLOR_XRGB(0,0,255),	// Ｚ軸始点 青
-		   0,   0, 400,  D3DCOLOR_XRGB(0,0,255)		// Ｚ軸終点 青
+	struct VERTEXDATA linevertices[6] = {
+		-400,    0,    0,  D3DCOLOR_XRGB(255, 0, 0),	// Ｘ軸始点 赤
+		 400,    0,    0,  D3DCOLOR_XRGB(255, 0, 0),	// Ｘ軸終点 赤
+		   0, -400,    0,  D3DCOLOR_XRGB(0, 255, 0),	// Ｙ軸始点 緑
+		   0,  400,    0,  D3DCOLOR_XRGB(0, 255, 0),	// Ｙ軸終点 緑
+		   0,    0, -400,  D3DCOLOR_XRGB(0, 0, 255),	// Ｚ軸始点 青
+		   0,    0,  400,  D3DCOLOR_XRGB(0, 0, 255)		// Ｚ軸終点 青
 	};
 
 	lpd3ddevice->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE);	// 頂点フォーマットをセット
 	lpd3ddevice->SetRenderState(D3DRS_LIGHTING,false);	//   光源計算オフ（光源計算を切るとDIFFUSE色がそのままでる）
 
-	lpd3ddevice->DrawPrimitiveUP(D3DPT_LINELIST, 3, &linevertices[0], sizeof(VERTEXDATA));	// ３軸を描画
+	lpd3ddevice->DrawPrimitiveUP(D3DPT_LINELIST, 3, linevertices, sizeof(VERTEXDATA));	// ３軸を描画
 	lpd3ddevice->SetRenderState(D3DRS_LIGHTING,true);	//   光源計算ON
 }
 

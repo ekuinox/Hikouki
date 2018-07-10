@@ -34,7 +34,7 @@ public:
 		UnLoadXFile();
 	}
 
-	bool LoadXFile(const char* xfilename,	LPDIRECT3DDEVICE9 lpd3ddevice);
+	void LoadXFile(const char* xfilename,	LPDIRECT3DDEVICE9 lpd3ddevice);
 	LPD3DXMESH GetMesh() const;
 	void UnLoadXFile();
 	void Draw(LPDIRECT3DDEVICE9 lpd3ddevice);
