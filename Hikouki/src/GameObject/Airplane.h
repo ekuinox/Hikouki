@@ -1,7 +1,6 @@
 #pragma once
 #include "XFileObjectBase.h"
 #include "Explosion.h"
-#include "../SceneAttachments/Timer.h"
 #include "../GameObjectAttachments/BoundingSphere.h"
 
 class Airplane : public XFileObjectBase {
@@ -11,10 +10,9 @@ protected:
 	void startExplosion();
 	Explosion* explosion;
 	BoundingSphere *bbox;
-	trau::Timer *timer;
 public:
-	Airplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, trau::Timer*);
-	Airplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, D3DXVECTOR3, trau::Timer*);
+	Airplane(CDirect3DXFile*, LPDIRECT3DDEVICE9);
+	Airplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, D3DXVECTOR3);
 	void draw(const LPDIRECT3DDEVICE9&) const;
 	virtual void update(const UpdateDetail&);
 	void switchExplosion();

@@ -1,7 +1,7 @@
 #include "Explosion.h"
 
-Explosion::Explosion(const LPD3DXMESH& mesh, const LPDIRECT3DTEXTURE9& tex, const LPDIRECT3DDEVICE9& device, trau::Timer *_timer)
-	: vertex(nullptr), numVertexes(0), connect(nullptr), numFaces(0), triangle(nullptr), texture(tex), timer(_timer)
+Explosion::Explosion(const LPD3DXMESH& mesh, const LPDIRECT3DTEXTURE9& tex, const LPDIRECT3DDEVICE9& device)
+	: vertex(nullptr), numVertexes(0), connect(nullptr), numFaces(0), triangle(nullptr), texture(tex)
 {
 	createTriangleFromMesh(mesh, device);
 }
@@ -44,7 +44,7 @@ void Explosion::update(const UpdateDetail& detail)
 		triangle[i].yangle += triangle[i].dya;
 		triangle[i].zangle += triangle[i].dza;
 
-		triangle[i].ny -= GRAVITY * timer->getSeconds();
+		triangle[i].ny -= GRAVITY * detail.timer->getSeconds();
 
 		triangle[i].cx += triangle[i].nx;
 		triangle[i].cy += triangle[i].ny;

@@ -1,7 +1,7 @@
 #include "HomingMissile.h"
 
-HomingMissile::HomingMissile(CDirect3DXFile * _xfile, std::shared_ptr<XFileObjectBase> _target, const float & maxAngle, const D3DXVECTOR3& _position, const D3DXVECTOR3 & _velocity, trau::Timer * _timer)
-	: XFileObjectBase(_xfile), target(_target), velocity(_velocity), addRotMax(D3DX_PI * maxAngle / 180.0f), position(_position), timer(_timer)
+HomingMissile::HomingMissile(CDirect3DXFile * _xfile, std::shared_ptr<XFileObjectBase> _target, const float & maxAngle, const D3DXVECTOR3& _position, const D3DXVECTOR3 & _velocity)
+	: XFileObjectBase(_xfile), target(_target), velocity(_velocity), addRotMax(D3DX_PI * maxAngle / 180.0f), position(_position)
 {
 	D3DXQuaternionIdentity(&attitude);
 	D3DXQuaternionRotationMatrix(&attitude, &mat);
@@ -24,7 +24,7 @@ void HomingMissile::update(const UpdateDetail& detail)
 
 	D3DXMatrixRotationQuaternion(&mat, &attitude);
 
-	velocity = D3DXVECTOR3(mat._31, mat._32, mat._33) * missileSpeed * timer->getSeconds();
+	velocity = D3DXVECTOR3(mat._31, mat._32, mat._33) * missileSpeed * detail.timer->getSeconds();
 
 	position += velocity;
 

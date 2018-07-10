@@ -4,14 +4,13 @@
 
 #include "GameObject.h"
 #include "../Utils/Utils.h"
-#include "../SceneAttachments/Timer.h"
 
 class Explosion : public GameObject {
 public:
 	static constexpr auto D3DFVFCUSTOM_VERTEX = D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1;
 	static constexpr auto GRAVITY = 9.8f;
 
-	Explosion(const LPD3DXMESH& mesh, const LPDIRECT3DTEXTURE9& tex, const LPDIRECT3DDEVICE9& device, trau::Timer *_timer);
+	Explosion(const LPD3DXMESH& mesh, const LPDIRECT3DTEXTURE9& tex, const LPDIRECT3DDEVICE9& device);
 	~Explosion();
 	void draw(const LPDIRECT3DDEVICE9&) const;
 	void update(const UpdateDetail&);
@@ -55,7 +54,6 @@ private:
 	int numFaces;
 	Triangle *triangle;
 	LPDIRECT3DTEXTURE9 texture;
-	trau::Timer * timer;
 
 	void createTriangleFromMesh(const LPD3DXMESH& mesh, const LPDIRECT3DDEVICE9& device);
 };

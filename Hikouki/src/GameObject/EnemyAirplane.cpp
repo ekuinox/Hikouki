@@ -9,11 +9,11 @@
 using json = nlohmann::json;
 using trau::utils::choice;
 
-EnemyAirplane::EnemyAirplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, trau::Timer *timer, const char * file)
-	: Airplane(_xfile, device, timer), randomEngine(std::mt19937(std::random_device()()))
+EnemyAirplane::EnemyAirplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, const char * file)
+	: Airplane(_xfile, device), randomEngine(std::mt19937(std::random_device()()))
+	, rotationTimer(std::unique_ptr<trau::Timer>(new trau::Timer()))
 {
 	trans.z = 20.0f;
-	rotationTimer = std::unique_ptr<trau::Timer>(new trau::Timer());
 
 	// json load
 
@@ -69,7 +69,7 @@ void EnemyAirplane::update(const UpdateDetail& detail)
 
 		
 		D3DXMATRIX mx;
-		MakeWorldMatrix(mx, mat, angle * timer->getSeconds(), trans * timer->getSeconds());
+		MakeWorldMatrix(mx, mat, angle * detail.timer->getSeconds(), trans * detail.timer->getSeconds());
 		bbox->updatePosition(mat);
 	}
 }

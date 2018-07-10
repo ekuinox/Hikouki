@@ -16,8 +16,8 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 		{ "Skydome", "assets/skydome.x" } // スカイドーム
 		});
 
-	airplanes.emplace_back(new Airplane(xfile_manager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3(0.0, 0.0, 10.0f), timer));
-	airplanes.emplace_back(new Airplane(xfile_manager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3(0.0, 0.0, -10.0f), timer));
+	airplanes.emplace_back(new Airplane(xfile_manager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3(0.0, 0.0, 10.0f)));
+	airplanes.emplace_back(new Airplane(xfile_manager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3(0.0, 0.0, -10.0f)));
 	text_areas.emplace_back(new trau::TextArea(graphics->GetDXDevice(), 0, 0, std::string("こんにちは")));
 	text_areas.emplace_back(new trau::TextArea(graphics->GetDXDevice(), graphics->GetWidth() - 100, 0, std::string("")));
 
@@ -25,9 +25,9 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 	for (const auto& airplane : airplanes) gameObjects.emplace_back(airplane);
 	for (const auto& text_area : text_areas) gameObjects.emplace_back(text_area);
 	gameObjects.emplace_back(new XFileObjectBase(xfile_manager->get("Skydome")));
-	const auto& enemyAirplane = std::shared_ptr<EnemyAirplane>(new EnemyAirplane(xfile_manager->get("Airplane"), graphics->GetDXDevice(), timer, "assets/GameObjectConfig/enemy.json"));
+	const auto& enemyAirplane = std::shared_ptr<EnemyAirplane>(new EnemyAirplane(xfile_manager->get("Airplane"), graphics->GetDXDevice(), "assets/GameObjectConfig/enemy.json"));
 	gameObjects.emplace_back(enemyAirplane);
-	gameObjects.emplace_back(new HomingMissile(xfile_manager->get("Airplane"), enemyAirplane, 360.0f, D3DXVECTOR3{0, -20, 0}, D3DXVECTOR3{ 0, 0, 1 }, timer));
+	gameObjects.emplace_back(new HomingMissile(xfile_manager->get("Airplane"), enemyAirplane, 360.0f, D3DXVECTOR3{0, -20, 0}, D3DXVECTOR3{ 0, 0, 1 }));
 
 	// 初期設定
 	graphics->SetRenderStateArray({

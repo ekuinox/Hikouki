@@ -1,14 +1,14 @@
 #include "Airplane.h"
 #include "../Utils/MathUtil.h"
 
-Airplane::Airplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, trau::Timer *timer)
-	: XFileObjectBase(_xfile), explosion_flag(false), explosion(new Explosion(xfile->GetMesh(), xfile->GetTextures()[0], device, timer)),
-	bbox(new BoundingSphere(xfile->GetMesh(), device)), drawing_bbox(true), timer(timer)
+Airplane::Airplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device)
+	: XFileObjectBase(_xfile), explosion_flag(false), explosion(new Explosion(xfile->GetMesh(), xfile->GetTextures()[0], device)),
+	bbox(new BoundingSphere(xfile->GetMesh(), device)), drawing_bbox(true)
 {
 }
 
-Airplane::Airplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, D3DXVECTOR3 coord, trau::Timer *timer)
-	: Airplane(_xfile, device, timer)
+Airplane::Airplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, D3DXVECTOR3 coord)
+	: Airplane(_xfile, device)
 {
 	D3DXMatrixTranslation(&mat, coord.x, coord.y, coord.z);
 }
@@ -38,11 +38,7 @@ void Airplane::update(const UpdateDetail& detail)
 	{
 		D3DXMATRIX mx;
 
-#ifdef __MOVE_RANDOM
-		angle.x = rand() % 2 - 1;
-		angle.y = rand() % 2 - 1;
-#endif
-		MakeWorldMatrix(mx, mat, angle, trans * timer->getSeconds());
+		MakeWorldMatrix(mx, mat, angle * detail.timer->getSeconds(), trans * detail.timer->getSeconds());
 		bbox->updatePosition(mat);
 	}
 }
