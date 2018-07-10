@@ -4,7 +4,7 @@
 #include "../GameObject/HomingMissile.h"
 
 MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, Input* _input, trau::Timer* _timer)
-	: Scene(_graphics, _xfileManager, _input, _timer), under_controll(0), cam_types(trau::CameraTypes::OVER)
+	: Scene(_graphics, _xfileManager, _input, _timer), underControll(0), cam_types(trau::CameraTypes::OVER)
 {
 	cameras.fps = std::unique_ptr<trau::FPSCamera>(new trau::FPSCamera());
 	cameras.tps = std::unique_ptr<trau::TPSCamera>(new trau::TPSCamera());
@@ -84,8 +84,8 @@ void MainScene::input()
 
 		if (inputDevice->getTrigger(KeyCode::V)) cam_types++;
 
-		if (inputDevice->getTrigger(KeyCode::Add) && under_controll + 1 < airplanes.size()) under_controll++;
-		if (inputDevice->getTrigger(KeyCode::Subtract) && under_controll > 0) under_controll--;
+		if (inputDevice->getTrigger(KeyCode::Add) && underControll + 1 < airplanes.size()) underControll++;
+		if (inputDevice->getTrigger(KeyCode::Subtract) && underControll > 0) underControll--;
 
 		if (cam_types == trau::CameraTypes::OVER)
 		{
@@ -98,11 +98,11 @@ void MainScene::input()
 			cameras.over->distance -= mouse_current_state.lZ / 10;
 		}
 
-		if (inputDevice->getTrigger(KeyCode::Numpad5)) airplanes[under_controll]->switchExplosion();
-		if (inputDevice->getTrigger(KeyCode::Numpad8)) airplanes[under_controll]->switchDrawBBox();
-		if (inputDevice->getTrigger(KeyCode::Numpad6)) airplanes[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, -10 });
-		if (inputDevice->getTrigger(KeyCode::Numpad4)) airplanes[under_controll]->addTrans(D3DXVECTOR3{ 0, 0, 10 });
-		if (inputDevice->getTrigger(KeyCode::Space)) airplanes[under_controll]->setTrans(D3DXVECTOR3{ 0, 0, 0 });
+		if (inputDevice->getTrigger(KeyCode::Numpad5)) airplanes[underControll]->switchExplosion();
+		if (inputDevice->getTrigger(KeyCode::Numpad8)) airplanes[underControll]->switchDrawBBox();
+		if (inputDevice->getTrigger(KeyCode::Numpad6)) airplanes[underControll]->addTrans(D3DXVECTOR3{ 0, 0, -10 });
+		if (inputDevice->getTrigger(KeyCode::Numpad4)) airplanes[underControll]->addTrans(D3DXVECTOR3{ 0, 0, 10 });
+		if (inputDevice->getTrigger(KeyCode::Space)) airplanes[underControll]->setTrans(D3DXVECTOR3{ 0, 0, 0 });
 
 		if (inputDevice->getTrigger(KeyCode::Return)) state = State::Exit;
 	}
@@ -132,8 +132,8 @@ void MainScene::update()
 
 	D3DXMATRIX mat;
 
-	cameras.tps->update(airplanes[under_controll]->getMat());
-	cameras.fps->update(airplanes[under_controll]->getMat());
+	cameras.tps->update(airplanes[underControll]->getMat());
+	cameras.fps->update(airplanes[underControll]->getMat());
 	cameras.over->update();
 }
 

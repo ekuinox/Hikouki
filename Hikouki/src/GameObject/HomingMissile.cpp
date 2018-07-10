@@ -17,7 +17,7 @@ void HomingMissile::update()
 
 	double dot;
 	auto targetAttitude = RotationArc(zDir, targetVector, dot);
-	auto diffAngle = acos(dot);
+	auto diffAngle = acosf(static_cast<float>(dot));
 
 	if (addRotMax >= diffAngle) attitude *= targetAttitude;
 	else D3DXQuaternionSlerp(&attitude, &attitude, &(attitude * targetAttitude), addRotMax / diffAngle);

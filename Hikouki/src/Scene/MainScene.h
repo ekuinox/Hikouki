@@ -33,7 +33,7 @@ private:
 
 	XFileManager *xfile_manager;
 	int width, height;
-	int under_controll;
+	unsigned int underControll;
 
 	void sortGameObjectsLayer();
 	void sortGameObjectsPriority();
