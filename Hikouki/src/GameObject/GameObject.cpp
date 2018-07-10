@@ -44,8 +44,3 @@ unsigned int GameObject::getPriority()
 {
 	return priority;
 }
-
-std::string GameObject::getUUID()
-{
-	return uuid;
-}
