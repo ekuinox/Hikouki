@@ -10,10 +10,9 @@ class HomingMissile : public XFileObjectBase {
 public:
 	static constexpr auto missileSpeed = 20.0f;
 	HomingMissile(CDirect3DXFile* _xfile, std::shared_ptr<XFileObjectBase> _target, const float& maxAngle, const D3DXVECTOR3& _position,const D3DXVECTOR3& _velocity, trau::Timer * _timer);
-	HomingMissile(CDirect3DXFile* _xfile, XFileObjectBase* _target, const float& maxAngle, const D3DXVECTOR3& _position, const D3DXVECTOR3& _velocity, trau::Timer * _timer);
 protected:
 	void update();
-	const D3DXQUATERNION& RotationArc(D3DXVECTOR3 v0, D3DXVECTOR3 v1, double& d);
+	D3DXQUATERNION RotationArc(D3DXVECTOR3 v0, D3DXVECTOR3 v1, double& d);
 	std::shared_ptr<XFileObjectBase> target;
 	D3DXVECTOR3 position;
 	D3DXVECTOR3 velocity;

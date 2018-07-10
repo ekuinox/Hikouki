@@ -7,11 +7,6 @@ HomingMissile::HomingMissile(CDirect3DXFile * _xfile, std::shared_ptr<XFileObjec
 	D3DXQuaternionRotationMatrix(&attitude, &mat);
 }
 
-HomingMissile::HomingMissile(CDirect3DXFile * _xfile, XFileObjectBase * _target, const float & maxAngle, const D3DXVECTOR3& _position, const D3DXVECTOR3 & _velocity, trau::Timer * _timer)
-	: HomingMissile(_xfile, _target, maxAngle, _position, _velocity, _timer)
-{
-}
-
 void HomingMissile::update()
 {
 	auto targetVector = target->getPos() - position;
@@ -38,7 +33,7 @@ void HomingMissile::update()
 	mat._43 = position.z;
 }
 
-const D3DXQUATERNION & HomingMissile::RotationArc(D3DXVECTOR3 v0, D3DXVECTOR3 v1, double & d)
+D3DXQUATERNION HomingMissile::RotationArc(D3DXVECTOR3 v0, D3DXVECTOR3 v1, double & d)
 {
 	D3DXVECTOR3 axis;
 
