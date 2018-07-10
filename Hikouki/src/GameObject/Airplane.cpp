@@ -7,7 +7,7 @@ Airplane::Airplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device)
 {
 }
 
-Airplane::Airplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, D3DXVECTOR3 coord)
+Airplane::Airplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, const D3DXVECTOR3& coord)
 	: Airplane(_xfile, device)
 {
 	D3DXMatrixTranslation(&mat, coord.x, coord.y, coord.z);
@@ -71,12 +71,12 @@ BoundingSphere* Airplane::getBBox()
 	return bbox;
 }
 
-void Airplane::addTrans(D3DXVECTOR3 v)
+void Airplane::addTrans(const D3DXVECTOR3& v)
 {
 	trans += v;
 }
 
-void Airplane::setTrans(D3DXVECTOR3 v)
+void Airplane::setTrans(const D3DXVECTOR3& v)
 {
 	trans = v;
 }

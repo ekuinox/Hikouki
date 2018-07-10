@@ -12,13 +12,13 @@ protected:
 	BoundingSphere *bbox;
 public:
 	Airplane(CDirect3DXFile*, LPDIRECT3DDEVICE9);
-	Airplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, D3DXVECTOR3);
+	Airplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, const D3DXVECTOR3&);
 	void draw(const LPDIRECT3DDEVICE9&) const;
 	virtual void update(const UpdateDetail&);
 	void switchExplosion();
 	void switchDrawBBox();
 	void switchDrawBBox(bool);
 	BoundingSphere* getBBox();
-	void addTrans(D3DXVECTOR3 v);
-	void setTrans(D3DXVECTOR3 v);
+	void addTrans(const D3DXVECTOR3& v);
+	void setTrans(const D3DXVECTOR3& v);
 };
