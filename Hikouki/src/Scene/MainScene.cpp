@@ -115,10 +115,12 @@ void MainScene::update()
 
 	const auto& _positon = cameraTarget->getPos();
 
-	jsonData["cameraTarget"]["x"] = _positon.x;
-	jsonData["cameraTarget"]["y"] = _positon.y;
-	jsonData["cameraTarget"]["z"] = _positon.z;
-	jsonData["cameraTarget"]["uuid"] = cameraTarget->getUUID();
+	jsonData["cameraTarget"] = {
+		nlohmann::json{ "x", _positon.x },
+		nlohmann::json{ "y", _positon.x },
+		nlohmann::json{ "z", _positon.x },
+		nlohmann::json{ "uuid", cameraTarget->getUUID() },
+	};
 
 	textAreas.front()->text = jsonData.dump(2);
 
