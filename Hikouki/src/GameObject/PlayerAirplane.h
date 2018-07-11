@@ -2,7 +2,8 @@
 
 #ifndef ___PLAYER_AIRPLANE_H
 
-#include "Airplane.h"
+#include "EnemyAirplane.h"
+#include "HomingMissile.h"
 
 class PlayerAirplane : public Airplane
 {
@@ -14,6 +15,11 @@ public:
 	};
 	PlayerAirplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, const D3DXVECTOR3&);
 	void update(const UpdateDetail&);
+	void draw(const LPDIRECT3DDEVICE9&) const;
+private:
+	std::shared_ptr<EnemyAirplane> enemy;
+	std::pair<std::unique_ptr<HomingMissile>, bool> homingMissile; // é¿ë‘Ç∆triggerÇÃèÛë‘
+	void triggerHomingMissile(const std::vector<std::shared_ptr<GameObjectInterface>>&);
 };
 
 #define ___PLAYER_AIRPLANE_H
