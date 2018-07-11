@@ -27,8 +27,10 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 	for (const auto& airplane : airplanes) gameObjects.emplace_back(airplane);
 	for (const auto& text_area : textAreas) gameObjects.emplace_back(text_area);
 	gameObjects.emplace_back(new XFileObjectBase(xFileManager->get("Skydome")));
-	const auto& enemyAirplane = std::shared_ptr<EnemyAirplane>(new EnemyAirplane(xFileManager->get("Airplane"), graphics->GetDXDevice(), "assets/GameObjectConfig/enemy.json"));
-	gameObjects.emplace_back(enemyAirplane);
+	for (auto i = 0; i < 5; ++i)
+	{
+		gameObjects.emplace_back(new EnemyAirplane(xFileManager->get("Airplane"), graphics->GetDXDevice(), "assets/GameObjectConfig/enemy.json"));
+	}
 	gameObjects.emplace_back(new PlayerAirplane(xFileManager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3{ 0, 0, 0 }));
 
 	// ‰Šúİ’è
