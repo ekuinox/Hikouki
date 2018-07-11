@@ -28,6 +28,7 @@
     <ClInclude Include="src\GameObject\GameObject.h" />
     <ClInclude Include="src\GameObject\HomingMissile.h" />
     <ClInclude Include="src\GameObject\Plain2D.h" />
+    <ClInclude Include="src\GameObject\PlayerAirplane.h" />
     <ClInclude Include="src\GameObject\TextArea.h" />
     <ClInclude Include="src\GameObject\XFileObjectBase.h" />
     <ClInclude Include="src\Manager\CDirectxGraphics.h" />
@@ -55,6 +56,7 @@
     <ClCompile Include="src\GameObject\GameObject.cpp" />
     <ClCompile Include="src\GameObject\HomingMissile.cpp" />
     <ClCompile Include="src\GameObject\Plain2D.cpp" />
+    <ClCompile Include="src\GameObject\PlayerAirplane.cpp" />
     <ClCompile Include="src\GameObject\TextArea.cpp" />
     <ClCompile Include="src\GameObject\XFileObjectBase.cpp" />
     <ClCompile Include="src\Main.cpp" />

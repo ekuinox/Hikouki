@@ -129,6 +129,9 @@
     <ClInclude Include="src\GameObject\Explosion.h">
       <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="src\GameObject\PlayerAirplane.h">
+      <Filter>ヘッダー ファイル\GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp">
@@ -192,6 +195,9 @@
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="src\GameObject\Explosion.cpp">
+      <Filter>ソース ファイル\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObject\PlayerAirplane.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,6 +3,7 @@
 #include "../GameObject/EnemyAirplane.h"
 #include "../GameObject/HomingMissile.h"
 #include "../GameObjectAttachments/Collider.h"
+#include "../GameObject/PlayerAirplane.h"
 
 MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, Input* _input, trau::Timer* _timer)
 	: Scene(_graphics, _xfileManager, _input, _timer), underControll(0), camType(trau::CameraTypes::OVER)
@@ -29,6 +30,7 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 	const auto& enemyAirplane = std::shared_ptr<EnemyAirplane>(new EnemyAirplane(xFileManager->get("Airplane"), graphics->GetDXDevice(), "assets/GameObjectConfig/enemy.json"));
 	gameObjects.emplace_back(enemyAirplane);
 	gameObjects.emplace_back(new HomingMissile(xFileManager->get("Airplane"), enemyAirplane, 360.0f, D3DXVECTOR3{0, -20, 0}, D3DXVECTOR3{ 0, 0, 1 }, graphics->GetDXDevice()));
+	gameObjects.emplace_back(new PlayerAirplane(xFileManager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3{ 0, 0, 0 }));
 
 	// ‰ŠúÝ’è
 	graphics->SetRenderStateArray({
