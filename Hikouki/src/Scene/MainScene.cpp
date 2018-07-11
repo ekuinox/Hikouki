@@ -28,7 +28,7 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 	gameObjects.emplace_back(new XFileObjectBase(xFileManager->get("Skydome")));
 	const auto& enemyAirplane = std::shared_ptr<EnemyAirplane>(new EnemyAirplane(xFileManager->get("Airplane"), graphics->GetDXDevice(), "assets/GameObjectConfig/enemy.json"));
 	gameObjects.emplace_back(enemyAirplane);
-	gameObjects.emplace_back(new HomingMissile(xFileManager->get("Airplane"), enemyAirplane, 360.0f, D3DXVECTOR3{0, -20, 0}, D3DXVECTOR3{ 0, 0, 1 }));
+	gameObjects.emplace_back(new HomingMissile(xFileManager->get("Airplane"), enemyAirplane, 360.0f, D3DXVECTOR3{0, -20, 0}, D3DXVECTOR3{ 0, 0, 1 }, graphics->GetDXDevice()));
 
 	// ‰ŠúÝ’è
 	graphics->SetRenderStateArray({

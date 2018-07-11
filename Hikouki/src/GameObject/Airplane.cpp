@@ -1,9 +1,10 @@
 #include "Airplane.h"
 #include "../Utils/MathUtil.h"
+#include "../GameObjectAttachments/Collider.h"
 
 Airplane::Airplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device)
 	: XFileObjectBase(_xfile), explosion_flag(false), explosion(new Explosion(xfile->GetMesh(), xfile->GetTextures()[0], device)),
-	bbox(new BoundingSphere(xfile->GetMesh(), device)), drawing_bbox(true)
+	bbox(new BoundingSphere(xfile->GetMesh(), device)), drawing_bbox(true), state(State::ALIVE)
 {
 }
 
@@ -36,13 +37,13 @@ void Airplane::update(const UpdateDetail& detail)
 
 		// Ç»Å`Å`Å`Å`Å`Å`Å`ÇÒÇ‡ÇÌÇ©ÇÁÇÒ
 
-		/*
 		const auto hashCode = typeid(*gameObject).hash_code();
+
 		if (hashCode == typeid(Airplane).hash_code())
 		{
-			const auto& a = *std::static_pointer_cast<Airplane>(gameObject);
+			const auto& airplane = std::static_pointer_cast<Airplane>(gameObject);
+			auto colls = Collider::getCollisions({ getBBox() }, { airplane->getBBox() });
 		}
-		*/
 	}
 
 	if (explosion_flag)
@@ -61,6 +62,7 @@ void Airplane::update(const UpdateDetail& detail)
 void Airplane::startExplosion()
 {
 	if (explosion_flag) {
+		state = State::Explosion;
 		explosion->triangleTransforms(mat);
 	}
 }
@@ -81,6 +83,13 @@ void Airplane::switchDrawBBox(bool new_drawing_bbox)
 	drawing_bbox = new_drawing_bbox;
 }
 
+bool Airplane::triggerExplosion()
+{
+	explosion_flag = true;
+	startExplosion();
+	return explosion_flag;
+}
+
 BoundingSphere* Airplane::getBBox()
 {
 	return bbox;
@@ -94,4 +103,9 @@ void Airplane::addTrans(const D3DXVECTOR3& v)
 void Airplane::setTrans(const D3DXVECTOR3& v)
 {
 	trans = v;
+}
+
+Airplane::State Airplane::getState()
+{
+	return state;
 }

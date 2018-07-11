@@ -1,7 +1,9 @@
 #include "HomingMissile.h"
+#include "EnemyAirplane.h"
+#include "../GameObjectAttachments/Collider.h"
 
-HomingMissile::HomingMissile(CDirect3DXFile * _xfile, std::shared_ptr<XFileObjectBase> _target, const float & maxAngle, const D3DXVECTOR3& _position, const D3DXVECTOR3 & _velocity)
-	: XFileObjectBase(_xfile), target(_target), velocity(_velocity), addRotMax(D3DX_PI * maxAngle / 180.0f), position(_position)
+HomingMissile::HomingMissile(CDirect3DXFile * _xfile, std::shared_ptr<XFileObjectBase> _target, const float & maxAngle, const D3DXVECTOR3& _position, const D3DXVECTOR3 & _velocity, LPDIRECT3DDEVICE9 device)
+	: XFileObjectBase(_xfile), target(_target), velocity(_velocity), addRotMax(D3DX_PI * maxAngle / 180.0f), position(_position), bbox(new BoundingSphere(xfile->GetMesh(), device))
 {
 	D3DXQuaternionIdentity(&attitude);
 	D3DXQuaternionRotationMatrix(&attitude, &mat);
@@ -31,6 +33,32 @@ void HomingMissile::update(const UpdateDetail& detail)
 	mat._41 = position.x;
 	mat._42 = position.y;
 	mat._43 = position.z;
+
+
+	bbox->updatePosition(mat);
+
+	for (const auto& gameObject : detail.gameObjects)
+	{
+		if (gameObject->getUUID() == getUUID()) break; // é©ï™ÇèúäO
+
+		const auto hashCode = typeid(*gameObject).hash_code();
+
+		if (hashCode == typeid(EnemyAirplane).hash_code())
+		{
+			const auto& airplane = std::static_pointer_cast<EnemyAirplane>(gameObject);
+
+			if (airplane->getState() != Airplane::State::ALIVE) break;
+
+			auto colls = Collider::getCollisions({ bbox }, { airplane->getBBox() });
+			if (colls.size() > 0)
+			{
+				airplane->triggerExplosion();
+				hide();
+				disable();
+			}
+		}
+	}
+
 }
 
 D3DXQUATERNION HomingMissile::RotationArc(D3DXVECTOR3 v0, D3DXVECTOR3 v1, double & d)
@@ -51,4 +79,10 @@ D3DXQUATERNION HomingMissile::RotationArc(D3DXVECTOR3 v0, D3DXVECTOR3 v1, double
 		axis.z / s,
 		s / 2
 	);
+}
+
+void HomingMissile::draw(const LPDIRECT3DDEVICE9 & device) const
+{
+//	bbox->draw(device);
+	XFileObjectBase::draw(device);
 }
