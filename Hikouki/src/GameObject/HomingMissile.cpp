@@ -74,15 +74,16 @@ void HomingMissile::update(const UpdateDetail& detail)
 		{
 			const auto& airplane = std::static_pointer_cast<EnemyAirplane>(gameObject);
 
-			if (airplane->getState() != Airplane::State::ALIVE) break;
-
-			auto colls = Collider::getCollisions({ bbox }, { airplane->getBBox() });
-			if (colls.size() > 0)
+			if (airplane->getState() == Airplane::State::ALIVE)
 			{
-				airplane->triggerExplosion();
-				state = HomingMissile::State::HIT;
-				hide();
-				disable();
+				auto colls = Collider::getCollisions({ bbox }, { airplane->getBBox() });
+				if (colls.size() > 0)
+				{
+					airplane->triggerExplosion();
+					state = HomingMissile::State::HIT;
+					hide();
+					disable();
+				}
 			}
 		}
 	}
