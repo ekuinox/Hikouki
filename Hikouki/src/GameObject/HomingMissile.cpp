@@ -70,9 +70,7 @@ void HomingMissile::update(const UpdateDetail& detail)
 	{
 		if (gameObject->getUUID() == getUUID()) break; // Ž©•ª‚ðœŠO
 
-		const auto hashCode = typeid(*gameObject).hash_code();
-
-		if (hashCode == typeid(EnemyAirplane).hash_code())
+		if (gameObject->getType() == GameObjectInterface::Type::EnemyAirplane)
 		{
 			const auto& airplane = std::static_pointer_cast<EnemyAirplane>(gameObject);
 
@@ -102,6 +100,11 @@ void HomingMissile::draw(const LPDIRECT3DDEVICE9 & device) const
 HomingMissile::State HomingMissile::getState() const
 {
 	return state;
+}
+
+const GameObjectInterface::Type HomingMissile::getType() const
+{
+	return GameObjectInterface::Type::HomingMissile;
 }
 
 D3DXQUATERNION HomingMissile::RotationArc(D3DXVECTOR3 v0, D3DXVECTOR3 v1, double & d)

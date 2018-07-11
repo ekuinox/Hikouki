@@ -16,6 +16,7 @@ public:
 	PlayerAirplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, const D3DXVECTOR3&);
 	void update(const UpdateDetail&);
 	void draw(const LPDIRECT3DDEVICE9&) const;
+	const GameObjectInterface::Type getType() const;
 private:
 	std::shared_ptr<EnemyAirplane> enemy;
 	std::unique_ptr<HomingMissile> homingMissile;

@@ -26,3 +26,8 @@ D3DXVECTOR3 XFileObjectBase::getPos() const
 {
 	return D3DXVECTOR3(mat._41, mat._42, mat._43);
 }
+
+const GameObjectInterface::Type XFileObjectBase::getType() const
+{
+	return GameObjectInterface::Type::XFileObjectBase;
+}

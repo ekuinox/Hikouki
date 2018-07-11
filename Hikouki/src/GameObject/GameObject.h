@@ -20,6 +20,19 @@ protected:
 	unsigned int layer = UINT_MAX; // 描画優先度
 	unsigned int priority = UINT_MAX; // 更新処理優先度
 public:
+	// GameObjectInterfaceを継承したクラスを確認するためのenum．クラスを追加するたびにここに追加する必要があり．．．
+	enum class Type {
+		GameObjectInterface,
+		GameObject,
+		Explosion,
+		Plain2D,
+		TextArea,
+		XFileObjectBase,
+		Airplane,
+		EnemyAirplane,
+		PlayerAirplane,
+		HomingMissile,
+	};
 	struct UpdateDetail {
 		trau::Timer * timer;
 		Input * input;
@@ -34,6 +47,9 @@ public:
 	virtual void disable() = 0;
 	virtual unsigned int getLayer() const = 0;
 	virtual unsigned int getPriority() const = 0;
+	virtual const GameObjectInterface::Type getType() const { return Type::GameObjectInterface; }
+	virtual unsigned int getId() { return 0; }
+	static unsigned int getIdStatic() { return 0; }
 	std::string getUUID() const { return uuid; }
 };
 
@@ -49,6 +65,7 @@ public:
 	virtual void disable();
 	virtual unsigned int getLayer() const;
 	virtual unsigned int getPriority() const;
+	virtual const GameObjectInterface::Type getType() const;
 };
 
 #endif

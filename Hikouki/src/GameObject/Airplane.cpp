@@ -43,9 +43,7 @@ void Airplane::update(const UpdateDetail& detail)
 		{
 			if (gameObject->getUUID() == getUUID()) break; // Ž©•ª‚ðœŠO
 
-			const auto hashCode = typeid(*gameObject).hash_code();
-
-			if (hashCode == typeid(Airplane).hash_code())
+			if (gameObject->getType() == GameObjectInterface::Type::Airplane)
 			{
 				const auto& airplane = std::static_pointer_cast<Airplane>(gameObject);
 				auto colls = Collider::getCollisions({ getBBox() }, { airplane->getBBox() });
@@ -84,4 +82,9 @@ void Airplane::setTrans(const D3DXVECTOR3& v)
 Airplane::State Airplane::getState()
 {
 	return state;
+}
+
+const GameObjectInterface::Type Airplane::getType() const
+{
+	return GameObjectInterface::Type::Airplane;
 }

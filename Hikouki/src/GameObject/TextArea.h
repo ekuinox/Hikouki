@@ -26,6 +26,7 @@ namespace trau
 		TextArea(LPDIRECT3DDEVICE9, int, int);
 		TextArea(LPDIRECT3DDEVICE9);
 		void draw(const LPDIRECT3DDEVICE9&) const;
+		const GameObjectInterface::Type getType() const;
 
 		std::string text;
 	};

@@ -23,6 +23,7 @@ public:
 
 	Plain2D(const D3DVECTOR& _center, const D3DVECTOR& _size, const TextureSets& _texture);
 	virtual void draw(const LPDIRECT3DDEVICE9&) const;
+	const GameObjectInterface::Type getType() const;
 protected:
 	D3DVECTOR center;
 	D3DVECTOR size;

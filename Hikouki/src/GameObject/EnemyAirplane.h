@@ -15,6 +15,7 @@ public:
 	};
 	EnemyAirplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, const char *);
 	void update(const UpdateDetail&);
+	const GameObjectInterface::Type getType() const;
 private:
 	std::mt19937 randomEngine;
 	std::unique_ptr<trau::Timer> rotationTimer;

@@ -25,4 +25,5 @@ public:
 	void addTrans(const D3DXVECTOR3& v);
 	void setTrans(const D3DXVECTOR3& v);
 	Airplane::State getState();
+	const GameObjectInterface::Type getType() const;
 };

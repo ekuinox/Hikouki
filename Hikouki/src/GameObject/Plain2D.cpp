@@ -25,3 +25,8 @@ void Plain2D::draw(const LPDIRECT3DDEVICE9& device) const
 
 	device->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, polygonsCount, vertexes, sizeof(VERTEX));
 }
+
+const GameObjectInterface::Type Plain2D::getType() const
+{
+	return GameObjectInterface::Type::Plain2D;
+}

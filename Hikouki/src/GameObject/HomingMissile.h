@@ -21,6 +21,7 @@ public:
 	void update(const UpdateDetail&);
 	void draw(const LPDIRECT3DDEVICE9&) const;
 	HomingMissile::State getState() const;
+	const GameObjectInterface::Type getType() const;
 protected:
 	D3DXQUATERNION RotationArc(D3DXVECTOR3 v0, D3DXVECTOR3 v1, double& d);
 	std::shared_ptr<XFileObjectBase> target;

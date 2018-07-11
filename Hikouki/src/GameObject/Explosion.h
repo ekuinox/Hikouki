@@ -15,6 +15,7 @@ public:
 	void draw(const LPDIRECT3DDEVICE9&) const;
 	void update(const UpdateDetail&);
 	void triangleTransforms(const D3DXMATRIX& mat);
+	const GameObjectInterface::Type getType() const;
 private:
 	struct Connect {
 		WORD idx[3];
