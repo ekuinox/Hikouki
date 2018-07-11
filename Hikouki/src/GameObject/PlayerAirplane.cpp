@@ -6,7 +6,7 @@ PlayerAirplane::PlayerAirplane(CDirect3DXFile * xfile, LPDIRECT3DDEVICE9 device,
 	: Airplane(xfile, device, coord), enemy(nullptr)
 {
 	homingMissile = {
-		std::unique_ptr<HomingMissile>(new HomingMissile(xfile, enemy, 20.0f, getPos(), D3DXVECTOR3{ 0, 0, 1 }, device)),
+		std::unique_ptr<HomingMissile>(new HomingMissile(xfile, enemy, D3DX_PI * 30.0f / 180.0f, getPos(), D3DXVECTOR3{ 0, 0, 1 }, device)),
 		false
 	};
 
@@ -37,6 +37,13 @@ void PlayerAirplane::update(const UpdateDetail & detail)
 	mathutils::makeWorldMatrix(mx, mat, angle * detail.timer->getSeconds(), trans * detail.timer->getSeconds());
 	
 	if (homingMissile.second) homingMissile.first->update(detail);
+
+	// ƒqƒbƒg‚µ‚Ä‚¢‚½‚Æ‚«‚Ìˆ—
+	if (homingMissile.first->getState() == HomingMissile::State::HIT)
+	{
+		homingMissile.second = false;
+		homingMissile.first->pause();
+	}
 }
 
 void PlayerAirplane::draw(const LPDIRECT3DDEVICE9 & device) const
@@ -57,7 +64,7 @@ void PlayerAirplane::triggerHomingMissile(const std::vector<std::shared_ptr<Game
 		{
 			auto _enemy = std::static_pointer_cast<EnemyAirplane>(gameObject);
 			const auto& _distance = Collider::calculateDistance(getPos(), _enemy->getPos());
-			if (enemy == nullptr || _distance < distance)
+			if (_enemy->getState() == Airplane::State::ALIVE && (enemy == nullptr || _distance < distance))
 			{
 				distance = _distance;
 				enemy = _enemy;
@@ -68,8 +75,6 @@ void PlayerAirplane::triggerHomingMissile(const std::vector<std::shared_ptr<Game
 	if (enemy != nullptr)
 	{
 		homingMissile.second = true;
-		homingMissile.first->init(enemy, getMat());
-		homingMissile.first->enable();
-		homingMissile.first->show();
+		homingMissile.first->trigger(enemy, getMat());
 	}
 }

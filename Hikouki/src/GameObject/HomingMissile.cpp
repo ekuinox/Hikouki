@@ -3,13 +3,23 @@
 #include "../GameObjectAttachments/Collider.h"
 
 HomingMissile::HomingMissile(CDirect3DXFile * _xfile, std::shared_ptr<XFileObjectBase> _target, const float & maxAngle, const D3DXVECTOR3& _position, const D3DXVECTOR3 & _velocity, LPDIRECT3DDEVICE9 device)
-	: XFileObjectBase(_xfile), target(_target), velocity(_velocity), addRotMax(D3DX_PI * maxAngle / 180.0f), position(_position), bbox(new BoundingSphere(xfile->GetMesh(), device))
+	: XFileObjectBase(_xfile), target(_target), velocity(_velocity)
+	, addRotMax(D3DX_PI * maxAngle / 180.0f), position(_position)
+	, bbox(new BoundingSphere(xfile->GetMesh(), device))
 {
+	pause();
 	D3DXQuaternionIdentity(&attitude);
 	D3DXQuaternionRotationMatrix(&attitude, &mat);
 }
 
-void HomingMissile::init(const std::shared_ptr<XFileObjectBase>& _target, const D3DXMATRIX & _owner_mat)
+void HomingMissile::pause()
+{
+	state = State::PAUSE;
+	hide();
+	disable();
+}
+
+void HomingMissile::trigger(const std::shared_ptr<XFileObjectBase>& _target, const D3DXMATRIX & _owner_mat)
 {
 	target = _target;
 
@@ -20,10 +30,15 @@ void HomingMissile::init(const std::shared_ptr<XFileObjectBase>& _target, const 
 		_owner_mat._42,
 		_owner_mat._43
 	);
+
+	enable();
+	show();
 }
 
 void HomingMissile::update(const UpdateDetail& detail)
 {
+	if (!active) return;
+
 	auto targetVector = target->getPos() - position;
 	auto zDir = velocity;
 
@@ -47,7 +62,6 @@ void HomingMissile::update(const UpdateDetail& detail)
 	mat._42 = position.y;
 	mat._43 = position.z;
 
-
 	bbox->updatePosition(mat);
 
 	for (const auto& gameObject : detail.gameObjects)
@@ -66,6 +80,7 @@ void HomingMissile::update(const UpdateDetail& detail)
 			if (colls.size() > 0)
 			{
 				airplane->triggerExplosion();
+				state = HomingMissile::State::HIT;
 				hide();
 				disable();
 			}
@@ -76,8 +91,14 @@ void HomingMissile::update(const UpdateDetail& detail)
 
 void HomingMissile::draw(const LPDIRECT3DDEVICE9 & device) const
 {
+	if (!drawing) return;
 //	bbox->draw(device);
 	XFileObjectBase::draw(device);
+}
+
+HomingMissile::State HomingMissile::getState() const
+{
+	return state;
 }
 
 D3DXQUATERNION HomingMissile::RotationArc(D3DXVECTOR3 v0, D3DXVECTOR3 v1, double & d)
