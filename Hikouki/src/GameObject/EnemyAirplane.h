@@ -7,6 +7,8 @@
 
 class EnemyAirplane : public Airplane {
 public:
+	static constexpr auto rotationSpanSeconds = 1.0f;
+	static constexpr auto initSpeed = 20.0f;
 	struct Moves {
 		float span;
 		D3DXVECTOR3 trans, angle;
@@ -14,7 +16,6 @@ public:
 	EnemyAirplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, const char *);
 	void update(const UpdateDetail&);
 private:
-	static constexpr auto rotationSpanSeconds = 1.0f;
 	std::mt19937 randomEngine;
 	std::unique_ptr<trau::Timer> rotationTimer;
 	std::vector<Moves> moveTimeline;

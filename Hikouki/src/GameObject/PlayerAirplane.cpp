@@ -5,10 +5,11 @@
 PlayerAirplane::PlayerAirplane(CDirect3DXFile * xfile, LPDIRECT3DDEVICE9 device, const D3DXVECTOR3 & coord)
 	: Airplane(xfile, device, coord), enemy(nullptr)
 {
-	homingMissile = std::unique_ptr<HomingMissile>(new HomingMissile(xfile, enemy, D3DX_PI * 30.0f / 180.0f, getPos(), D3DXVECTOR3{ 0, 0, 1 }, device));
+	homingMissile = std::unique_ptr<HomingMissile>(new HomingMissile(xfile, enemy, D3DX_PI * 10.0f / 180.0f, getPos(), D3DXVECTOR3{ 0, 0, 1 }, device));
 
 	trans.z = initSpeed;
 
+	// xé≤ï˚å¸Ç…êiÇﬂÇÈÇÊÇ§Ç…
 	D3DXMatrixRotationY(&mat, D3DX_PI * 90.0f / 180.0f);
 }
 

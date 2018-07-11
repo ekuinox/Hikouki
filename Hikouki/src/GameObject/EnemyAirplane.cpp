@@ -12,7 +12,7 @@ EnemyAirplane::EnemyAirplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, c
 	: Airplane(_xfile, device), randomEngine(std::mt19937(std::random_device()()))
 	, rotationTimer(std::unique_ptr<trau::Timer>(new trau::Timer()))
 {
-	trans.z = 20.0f;
+	trans.z = initSpeed;
 
 	// json load
 
