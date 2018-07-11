@@ -26,7 +26,7 @@ private:
 
 	trau::CameraTypes camType;
 
-	std::vector<std::shared_ptr<Airplane>> airplanes;
+	std::shared_ptr<XFileObjectBase> cameraTarget;
 	std::vector<std::shared_ptr<trau::TextArea>> textAreas;
 	std::vector<std::shared_ptr<GameObjectInterface>> gameObjects;
 

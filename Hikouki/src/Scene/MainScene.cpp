@@ -1,12 +1,13 @@
 #include "MainScene.h"
 #include <algorithm>
+#include <nlohmann/json.hpp>
 #include "../GameObject/EnemyAirplane.h"
 #include "../GameObject/HomingMissile.h"
 #include "../GameObjectAttachments/Collider.h"
 #include "../GameObject/PlayerAirplane.h"
 
 MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, Input* _input, trau::Timer* _timer)
-	: Scene(_graphics, _xfileManager, _input, _timer), underControll(0), camType(trau::CameraTypes::OVER)
+	: Scene(_graphics, _xfileManager, _input, _timer), camType(trau::CameraTypes::OVER)
 {
 	cameras.fps = std::unique_ptr<trau::FPSCamera>(new trau::FPSCamera());
 	cameras.tps = std::unique_ptr<trau::TPSCamera>(new trau::TPSCamera());
@@ -16,22 +17,21 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 	xFileManager->add({
 		{ "Airplane", "assets/f1.x" }, // 飛行機
 		{ "Skydome", "assets/skydome.x" } // スカイドーム
-		});
+	});
 
-	airplanes.emplace_back(new Airplane(xFileManager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3(0.0, 0.0, 10.0f)));
-	airplanes.emplace_back(new Airplane(xFileManager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3(0.0, 0.0, -10.0f)));
 	textAreas.emplace_back(new trau::TextArea(graphics->GetDXDevice(), 0, 0, std::string("こんにちは")));
 	textAreas.emplace_back(new trau::TextArea(graphics->GetDXDevice(), graphics->GetWidth() - 100, 0, std::string("")));
 
 	// ブチ込め
-	for (const auto& airplane : airplanes) gameObjects.emplace_back(airplane);
 	for (const auto& text_area : textAreas) gameObjects.emplace_back(text_area);
 	gameObjects.emplace_back(new XFileObjectBase(xFileManager->get("Skydome")));
 	for (auto i = 0; i < 5; ++i)
 	{
 		gameObjects.emplace_back(new EnemyAirplane(xFileManager->get("Airplane"), graphics->GetDXDevice(), "assets/GameObjectConfig/enemy.json"));
 	}
-	gameObjects.emplace_back(new PlayerAirplane(xFileManager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3{ 0, 0, 0 }));
+
+	cameraTarget = std::shared_ptr<XFileObjectBase>(new PlayerAirplane(xFileManager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3{ 0, 0, 0 }));
+	gameObjects.emplace_back(cameraTarget);
 
 	// 初期設定
 	graphics->SetRenderStateArray({
@@ -88,9 +88,6 @@ void MainScene::input()
 
 		if (inputDevice->getTrigger(KeyCode::V)) camType++;
 
-		if (inputDevice->getTrigger(KeyCode::Add) && underControll + 1 < airplanes.size()) underControll++;
-		if (inputDevice->getTrigger(KeyCode::Subtract) && underControll > 0) underControll--;
-
 		if (camType == trau::CameraTypes::OVER)
 		{
 			if (inputDevice->getPress(KeyCode::UpArrow)) cameras.over->elevation += 10.0f * timer->getSeconds();
@@ -101,12 +98,6 @@ void MainScene::input()
 			if (inputDevice->getPress(KeyCode::BackSpace)) cameras.over->distance += 0.1f;
 			cameras.over->distance -= mouseCurrentState.lZ / 10;
 		}
-
-		if (inputDevice->getTrigger(KeyCode::Numpad5)) airplanes[underControll]->switchExplosion();
-		if (inputDevice->getTrigger(KeyCode::Numpad8)) airplanes[underControll]->switchDrawBBox();
-		if (inputDevice->getTrigger(KeyCode::Numpad6)) airplanes[underControll]->addTrans(D3DXVECTOR3{ 0, 0, -10 });
-		if (inputDevice->getTrigger(KeyCode::Numpad4)) airplanes[underControll]->addTrans(D3DXVECTOR3{ 0, 0, 10 });
-		if (inputDevice->getTrigger(KeyCode::Space)) airplanes[underControll]->setTrans(D3DXVECTOR3{ 0, 0, 0 });
 
 		if (inputDevice->getTrigger(KeyCode::Return)) state = State::Exit;
 	}
@@ -120,26 +111,19 @@ void MainScene::update()
 {
 	for (const auto& gameObject : gameObjects) gameObject->update({ timer, inputDevice, gameObjects });
 
-	auto colls = Collider::getCollisions({ airplanes[0]->getBBox() }, { airplanes[1]->getBBox() });
+	nlohmann::json jsonData;
 
-	textAreas.front()->text = "{\n    Airplane:\n    {\n";
-	for (auto i = 0; i < 2; ++i)
-	{
-		auto pos = airplanes[i]->getBBox()->getPosition();
-		textAreas.front()->text += (boost::format(
-			"        { X: %2%, Y: %3%, Z: %4%, R: %5%, Hit: %6% }%7%\n"
-		) % i % pos.x % pos.y % pos.z % airplanes[i]->getBBox()->getR() % (colls.size() > 0 ? "TRUE" : "FALSE") % (i == 1 ? "" : ",")).str();
-	}
-	textAreas.front()->text += (boost::format(
-		"    },\n    Distance: %1%\n} \n%2%\n"
-	) % Collider::calculateDistance(airplanes[0]->getBBox()->getPosition(), airplanes[1]->getBBox()->getPosition()) % timer->getSeconds()).str();
+	const auto& _positon = cameraTarget->getPos();
 
-	textAreas.front()->text += (boost::format("\n%1%") % airplanes[0]->getUUID()).str();
+	jsonData["cameraTarget"]["x"] = _positon.x;
+	jsonData["cameraTarget"]["y"] = _positon.y;
+	jsonData["cameraTarget"]["z"] = _positon.z;
+	jsonData["cameraTarget"]["uuid"] = cameraTarget->getUUID();
 
-	D3DXMATRIX mat;
+	textAreas.front()->text = jsonData.dump(2);
 
-	cameras.tps->update(airplanes[underControll]->getMat());
-	cameras.fps->update(airplanes[underControll]->getMat());
+	cameras.tps->update(cameraTarget->getMat());
+	cameras.fps->update(cameraTarget->getMat());
 	cameras.over->update();
 }
 
