@@ -16,13 +16,16 @@ PlayerAirplane::PlayerAirplane(CDirect3DXFile * xfile, LPDIRECT3DDEVICE9 device,
 void PlayerAirplane::update(const UpdateDetail & detail)
 {
 	constexpr auto angleMax = 45.0f;
-	constexpr auto addAngle = 1.0f;
+	constexpr auto addAngle = 10.0f;
+
+	// ƒ[ƒ‚É–ß‚·
+	angle = D3DXVECTOR3(0, 0, 0);
 
 	// ‘€ì
 	if (detail.input->getPress(KeyCode::A) && angle.y > -angleMax) angle.y -= addAngle;
 	if (detail.input->getPress(KeyCode::D) && angle.y < angleMax) angle.y += addAngle;
-	if (detail.input->getPress(KeyCode::S) && angle.x > -angleMax) angle.x -= addAngle;
-	if (detail.input->getPress(KeyCode::W) && angle.x < angleMax) angle.x += addAngle;
+	if (detail.input->getPress(KeyCode::W) && angle.x > -angleMax) angle.x -= addAngle;
+	if (detail.input->getPress(KeyCode::S) && angle.x < angleMax) angle.x += addAngle;
 
 	// BBox‚ðØ‚è‘Ö‚¦‚é
 	if (detail.input->getTrigger(KeyCode::F5)) drawingBBox = !drawingBBox;
