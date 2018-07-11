@@ -5,13 +5,7 @@
 PlayerAirplane::PlayerAirplane(CDirect3DXFile * xfile, LPDIRECT3DDEVICE9 device, const D3DXVECTOR3 & coord)
 	: Airplane(xfile, device, coord), enemy(nullptr)
 {
-	homingMissile = {
-		std::unique_ptr<HomingMissile>(new HomingMissile(xfile, enemy, D3DX_PI * 30.0f / 180.0f, getPos(), D3DXVECTOR3{ 0, 0, 1 }, device)),
-		false
-	};
-
-	homingMissile.first->hide();
-	homingMissile.first->disable();
+	homingMissile = std::unique_ptr<HomingMissile>(new HomingMissile(xfile, enemy, D3DX_PI * 30.0f / 180.0f, getPos(), D3DXVECTOR3{ 0, 0, 1 }, device));
 
 	trans.z = initSpeed;
 
@@ -31,20 +25,17 @@ void PlayerAirplane::update(const UpdateDetail & detail)
 	if (detail.input->getTrigger(KeyCode::F5)) drawingBBox = !drawingBBox;
 
 	// ”­ŽË
-	if (!homingMissile.second && detail.input->getTrigger(KeyCode::E)) triggerHomingMissile(detail.gameObjects);
+	if (homingMissile->getState() == HomingMissile::State::PAUSE && detail.input->getTrigger(KeyCode::E))
+		triggerHomingMissile(detail.gameObjects);
 
 	D3DXMATRIX mx;
 
 	mathutils::makeWorldMatrix(mx, mat, angle * detail.timer->getSeconds(), trans * detail.timer->getSeconds());
 	
-	if (homingMissile.second) homingMissile.first->update(detail);
+	if (homingMissile->getState() == HomingMissile::State::FOLLOWING) homingMissile->update(detail);
 
 	// ƒqƒbƒg‚µ‚Ä‚¢‚½‚Æ‚«‚Ìˆ—
-	if (homingMissile.first->getState() == HomingMissile::State::HIT)
-	{
-		homingMissile.second = false;
-		homingMissile.first->pause();
-	}
+	if (homingMissile->getState() == HomingMissile::State::HIT) homingMissile->pause();
 
 	bbox->updatePosition(mat);
 }
@@ -52,7 +43,7 @@ void PlayerAirplane::update(const UpdateDetail & detail)
 void PlayerAirplane::draw(const LPDIRECT3DDEVICE9 & device) const
 {
 	Airplane::draw(device);
-	if (homingMissile.second) homingMissile.first->draw(device);
+	if (homingMissile->getState() == HomingMissile::State::FOLLOWING) homingMissile->draw(device);
 }
 
 void PlayerAirplane::triggerHomingMissile(const std::vector<std::shared_ptr<GameObjectInterface>>& gameObjects)
@@ -75,9 +66,5 @@ void PlayerAirplane::triggerHomingMissile(const std::vector<std::shared_ptr<Game
 		}
 	}
 
-	if (enemy != nullptr)
-	{
-		homingMissile.second = true;
-		homingMissile.first->trigger(enemy, getMat());
-	}
+	if (enemy != nullptr) homingMissile->trigger(enemy, getMat());
 }

@@ -30,6 +30,8 @@ void HomingMissile::trigger(const std::shared_ptr<XFileObjectBase>& _target, con
 		_owner_mat._42,
 		_owner_mat._43
 	);
+	
+	state = State::FOLLOWING;
 
 	enable();
 	show();

@@ -18,7 +18,7 @@ public:
 	void draw(const LPDIRECT3DDEVICE9&) const;
 private:
 	std::shared_ptr<EnemyAirplane> enemy;
-	std::pair<std::unique_ptr<HomingMissile>, bool> homingMissile; // À‘Ô‚Ætrigger‚Ìó‘Ô
+	std::unique_ptr<HomingMissile> homingMissile;
 	void triggerHomingMissile(const std::vector<std::shared_ptr<GameObjectInterface>>&);
 };
 
