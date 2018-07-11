@@ -52,9 +52,7 @@ void Airplane::update(const UpdateDetail& detail)
 			}
 		}
 
-		D3DXMATRIX mx;
-
-		mathutils::makeWorldMatrix(mx, mat, angle * detail.timer->getSeconds(), trans * detail.timer->getSeconds());
+		mathutils::makeWorldMatrixTotal(mat, angle * detail.timer->getSeconds(), trans * detail.timer->getSeconds());
 		bbox->updatePosition(mat);
 	}
 }

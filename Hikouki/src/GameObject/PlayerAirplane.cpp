@@ -17,25 +17,25 @@ void PlayerAirplane::update(const UpdateDetail & detail)
 	constexpr auto angleMax = 45.0f;
 	constexpr auto addAngle = 1.0f;
 
+	// 操作
 	if (detail.input->getPress(KeyCode::A) && angle.y > -angleMax) angle.y -= addAngle;
 	if (detail.input->getPress(KeyCode::D) && angle.y < angleMax) angle.y += addAngle;
 	if (detail.input->getPress(KeyCode::S) && angle.x > -angleMax) angle.x -= addAngle;
 	if (detail.input->getPress(KeyCode::W) && angle.x < angleMax) angle.x += addAngle;
 
+	// BBoxを切り替える
 	if (detail.input->getTrigger(KeyCode::F5)) drawingBBox = !drawingBBox;
 
-	// 発射
+	// 追尾ミサイルを発射する
 	if (homingMissile->getState() == HomingMissile::State::PAUSE && detail.input->getTrigger(KeyCode::E))
 		triggerHomingMissile(detail.gameObjects);
 
-	D3DXMATRIX mx;
-
-	mathutils::makeWorldMatrix(mx, mat, angle * detail.timer->getSeconds(), trans * detail.timer->getSeconds());
-	
 	if (homingMissile->getState() == HomingMissile::State::FOLLOWING) homingMissile->update(detail);
 
 	// ヒットしていたときの処理
 	if (homingMissile->getState() == HomingMissile::State::HIT) homingMissile->pause();
+
+	mathutils::makeWorldMatrixTotal(mat, angle * detail.timer->getSeconds(), trans * detail.timer->getSeconds());
 
 	bbox->updatePosition(mat);
 }

@@ -14,6 +14,7 @@
 namespace mathutils {
 	void makeWorldMatrix(D3DXMATRIX& mat, const D3DXVECTOR3& angle, const D3DXVECTOR3& trans);
 	void makeWorldMatrix(D3DXMATRIX& mat, D3DXMATRIX& mattotal, const D3DXVECTOR3& angle, const D3DXVECTOR3& trans);
+	const D3DXMATRIX makeWorldMatrixTotal(D3DXMATRIX& mattotal, const D3DXVECTOR3& angle, const D3DXVECTOR3& trans);
 }
 
 //******************************************************************************

@@ -68,9 +68,7 @@ void EnemyAirplane::update(const UpdateDetail& detail)
 			if (moveTimeline.size() == moveTimelineIndex) moveTimelineIndex = 0;
 		}
 
-		
-		D3DXMATRIX mx;
-		mathutils::makeWorldMatrix(mx, mat, angle * detail.timer->getSeconds(), trans * detail.timer->getSeconds());
+		mathutils::makeWorldMatrixTotal(mat, angle * detail.timer->getSeconds(), trans * detail.timer->getSeconds());
 		bbox->updatePosition(mat);
 	}
 }
