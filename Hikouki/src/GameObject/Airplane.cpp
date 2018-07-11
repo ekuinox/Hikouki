@@ -3,8 +3,8 @@
 #include "../GameObjectAttachments/Collider.h"
 
 Airplane::Airplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device)
-	: XFileObjectBase(_xfile), explosion_flag(false), explosion(new Explosion(xfile->GetMesh(), xfile->GetTextures()[0], device)),
-	bbox(new BoundingSphere(xfile->GetMesh(), device)), drawing_bbox(true), state(State::ALIVE)
+	: XFileObjectBase(_xfile), explosion(new Explosion(xfile->GetMesh(), xfile->GetTextures()[0], device)),
+	bbox(new BoundingSphere(xfile->GetMesh(), device)), drawingBBox(false), state(State::ALIVE)
 {
 }
 
@@ -17,41 +17,41 @@ Airplane::Airplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, const D3DXV
 void Airplane::draw(const LPDIRECT3DDEVICE9& device) const
 {
 	if (!drawing) return;
-	if (explosion_flag)
+
+	if (state == State::Explosion)
 	{
 		explosion->draw(device);
-		return;
 	}
-	device->SetTransform(D3DTS_WORLD, &mat);
-	xfile->Draw(device);
-	if (drawing_bbox) bbox->draw(device);
+	else
+	{
+		if (drawingBBox) bbox->draw(device);
+		XFileObjectBase::draw(device);
+	}
 }
 
 void Airplane::update(const UpdateDetail& detail)
 {
 	if (!active) return;
 
-	for (const auto& gameObject : detail.gameObjects)
-	{
-		if (gameObject->getUUID() == getUUID()) break; // é©ï™ÇèúäO
-
-		// Ç»Å`Å`Å`Å`Å`Å`Å`ÇÒÇ‡ÇÌÇ©ÇÁÇÒ
-
-		const auto hashCode = typeid(*gameObject).hash_code();
-
-		if (hashCode == typeid(Airplane).hash_code())
-		{
-			const auto& airplane = std::static_pointer_cast<Airplane>(gameObject);
-			auto colls = Collider::getCollisions({ getBBox() }, { airplane->getBBox() });
-		}
-	}
-
-	if (explosion_flag)
+	if (state == State::Explosion)
 	{
 		explosion->update(detail);
 	}
 	else
 	{
+		for (const auto& gameObject : detail.gameObjects)
+		{
+			if (gameObject->getUUID() == getUUID()) break; // é©ï™ÇèúäO
+
+			const auto hashCode = typeid(*gameObject).hash_code();
+
+			if (hashCode == typeid(Airplane).hash_code())
+			{
+				const auto& airplane = std::static_pointer_cast<Airplane>(gameObject);
+				auto colls = Collider::getCollisions({ getBBox() }, { airplane->getBBox() });
+			}
+		}
+
 		D3DXMATRIX mx;
 
 		mathutils::makeWorldMatrix(mx, mat, angle * detail.timer->getSeconds(), trans * detail.timer->getSeconds());
@@ -59,35 +59,13 @@ void Airplane::update(const UpdateDetail& detail)
 	}
 }
 
-void Airplane::startExplosion()
+void Airplane::triggerExplosion()
 {
-	if (explosion_flag) {
+	if (state == State::ALIVE)
+	{
+		explosion->triangleTransforms(getMat());
 		state = State::Explosion;
-		explosion->triangleTransforms(mat);
 	}
-}
-
-void Airplane::switchExplosion()
-{
-	explosion_flag = !explosion_flag;
-	startExplosion();
-}
-
-void Airplane::switchDrawBBox()
-{
-	switchDrawBBox(!drawing_bbox);
-}
-
-void Airplane::switchDrawBBox(bool new_drawing_bbox)
-{
-	drawing_bbox = new_drawing_bbox;
-}
-
-bool Airplane::triggerExplosion()
-{
-	explosion_flag = true;
-	startExplosion();
-	return explosion_flag;
 }
 
 BoundingSphere* Airplane::getBBox()

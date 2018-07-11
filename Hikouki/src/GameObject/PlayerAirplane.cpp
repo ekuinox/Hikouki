@@ -14,7 +14,6 @@ PlayerAirplane::PlayerAirplane(CDirect3DXFile * xfile, LPDIRECT3DDEVICE9 device,
 	homingMissile.first->disable();
 
 	trans.z = initSpeed;
-	drawing_bbox = false;
 
 	D3DXMatrixRotationY(&mat, D3DX_PI * 90.0f / 180.0f);
 }
@@ -28,6 +27,8 @@ void PlayerAirplane::update(const UpdateDetail & detail)
 	if (detail.input->getPress(KeyCode::D) && angle.y < angleMax) angle.y += addAngle;
 	if (detail.input->getPress(KeyCode::S) && angle.x > -angleMax) angle.x -= addAngle;
 	if (detail.input->getPress(KeyCode::W) && angle.x < angleMax) angle.x += addAngle;
+
+	if (detail.input->getTrigger(KeyCode::F5)) drawingBBox = !drawingBBox;
 
 	// ”­ŽË
 	if (!homingMissile.second && detail.input->getTrigger(KeyCode::E)) triggerHomingMissile(detail.gameObjects);
@@ -44,6 +45,8 @@ void PlayerAirplane::update(const UpdateDetail & detail)
 		homingMissile.second = false;
 		homingMissile.first->pause();
 	}
+
+	bbox->updatePosition(mat);
 }
 
 void PlayerAirplane::draw(const LPDIRECT3DDEVICE9 & device) const

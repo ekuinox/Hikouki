@@ -49,12 +49,14 @@ void EnemyAirplane::update(const UpdateDetail& detail)
 {
 	if (!active) return;
 
-	if (explosion_flag)
+	if (state == State::Explosion)
 	{
 		explosion->update(detail);
 	}
 	else
 	{
+		if (detail.input->getTrigger(KeyCode::F5)) drawingBBox = !drawingBBox;
+
 		rotationTimer->end();
 		if (rotationTimer->getSeconds() > moveTimeline[moveTimelineIndex].span)
 		{

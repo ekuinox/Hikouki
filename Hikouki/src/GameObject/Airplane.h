@@ -11,9 +11,7 @@ public:
 		EXIT,
 	};
 protected:
-	bool drawing_bbox;
-	bool explosion_flag;
-	void startExplosion();
+	bool drawingBBox;
 	Explosion* explosion;
 	BoundingSphere *bbox;
 	Airplane::State state;
@@ -22,10 +20,7 @@ public:
 	Airplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, const D3DXVECTOR3&);
 	void draw(const LPDIRECT3DDEVICE9&) const;
 	virtual void update(const UpdateDetail&);
-	void switchExplosion();
-	void switchDrawBBox();
-	void switchDrawBBox(bool);
-	bool triggerExplosion();
+	void triggerExplosion();
 	BoundingSphere* getBBox();
 	void addTrans(const D3DXVECTOR3& v);
 	void setTrans(const D3DXVECTOR3& v);
