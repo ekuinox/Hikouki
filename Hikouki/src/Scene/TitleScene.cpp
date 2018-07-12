@@ -48,10 +48,13 @@ void TitleScene::input()
 void TitleScene::update()
 {
 	for (const auto& gameObject : gameObjects) gameObject->update({ timer, inputDevice, gameObjects });
+	for (const auto& gameObject : gameObjects) gameObject->afterUpdate({ timer, inputDevice, gameObjects });
 }
 
 void TitleScene::render()
 {
+	for (const auto& gameObject : gameObjects) gameObject->beforeDraw(graphics->GetDXDevice());
+
 	graphics->Render([&](const LPDIRECT3DDEVICE9 device) {
 		for (const auto& gameObject : gameObjects) gameObject->draw(device);
 	});
