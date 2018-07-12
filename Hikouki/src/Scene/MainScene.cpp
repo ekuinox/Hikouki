@@ -10,7 +10,7 @@
 #include "../GameObject/Rader.h"
 
 MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, Input* _input, trau::Timer* _timer)
-	: Scene(_graphics, _xfileManager, _input, _timer)
+	: Scene(_graphics, _xfileManager, _input, _timer), pausing(false)
 {
 	xFileManager = new XFileManager(graphics->GetDXDevice());
 	xFileManager->add({
@@ -84,6 +84,13 @@ void MainScene::input()
 	try
 	{
 		inputDevice->update();
+
+		if (inputDevice->getTrigger(KeyCode::F3))
+		{
+			if (pausing) for (const auto& gameObject : gameObjects) gameObject->enable();
+			else for (const auto& gameObject : gameObjects) gameObject->disable();
+			pausing = !pausing;
+		}
 
 		if (inputDevice->getTrigger(KeyCode::Return)) state = State::Exit;
 	}

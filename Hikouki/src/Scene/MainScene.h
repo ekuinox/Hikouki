@@ -16,6 +16,7 @@ public:
 	Scene::State getState();
 private:
 	std::vector<std::shared_ptr<GameObjectInterface>> gameObjects;
+	bool pausing;
 
 	void sortGameObjectsLayer();
 	void sortGameObjectsPriority();

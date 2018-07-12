@@ -16,6 +16,8 @@ PlayerAirplane::PlayerAirplane(CDirect3DXFile * xfile, LPDIRECT3DDEVICE9 device,
 
 void PlayerAirplane::update(const UpdateDetail & detail)
 {
+	if (!active) return;
+
 	constexpr auto angleMax = 45.0f;
 	constexpr auto addAngle = 10.0f;
 
