@@ -63,7 +63,7 @@ void PlayerAirplane::triggerHomingMissile(const std::vector<std::shared_ptr<Game
 
 	for (const auto& gameObject : gameObjects)
 	{
-		if (typeid(*gameObject).hash_code() == typeid(EnemyAirplane).hash_code())
+		if (gameObject->getType() == GameObjectInterface::Type::EnemyAirplane)
 		{
 			auto _enemy = std::static_pointer_cast<EnemyAirplane>(gameObject);
 			const auto& _distance = Collider::calculateDistance(getPos(), _enemy->getPos());

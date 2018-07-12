@@ -39,17 +39,6 @@ void Airplane::update(const UpdateDetail& detail)
 	}
 	else
 	{
-		for (const auto& gameObject : detail.gameObjects)
-		{
-			if (gameObject->getUUID() == getUUID()) break; // Ž©•ª‚ðœŠO
-
-			if (gameObject->getType() == GameObjectInterface::Type::Airplane)
-			{
-				const auto& airplane = std::static_pointer_cast<Airplane>(gameObject);
-				auto colls = Collider::getCollisions({ getBBox() }, { airplane->getBBox() });
-			}
-		}
-
 		mathutils::makeWorldMatrixTotal(mat, angle * detail.timer->getSeconds(), trans * detail.timer->getSeconds());
 		bbox->updatePosition(mat);
 	}
