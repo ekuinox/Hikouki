@@ -132,6 +132,9 @@
     <ClInclude Include="src\GameObject\Camera.h">
       <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="src\GameObject\Skydome.h">
+      <Filter>ヘッダー ファイル\GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp">
@@ -198,6 +201,9 @@
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="src\GameObject\Camera.cpp">
+      <Filter>ソース ファイル\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObject\Skydome.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
   </ItemGroup>

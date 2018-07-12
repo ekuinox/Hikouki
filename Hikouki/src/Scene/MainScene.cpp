@@ -6,6 +6,7 @@
 #include "../GameObjectAttachments/Collider.h"
 #include "../GameObject/PlayerAirplane.h"
 #include "../GameObject/Camera.h"
+#include "../GameObject/Skydome.h"
 
 MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, Input* _input, trau::Timer* _timer)
 	: Scene(_graphics, _xfileManager, _input, _timer)
@@ -16,7 +17,7 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 		{ "Skydome", "assets/skydome.x" } // スカイドーム
 	});
 
-	gameObjects.emplace_back(new XFileObjectBase(xFileManager->get("Skydome")));
+	gameObjects.emplace_back(new Skydome(xFileManager->get("Skydome"), graphics->GetDXDevice()));
 
 	// 敵を5体生成する
 	for (auto i = 0; i < 5; ++i)
