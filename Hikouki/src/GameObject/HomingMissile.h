@@ -17,6 +17,7 @@ public:
 	static constexpr unsigned int id = XFileObjectBase::id * 100 + 2;
 	static constexpr auto missileSpeed = 30.0f;
 	HomingMissile(CDirect3DXFile* _xfile, std::shared_ptr<XFileObjectBase> _target, const float& maxAngle, const D3DXVECTOR3& _position,const D3DXVECTOR3& _velocity, LPDIRECT3DDEVICE9 device);
+	~HomingMissile();
 	void pause();
 	void trigger(const std::shared_ptr<XFileObjectBase>& _target, const D3DXMATRIX& _owner_mat);
 	void update(const UpdateDetail&);

@@ -5,6 +5,11 @@ GameObject::GameObject()
 {
 }
 
+GameObject::~GameObject()
+{
+
+}
+
 void GameObject::beforeDraw(const LPDIRECT3DDEVICE9 &)
 {
 }

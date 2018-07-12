@@ -27,6 +27,7 @@ public:
 		std::vector<std::shared_ptr<GameObjectInterface>> gameObjects;
 	};
 	GameObjectInterface() : uuid(trau::utils::generateUUID()) {}
+	virtual ~GameObjectInterface() {}
 	virtual void beforeDraw(const LPDIRECT3DDEVICE9&) = 0;
 	virtual void draw(const LPDIRECT3DDEVICE9&) const = 0;
 	virtual void update(const UpdateDetail&) = 0;
@@ -46,6 +47,7 @@ class GameObject : public GameObjectInterface
 public:
 	static constexpr unsigned int id = GameObjectInterface::id + 1;
 	GameObject();
+	virtual ~GameObject();
 	virtual void beforeDraw(const LPDIRECT3DDEVICE9&);
 	virtual void draw(const LPDIRECT3DDEVICE9&) const;
 	virtual void update(const UpdateDetail&);

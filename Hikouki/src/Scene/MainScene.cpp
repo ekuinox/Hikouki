@@ -46,6 +46,11 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 	});
 }
 
+MainScene::~MainScene()
+{
+	gameObjects.clear();
+}
+
 Scene::State MainScene::exec()
 {
 	timer->run([&] {

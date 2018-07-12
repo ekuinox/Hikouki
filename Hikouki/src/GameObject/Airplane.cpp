@@ -14,6 +14,12 @@ Airplane::Airplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, const D3DXV
 	D3DXMatrixTranslation(&mat, coord.x, coord.y, coord.z);
 }
 
+Airplane::~Airplane()
+{
+	delete explosion;
+	delete bbox;
+}
+
 void Airplane::draw(const LPDIRECT3DDEVICE9& device) const
 {
 	if (!drawing) return;

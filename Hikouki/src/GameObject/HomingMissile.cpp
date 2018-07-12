@@ -12,6 +12,11 @@ HomingMissile::HomingMissile(CDirect3DXFile * _xfile, std::shared_ptr<XFileObjec
 	D3DXQuaternionRotationMatrix(&attitude, &mat);
 }
 
+HomingMissile::~HomingMissile()
+{
+	delete bbox;
+}
+
 void HomingMissile::pause()
 {
 	state = State::PAUSE;

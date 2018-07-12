@@ -12,6 +12,7 @@
 class MainScene : public Scene {
 public:
 	MainScene(CDirectXGraphics*, XFileManager*, Input*, trau::Timer*);
+	~MainScene();
 	Scene::State exec();
 	Scene::State getState();
 private:

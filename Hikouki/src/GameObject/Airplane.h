@@ -19,6 +19,7 @@ public:
 	static constexpr unsigned int id = XFileObjectBase::id * 100 + 1;
 	Airplane(CDirect3DXFile*, LPDIRECT3DDEVICE9);
 	Airplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, const D3DXVECTOR3&);
+	virtual ~Airplane();
 	void draw(const LPDIRECT3DDEVICE9&) const;
 	virtual void update(const UpdateDetail&);
 	void triggerExplosion();
