@@ -37,7 +37,7 @@ void TitleScene::input()
 	{
 		inputDevice->update();
 	}
-	catch (const char* e)
+	catch (...)
 	{
 		return;
 	}
