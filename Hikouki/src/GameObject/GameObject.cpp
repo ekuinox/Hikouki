@@ -5,6 +5,10 @@ GameObject::GameObject()
 {
 }
 
+void GameObject::beforeDraw(const LPDIRECT3DDEVICE9 &)
+{
+}
+
 void GameObject::draw(const LPDIRECT3DDEVICE9&) const
 {
 	if (!drawing) return;
@@ -13,6 +17,10 @@ void GameObject::draw(const LPDIRECT3DDEVICE9&) const
 void GameObject::update(const UpdateDetail & detail)
 {
 	if (!active) return;
+}
+
+void GameObject::afterUpdate(const UpdateDetail &)
+{
 }
 
 void GameObject::show()

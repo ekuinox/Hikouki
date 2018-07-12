@@ -23,6 +23,7 @@
     <ClInclude Include="src\GameObjectAttachments\BoundingSphere.h" />
     <ClInclude Include="src\GameObjectAttachments\Collider.h" />
     <ClInclude Include="src\GameObject\Airplane.h" />
+    <ClInclude Include="src\GameObject\Camera.h" />
     <ClInclude Include="src\GameObject\EnemyAirplane.h" />
     <ClInclude Include="src\GameObject\Explosion.h" />
     <ClInclude Include="src\GameObject\GameObject.h" />
@@ -35,7 +36,6 @@
     <ClInclude Include="src\Manager\EventMachine.h" />
     <ClInclude Include="src\Manager\GameController.h" />
     <ClInclude Include="src\Manager\XFileManager.h" />
-    <ClInclude Include="src\SceneAttachments\Camera.h" />
     <ClInclude Include="src\SceneAttachments\Timer.h" />
     <ClInclude Include="src\Scene\MainScene.h" />
     <ClInclude Include="src\Scene\Scene.h" />
@@ -51,6 +51,7 @@
     <ClCompile Include="src\GameObjectAttachments\BoundingSphere.cpp" />
     <ClCompile Include="src\GameObjectAttachments\Collider.cpp" />
     <ClCompile Include="src\GameObject\Airplane.cpp" />
+    <ClCompile Include="src\GameObject\Camera.cpp" />
     <ClCompile Include="src\GameObject\EnemyAirplane.cpp" />
     <ClCompile Include="src\GameObject\Explosion.cpp" />
     <ClCompile Include="src\GameObject\GameObject.cpp" />
@@ -63,7 +64,6 @@
     <ClCompile Include="src\Manager\CDirectXGraphics.cpp" />
     <ClCompile Include="src\Manager\GameController.cpp" />
     <ClCompile Include="src\Manager\XFileManager.cpp" />
-    <ClCompile Include="src\SceneAttachments\Camera.cpp" />
     <ClCompile Include="src\Scene\MainScene.cpp" />
     <ClCompile Include="src\Scene\TitleScene.cpp" />
     <ClCompile Include="src\Utils\CDirect3DXFile.cpp" />

@@ -66,9 +66,6 @@
     <ClInclude Include="src\Utils\CDirect3DXFile.h">
       <Filter>ヘッダー ファイル\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\SceneAttachments\Camera.h">
-      <Filter>ヘッダー ファイル\SceneAttachments</Filter>
-    </ClInclude>
     <ClInclude Include="src\SceneAttachments\Timer.h">
       <Filter>ヘッダー ファイル\SceneAttachments</Filter>
     </ClInclude>
@@ -132,6 +129,9 @@
     <ClInclude Include="src\GameObject\PlayerAirplane.h">
       <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="src\GameObject\Camera.h">
+      <Filter>ヘッダー ファイル\GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp">
@@ -167,9 +167,6 @@
     <ClCompile Include="src\Manager\GameController.cpp">
       <Filter>ソース ファイル\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="src\SceneAttachments\Camera.cpp">
-      <Filter>ソース ファイル\SceneAttachments</Filter>
-    </ClCompile>
     <ClCompile Include="src\Scene\MainScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
@@ -198,6 +195,9 @@
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="src\GameObject\PlayerAirplane.cpp">
+      <Filter>ソース ファイル\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObject\Camera.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
   </ItemGroup>

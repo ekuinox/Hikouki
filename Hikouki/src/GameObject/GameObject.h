@@ -32,6 +32,7 @@ public:
 		EnemyAirplane,
 		PlayerAirplane,
 		HomingMissile,
+		Camera
 	};
 	struct UpdateDetail {
 		trau::Timer * timer;
@@ -39,8 +40,10 @@ public:
 		std::vector<std::shared_ptr<GameObjectInterface>> gameObjects;
 	};
 	GameObjectInterface() : uuid(trau::utils::generateUUID()) {}
+	virtual void beforeDraw(const LPDIRECT3DDEVICE9&) = 0;
 	virtual void draw(const LPDIRECT3DDEVICE9&) const = 0;
 	virtual void update(const UpdateDetail&) = 0;
+	virtual void afterUpdate(const UpdateDetail&) = 0;
 	virtual void show() = 0;
 	virtual void hide() = 0;
 	virtual void enable() = 0;
@@ -57,8 +60,10 @@ class GameObject : public GameObjectInterface
 {
 public:
 	GameObject();
+	virtual void beforeDraw(const LPDIRECT3DDEVICE9&);
 	virtual void draw(const LPDIRECT3DDEVICE9&) const;
 	virtual void update(const UpdateDetail&);
+	virtual void afterUpdate(const UpdateDetail&);
 	virtual void show();
 	virtual void hide();
 	virtual void enable();
