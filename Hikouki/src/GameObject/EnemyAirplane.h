@@ -7,7 +7,7 @@
 
 class EnemyAirplane : public Airplane {
 public:
-	static constexpr unsigned int id = Airplane::id * 100 + 3;
+	static constexpr unsigned int id = Airplane::id * 100 + 2;
 	static constexpr auto rotationSpanSeconds = 1.0f;
 	static constexpr auto initSpeed = 20.0f;
 	struct Moves {

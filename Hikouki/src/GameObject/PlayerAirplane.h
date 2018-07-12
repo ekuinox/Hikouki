@@ -8,7 +8,7 @@
 class PlayerAirplane : public Airplane
 {
 public:
-	static constexpr auto id = Airplane::id * 100 + 1;
+	static constexpr unsigned int id = Airplane::id * 100 + 1;
 	static constexpr auto initSpeed = 10.0f;
 	enum class State {
 		ALIVE,

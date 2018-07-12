@@ -7,7 +7,7 @@
 
 class Explosion : public GameObject {
 public:
-	static constexpr unsigned int id = GameObject::id + 4;
+	static constexpr unsigned int id = GameObject::id * 100 + 3;
 
 	static constexpr auto D3DFVFCUSTOM_VERTEX = D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1;
 	static constexpr auto GRAVITY = 9.8f;

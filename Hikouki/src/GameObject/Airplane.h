@@ -16,7 +16,7 @@ protected:
 	BoundingSphere *bbox;
 	Airplane::State state;
 public:
-	static constexpr unsigned int id = XFileObjectBase::id + 1;
+	static constexpr unsigned int id = XFileObjectBase::id * 100 + 1;
 	Airplane(CDirect3DXFile*, LPDIRECT3DDEVICE9);
 	Airplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, const D3DXVECTOR3&);
 	void draw(const LPDIRECT3DDEVICE9&) const;

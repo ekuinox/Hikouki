@@ -12,7 +12,7 @@ protected:
 	CDirect3DXFile *xfile;
 	D3DXVECTOR3 angle, trans; // ˆÚ“®—Ê
 public:
-	static constexpr unsigned int id = GameObject::id * 10;
+	static constexpr unsigned int id = GameObject::id * 100 + 1;
 	XFileObjectBase(CDirect3DXFile*);
 	virtual void draw(const LPDIRECT3DDEVICE9&) const;
 	D3DXMATRIX getMat() const;

@@ -12,6 +12,7 @@ public:
 		TPS,
 		OVER
 	};
+	static constexpr unsigned int id = GameObject::id * 100 + 2;
 	Camera(const std::shared_ptr<XFileObjectBase>&, const int&, const int&);
 	void afterUpdate(const UpdateDetail&);
 	void beforeDraw(const LPDIRECT3DDEVICE9&);

@@ -22,7 +22,7 @@ namespace trau
 		LPD3DXFONT font;
 		RECT *rect;
 	public:
-		static constexpr unsigned int id = GameObject::id + 2;
+		static constexpr unsigned int id = GameObject::id * 100 + 4;
 		TextArea(LPDIRECT3DDEVICE9, int, int, const std::string&);
 		TextArea(LPDIRECT3DDEVICE9, int, int);
 		TextArea(LPDIRECT3DDEVICE9);

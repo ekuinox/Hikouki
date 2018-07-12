@@ -6,7 +6,7 @@
 
 class Plain2D : public GameObject {
 public:
-	static constexpr unsigned int id = GameObject::id + 3;
+	static constexpr unsigned int id = GameObject::id * 100 + 5;
 	static constexpr auto FVF_VERTEX_2D = D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1;
 	struct TextureSets {
 		LPDIRECT3DTEXTURE9 image;
