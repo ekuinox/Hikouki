@@ -9,6 +9,14 @@ Skydome::Skydome(CDirect3DXFile * xfile, LPDIRECT3DDEVICE9 device)
 
 void Skydome::update(const UpdateDetail & detail)
 {
-	// ここでいい感じに他のオブジェクトが範囲外にでないようにする
-	auto r = bbox->getR();
+}
+
+const std::unique_ptr<BoundingSphere>& Skydome::getBBox() const
+{
+	return bbox;
+}
+
+const GameObjectInterface::Type Skydome::getType() const
+{
+	return GameObjectInterface::Type::Skydome;
 }

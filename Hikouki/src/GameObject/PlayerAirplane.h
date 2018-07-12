@@ -8,7 +8,7 @@
 class PlayerAirplane : public Airplane
 {
 public:
-	static constexpr auto initSpeed = 20.0f;
+	static constexpr auto initSpeed = 100.0f;
 	enum class State {
 		ALIVE,
 		EXPLOSION
@@ -21,6 +21,7 @@ private:
 	std::shared_ptr<EnemyAirplane> enemy;
 	std::unique_ptr<HomingMissile> homingMissile;
 	void triggerHomingMissile(const std::vector<std::shared_ptr<GameObjectInterface>>&);
+	void onOutside();
 };
 
 #define ___PLAYER_AIRPLANE_H

@@ -1,6 +1,7 @@
 #include "PlayerAirplane.h"
 #include "../Utils/MathUtil.h"
 #include "../GameObjectAttachments/Collider.h"
+#include "../GameObject/Skydome.h"
 
 PlayerAirplane::PlayerAirplane(CDirect3DXFile * xfile, LPDIRECT3DDEVICE9 device, const D3DXVECTOR3 & coord)
 	: Airplane(xfile, device, coord), enemy(nullptr)
@@ -39,6 +40,21 @@ void PlayerAirplane::update(const UpdateDetail & detail)
 	// ヒットしていたときの処理
 	if (homingMissile->getState() == HomingMissile::State::HIT) homingMissile->pause();
 
+	// スカイドームの外
+	for (const auto& gameObject : detail.gameObjects)
+	{
+		if (gameObject->getType() == GameObjectInterface::Type::Skydome)
+		{
+			const auto& r = std::static_pointer_cast<Skydome>(gameObject)->getBBox().get()->getR();
+			
+			// 画面端の判定
+			if (fabs(getPos().x) > r || fabs(getPos().y) > r || fabs(getPos().z > r))
+			{
+				onOutside();
+			}
+		}
+	}
+
 	mathutils::makeWorldMatrixTotal(mat, angle * detail.timer->getSeconds(), trans * detail.timer->getSeconds());
 
 	bbox->updatePosition(mat);
@@ -76,4 +92,9 @@ void PlayerAirplane::triggerHomingMissile(const std::vector<std::shared_ptr<Game
 	}
 
 	if (enemy != nullptr) homingMissile->trigger(enemy, getMat());
+}
+
+void PlayerAirplane::onOutside()
+{
+	triggerExplosion();
 }

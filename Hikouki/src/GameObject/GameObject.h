@@ -32,7 +32,8 @@ public:
 		EnemyAirplane,
 		PlayerAirplane,
 		HomingMissile,
-		Camera
+		Camera,
+		Skydome
 	};
 	struct UpdateDetail {
 		trau::Timer * timer;
