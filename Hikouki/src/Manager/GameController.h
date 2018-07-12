@@ -20,6 +20,8 @@ private:
 	std::vector<std::unique_ptr<Scene>> scenes;
 	XFileManager *xFileManager;
 	int width, height;
+
+	void initScenes();
 public:
 	GameController(HINSTANCE, HWND, int, int, bool);
 	~GameController();

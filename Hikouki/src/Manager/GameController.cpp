@@ -3,6 +3,17 @@
 #include "../Scene/TitleScene.h"
 #include "../Scene/ResultScene.h"
 
+void GameController::initScenes()
+{
+	scenes.clear();
+
+	scenes.emplace_back(std::unique_ptr<TitleScene>(new TitleScene(graphics, xFileManager, inputDevice, timer)));
+	scenes.emplace_back(std::unique_ptr<MainScene>(new MainScene(graphics, xFileManager, inputDevice, timer)));
+	scenes.emplace_back(std::unique_ptr<ResultScene>(new ResultScene(graphics, xFileManager, inputDevice, timer)));
+
+	currentSceneIndex = 0;
+}
+
 GameController::GameController(HINSTANCE hinst, HWND hwnd, int _width, int _height, bool fullscreen)
 	: width(_width), height(_height)
 {
@@ -19,11 +30,7 @@ GameController::GameController(HINSTANCE hinst, HWND hwnd, int _width, int _heig
 
 	xFileManager = new XFileManager(graphics->GetDXDevice());
 
-	scenes.emplace_back(std::unique_ptr<TitleScene>(new TitleScene(graphics, xFileManager, inputDevice, timer)));
-	scenes.emplace_back(std::unique_ptr<MainScene>(new MainScene(graphics, xFileManager, inputDevice, timer)));
-	scenes.emplace_back(std::unique_ptr<ResultScene>(new ResultScene(graphics, xFileManager, inputDevice, timer)));
-
-	currentSceneIndex = 0;
+	initScenes();
 
 	Start();
 }
@@ -45,8 +52,6 @@ void GameController::main()
 {
 	if (scenes[currentSceneIndex]->exec() == Scene::State::Exit) {
 		currentSceneIndex++;
-		if (currentSceneIndex == scenes.size()) {
-			state = State::Exit;
-		}
+		if (currentSceneIndex == scenes.size()) initScenes();
 	}
 }
