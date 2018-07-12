@@ -1,17 +1,18 @@
 #pragma once
 
-#ifndef ___TITLE_SCENE_H
-#define ___TITLE_SCENE_H
+#ifndef ___RESULT_SCENE_H
+
+#include "Scene.h"
 
 #include "Scene.h"
 #include <vector>
 #include <memory>
 #include "../GameObject/GameObject.h"
 
-class TitleScene : public Scene {
+class ResultScene : public Scene {
 public:
-	TitleScene(CDirectXGraphics*, XFileManager*, Input*, trau::Timer*);
-	~TitleScene();
+	ResultScene(CDirectXGraphics*, XFileManager*, Input*, trau::Timer*);
+	~ResultScene();
 	Scene::State exec();
 	Scene::State getState();
 private:
@@ -22,4 +23,5 @@ private:
 	std::vector<std::shared_ptr<GameObjectInterface>> gameObjects;
 };
 
+#define ___RESULT_SCENE_H
 #endif

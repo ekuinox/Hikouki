@@ -40,6 +40,7 @@
     <ClInclude Include="src\Manager\XFileManager.h" />
     <ClInclude Include="src\SceneAttachments\Timer.h" />
     <ClInclude Include="src\Scene\MainScene.h" />
+    <ClInclude Include="src\Scene\ResultScene.h" />
     <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Scene\TitleScene.h" />
     <ClInclude Include="src\Utils\CDirect3DXFile.h" />
@@ -69,6 +70,7 @@
     <ClCompile Include="src\Manager\GameController.cpp" />
     <ClCompile Include="src\Manager\XFileManager.cpp" />
     <ClCompile Include="src\Scene\MainScene.cpp" />
+    <ClCompile Include="src\Scene\ResultScene.cpp" />
     <ClCompile Include="src\Scene\TitleScene.cpp" />
     <ClCompile Include="src\Utils\CDirect3DXFile.cpp" />
     <ClCompile Include="src\Utils\Input.cpp" />

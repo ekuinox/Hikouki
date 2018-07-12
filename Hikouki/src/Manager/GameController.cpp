@@ -1,6 +1,7 @@
 #include "GameController.h"
 #include "../Scene/MainScene.h"
 #include "../Scene/TitleScene.h"
+#include "../Scene/ResultScene.h"
 
 GameController::GameController(HINSTANCE hinst, HWND hwnd, int _width, int _height, bool fullscreen)
 	: width(_width), height(_height)
@@ -20,6 +21,7 @@ GameController::GameController(HINSTANCE hinst, HWND hwnd, int _width, int _heig
 
 	scenes.emplace_back(std::unique_ptr<TitleScene>(new TitleScene(graphics, xFileManager, inputDevice, timer)));
 	scenes.emplace_back(std::unique_ptr<MainScene>(new MainScene(graphics, xFileManager, inputDevice, timer)));
+	scenes.emplace_back(std::unique_ptr<ResultScene>(new ResultScene(graphics, xFileManager, inputDevice, timer)));
 
 	currentSceneIndex = 0;
 
