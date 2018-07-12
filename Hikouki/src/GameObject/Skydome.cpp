@@ -15,8 +15,3 @@ const std::unique_ptr<BoundingSphere>& Skydome::getBBox() const
 {
 	return bbox;
 }
-
-const GameObjectInterface::Type Skydome::getType() const
-{
-	return GameObjectInterface::Type::Skydome;
-}

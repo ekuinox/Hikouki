@@ -6,6 +6,7 @@
 
 class Plain2D : public GameObject {
 public:
+	static constexpr unsigned int id = GameObject::id + 3;
 	static constexpr auto FVF_VERTEX_2D = D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1;
 	struct TextureSets {
 		LPDIRECT3DTEXTURE9 image;
@@ -23,7 +24,7 @@ public:
 
 	Plain2D(const D3DVECTOR& _center, const D3DVECTOR& _size, const TextureSets& _texture);
 	virtual void draw(const LPDIRECT3DDEVICE9&) const;
-	const GameObjectInterface::Type getType() const;
+	virtual unsigned int getId() const { return id; }
 protected:
 	D3DVECTOR center;
 	D3DVECTOR size;

@@ -17,7 +17,7 @@ public:
 	void beforeDraw(const LPDIRECT3DDEVICE9&);
 	const D3DXMATRIX& getView() const;
 	const D3DXMATRIX& getProj() const;
-	const GameObjectInterface::Type getType() const;
+	virtual unsigned int getId() const { return id; }
 private:
 	State state;
 	std::shared_ptr<XFileObjectBase> target;

@@ -7,6 +7,8 @@
 
 class Explosion : public GameObject {
 public:
+	static constexpr unsigned int id = GameObject::id + 4;
+
 	static constexpr auto D3DFVFCUSTOM_VERTEX = D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1;
 	static constexpr auto GRAVITY = 9.8f;
 
@@ -15,7 +17,7 @@ public:
 	void draw(const LPDIRECT3DDEVICE9&) const;
 	void update(const UpdateDetail&);
 	void triangleTransforms(const D3DXMATRIX& mat);
-	const GameObjectInterface::Type getType() const;
+	virtual unsigned int getId() const { return id; }
 private:
 	struct Connect {
 		WORD idx[3];

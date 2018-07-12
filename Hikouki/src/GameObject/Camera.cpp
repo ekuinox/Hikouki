@@ -45,11 +45,6 @@ const D3DXMATRIX& Camera::getProj() const
 	return proj;
 }
 
-const GameObjectInterface::Type Camera::getType() const
-{
-	return GameObjectInterface::Type::Camera;
-}
-
 void Camera::onFPS(const UpdateDetail& detail, const D3DXMATRIX& mat)
 {
 	if (detail.input->getTrigger(KeyCode::V))

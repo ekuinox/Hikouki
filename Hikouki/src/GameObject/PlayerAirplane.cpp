@@ -43,7 +43,7 @@ void PlayerAirplane::update(const UpdateDetail & detail)
 	// スカイドームの外
 	for (const auto& gameObject : detail.gameObjects)
 	{
-		if (gameObject->getType() == GameObjectInterface::Type::Skydome)
+		if (gameObject->getId() == Skydome::id)
 		{
 			const auto& r = std::static_pointer_cast<Skydome>(gameObject)->getBBox().get()->getR();
 			
@@ -66,11 +66,6 @@ void PlayerAirplane::draw(const LPDIRECT3DDEVICE9 & device) const
 	if (homingMissile->getState() == HomingMissile::State::FOLLOWING) homingMissile->draw(device);
 }
 
-const GameObjectInterface::Type PlayerAirplane::getType() const
-{
-	return GameObjectInterface::Type::PlayerAirplane;
-}
-
 void PlayerAirplane::triggerHomingMissile(const std::vector<std::shared_ptr<GameObjectInterface>>& gameObjects)
 {
 	// 一番近い敵を見つけ出す
@@ -79,7 +74,7 @@ void PlayerAirplane::triggerHomingMissile(const std::vector<std::shared_ptr<Game
 
 	for (const auto& gameObject : gameObjects)
 	{
-		if (gameObject->getType() == GameObjectInterface::Type::EnemyAirplane)
+		if (gameObject->getId() == EnemyAirplane::id)
 		{
 			auto _enemy = std::static_pointer_cast<EnemyAirplane>(gameObject);
 			const auto& _distance = Collider::calculateDistance(getPos(), _enemy->getPos());

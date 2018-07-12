@@ -72,8 +72,3 @@ Airplane::State Airplane::getState()
 {
 	return state;
 }
-
-const GameObjectInterface::Type Airplane::getType() const
-{
-	return GameObjectInterface::Type::Airplane;
-}

@@ -8,7 +8,8 @@
 class PlayerAirplane : public Airplane
 {
 public:
-	static constexpr auto initSpeed = 100.0f;
+	static constexpr auto id = Airplane::id * 100 + 1;
+	static constexpr auto initSpeed = 10.0f;
 	enum class State {
 		ALIVE,
 		EXPLOSION
@@ -16,7 +17,7 @@ public:
 	PlayerAirplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, const D3DXVECTOR3&);
 	void update(const UpdateDetail&);
 	void draw(const LPDIRECT3DDEVICE9&) const;
-	const GameObjectInterface::Type getType() const;
+	virtual unsigned int getId() const { return id; }
 private:
 	std::shared_ptr<EnemyAirplane> enemy;
 	std::unique_ptr<HomingMissile> homingMissile;

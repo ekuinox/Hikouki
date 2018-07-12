@@ -34,8 +34,3 @@ void trau::TextArea::draw(const LPDIRECT3DDEVICE9&) const
 	// •`‰æ
 	font->DrawText(NULL, text.c_str(), -1, rect, DT_LEFT | DT_BOTTOM, _color);
 }
-
-const GameObjectInterface::Type trau::TextArea::getType() const
-{
-	return GameObjectInterface::Type::TextArea;
-}

@@ -28,6 +28,11 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 	gameObjects.emplace_back(cameraTarget);
 	gameObjects.emplace_back(new Camera(cameraTarget, graphics->GetWidth(), graphics->GetHeight()));
 
+	for (const auto& gameObject : gameObjects)
+	{
+		auto id = gameObject->getId();
+	}
+
 	// 初期設定
 	graphics->SetRenderStateArray({
 		{ D3DRS_ZENABLE, TRUE }, // Ｚバッファ有効

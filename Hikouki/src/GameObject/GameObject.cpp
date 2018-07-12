@@ -52,8 +52,3 @@ unsigned int GameObject::getPriority() const
 {
 	return priority;
 }
-
-const GameObjectInterface::Type GameObject::getType() const
-{
-	return Type::GameObject;
-}

@@ -8,10 +8,11 @@
 
 class Skydome : public XFileObjectBase {
 public:
+	static constexpr unsigned int id = XFileObjectBase::id + 2;
 	Skydome(CDirect3DXFile*, LPDIRECT3DDEVICE9);
 	void update(const UpdateDetail&);
 	const std::unique_ptr<BoundingSphere>& getBBox() const;
-	const GameObjectInterface::Type getType() const;
+	virtual unsigned int getId() const { return id; }
 private:
 	std::unique_ptr<BoundingSphere> bbox;
 };

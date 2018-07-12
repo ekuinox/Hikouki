@@ -72,8 +72,3 @@ void EnemyAirplane::update(const UpdateDetail& detail)
 		bbox->updatePosition(mat);
 	}
 }
-
-const GameObjectInterface::Type EnemyAirplane::getType() const
-{
-	return GameObjectInterface::Type::EnemyAirplane;
-}

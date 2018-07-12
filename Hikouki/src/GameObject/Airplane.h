@@ -16,6 +16,7 @@ protected:
 	BoundingSphere *bbox;
 	Airplane::State state;
 public:
+	static constexpr unsigned int id = XFileObjectBase::id + 1;
 	Airplane(CDirect3DXFile*, LPDIRECT3DDEVICE9);
 	Airplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, const D3DXVECTOR3&);
 	void draw(const LPDIRECT3DDEVICE9&) const;
@@ -25,5 +26,5 @@ public:
 	void addTrans(const D3DXVECTOR3& v);
 	void setTrans(const D3DXVECTOR3& v);
 	Airplane::State getState();
-	const GameObjectInterface::Type getType() const;
+	virtual unsigned int getId() const { return id; }
 };

@@ -143,11 +143,6 @@ void Explosion::triangleTransforms(const D3DXMATRIX& mat)
 	return;
 }
 
-const GameObjectInterface::Type Explosion::getType() const
-{
-	return GameObjectInterface::Type::Explosion;
-}
-
 void Explosion::createTriangleFromMesh(const LPD3DXMESH& mesh, const LPDIRECT3DDEVICE9& device)
 {
 	LPDIRECT3DVERTEXBUFFER9 vertexBuffer;
