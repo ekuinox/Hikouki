@@ -18,6 +18,8 @@ public:
 	void update(const UpdateDetail&);
 	void draw(const LPDIRECT3DDEVICE9&) const;
 	virtual unsigned int getId() const { return id; }
+
+	std::vector<D3DXVECTOR3> getHomingMissilePositions();
 private:
 	std::shared_ptr<EnemyAirplane> enemy;
 	std::unique_ptr<HomingMissile> homingMissile;

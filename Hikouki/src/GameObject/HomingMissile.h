@@ -14,7 +14,7 @@ public:
 		HIT,
 		EXIT,
 	};
-	static constexpr unsigned int id = XFileObjectBase::id * 100 + 2;
+	static constexpr unsigned int id = XFileObjectBase::id * 100 + 20;
 	static constexpr auto missileSpeed = 30.0f;
 	HomingMissile(CDirect3DXFile* _xfile, std::shared_ptr<XFileObjectBase> _target, const float& maxAngle, const D3DXVECTOR3& _position,const D3DXVECTOR3& _velocity, LPDIRECT3DDEVICE9 device);
 	void pause();
@@ -22,7 +22,7 @@ public:
 	void update(const UpdateDetail&);
 	void draw(const LPDIRECT3DDEVICE9&) const;
 	HomingMissile::State getState() const;
-	virtual unsigned int getId() const { return id; }
+	virtual unsigned int getId() const { return HomingMissile::id; }
 protected:
 	D3DXQUATERNION RotationArc(D3DXVECTOR3 v0, D3DXVECTOR3 v1, double& d);
 	std::shared_ptr<XFileObjectBase> target;

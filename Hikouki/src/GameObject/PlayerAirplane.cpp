@@ -66,6 +66,15 @@ void PlayerAirplane::draw(const LPDIRECT3DDEVICE9 & device) const
 	if (homingMissile->getState() == HomingMissile::State::FOLLOWING) homingMissile->draw(device);
 }
 
+std::vector<D3DXVECTOR3> PlayerAirplane::getHomingMissilePositions()
+{
+	std::vector<D3DXVECTOR3> result = {};
+
+	if (homingMissile->getState() == HomingMissile::State::FOLLOWING) result.emplace_back(homingMissile->getPos());
+
+	return result;
+}
+
 void PlayerAirplane::triggerHomingMissile(const std::vector<std::shared_ptr<GameObjectInterface>>& gameObjects)
 {
 	// ˆê”Ô‹ß‚¢“G‚ğŒ©‚Â‚¯o‚·

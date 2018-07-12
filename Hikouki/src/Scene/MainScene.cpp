@@ -7,6 +7,7 @@
 #include "../GameObject/PlayerAirplane.h"
 #include "../GameObject/Camera.h"
 #include "../GameObject/Skydome.h"
+#include "../GameObject/Rader.h"
 
 MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, Input* _input, trau::Timer* _timer)
 	: Scene(_graphics, _xfileManager, _input, _timer)
@@ -27,7 +28,7 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 	const auto& cameraTarget = std::shared_ptr<XFileObjectBase>(new PlayerAirplane(xFileManager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3{ 0, 0, 0 }));
 	gameObjects.emplace_back(cameraTarget);
 	gameObjects.emplace_back(new Camera(cameraTarget, graphics->GetWidth(), graphics->GetHeight()));
-
+	gameObjects.emplace_back(new Rader(cameraTarget, { 100, 100 }, 80));
 	for (const auto& gameObject : gameObjects)
 	{
 		auto id = gameObject->getId();
