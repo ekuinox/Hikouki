@@ -43,6 +43,7 @@ GameController::~GameController()
 		scenes.clear();
 		graphics->Exit();
 		delete graphics;
+		delete xFileManager;
 	}
 
 	delete inputDevice;

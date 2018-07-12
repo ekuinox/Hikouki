@@ -5,6 +5,14 @@ XFileManager::XFileManager(LPDIRECT3DDEVICE9 _device)
 {
 }
 
+XFileManager::~XFileManager()
+{
+	for (const auto& xfile : xfiles)
+	{
+		delete xfile.second.xfile;
+	}
+}
+
 void XFileManager::add(const char * key, const char * filename)
 {
 	if (!xfiles.count(key)) xfiles[key].xfile = new CDirect3DXFile(filename, device);
