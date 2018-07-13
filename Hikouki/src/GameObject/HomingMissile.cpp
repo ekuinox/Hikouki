@@ -90,6 +90,31 @@ void HomingMissile::update(const UpdateDetail& detail)
 					disable();
 				}
 			}
+			else if (airplane->getUUID() == target->getUUID())
+			{
+				// “G‚ÌÄİ’è
+
+				// ˆê”Ô‹ß‚¢“G‚ğŒ©‚Â‚¯o‚·
+				std::shared_ptr<EnemyAirplane> enemy = nullptr;
+				float distance = 0.0f;
+
+				for (const auto& gameObject : detail.gameObjects)
+				{
+					if (gameObject->getId() == EnemyAirplane::id)
+					{
+						auto _enemy = std::static_pointer_cast<EnemyAirplane>(gameObject);
+						const auto& _distance = Collider::calculateDistance(getPos(), _enemy->getPos());
+						if (_enemy->getState() == Airplane::State::ALIVE && (enemy == nullptr || _distance < distance))
+						{
+							distance = _distance;
+							enemy = _enemy;
+						}
+					}
+				}
+
+				if (enemy != nullptr) trigger(enemy, getMat());
+				else pause();
+			}
 		}
 	}
 
