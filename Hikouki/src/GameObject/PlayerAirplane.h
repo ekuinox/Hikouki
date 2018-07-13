@@ -15,6 +15,7 @@ public:
 		ALIVE,
 		EXPLOSION
 	};
+	PlayerAirplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, const D3DXVECTOR3&, CDirect3DXFile*, CDirect3DXFile*);
 	PlayerAirplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, const D3DXVECTOR3&);
 	void update(const UpdateDetail&);
 	void draw(const LPDIRECT3DDEVICE9&) const;
@@ -24,7 +25,7 @@ public:
 private:
 	std::shared_ptr<EnemyAirplane> enemy;
 	std::unique_ptr<HomingMissile> homingMissile;
-	std::array<std::unique_ptr<Bullet>, 5> bullets;
+	std::array<std::unique_ptr<Bullet>, 100> bullets;
 	void triggerHomingMissile(const std::vector<std::shared_ptr<GameObjectInterface>>&);
 	void triggerBullet();
 	void onOutside();

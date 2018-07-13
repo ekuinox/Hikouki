@@ -13,8 +13,10 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 {
 	xFileManager = new XFileManager(graphics->GetDXDevice());
 	xFileManager->add({
-		{ "Airplane", "assets/f1.x" }, // 飛行機
-		{ "Skydome", "assets/skydome.x" } // スカイドーム
+		{ "Airplane", "assets/f1.x" },
+		{ "Skydome", "assets/skydome.x" },
+		{ "Bullet", "assets/bullet.x" },
+		{ "Missile", "assets/missile.x" }
 	});
 
 	gameObjects.emplace_back(new Skydome(xFileManager->get("Skydome"), graphics->GetDXDevice()));
@@ -24,7 +26,13 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 		gameObjects.emplace_back(new EnemyAirplane(xFileManager->get("Airplane"), graphics->GetDXDevice(), "assets/GameObjectConfig/enemy.json"));
 
 	// プレイヤを生成してカメラのターゲットにセットする
-	player = std::shared_ptr<PlayerAirplane>(new PlayerAirplane(xFileManager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3{ 0, 0, 0 }));
+	player = std::shared_ptr<PlayerAirplane>(new PlayerAirplane(
+		xFileManager->get("Airplane"),
+		graphics->GetDXDevice(),
+		D3DXVECTOR3{ 0, 0, 0 },
+		xFileManager->get("Missile"),
+		xFileManager->get("Bullet")
+	));
 	gameObjects.emplace_back(player);
 	gameObjects.emplace_back(new Camera(player, graphics->GetWidth(), graphics->GetHeight()));
 	gameObjects.emplace_back(new Rader(player, { 100, 100 }, 80));

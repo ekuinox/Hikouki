@@ -3,20 +3,14 @@
 #include "../GameObjectAttachments/Collider.h"
 #include "../GameObject/Skydome.h"
 
-PlayerAirplane::PlayerAirplane(CDirect3DXFile * xfile, LPDIRECT3DDEVICE9 device, const D3DXVECTOR3 & coord)
+PlayerAirplane::PlayerAirplane(CDirect3DXFile * xfile, LPDIRECT3DDEVICE9 device, const D3DXVECTOR3 & coord, CDirect3DXFile * homingMissileXFile, CDirect3DXFile * bulletXFile)
 	: Airplane(xfile, device, coord), enemy(nullptr)
 {
 	static constexpr auto initSpeed = 20.0f;
 
-	homingMissile = std::unique_ptr<HomingMissile>(new HomingMissile(xfile, enemy, D3DX_PI * 10.0f / 180.0f, getPos(), D3DXVECTOR3{ 0, 0, 1 }, device));
+	homingMissile = std::unique_ptr<HomingMissile>(new HomingMissile(homingMissileXFile, enemy, D3DX_PI * 10.0f / 180.0f, getPos(), D3DXVECTOR3{ 0, 0, 1 }, device));
 
-	bullets = {
-		std::unique_ptr<Bullet>(new Bullet(xfile, device)),
-		std::unique_ptr<Bullet>(new Bullet(xfile, device)),
-		std::unique_ptr<Bullet>(new Bullet(xfile, device)),
-		std::unique_ptr<Bullet>(new Bullet(xfile, device)),
-		std::unique_ptr<Bullet>(new Bullet(xfile, device)),
-	};
+	for (auto i = 0; i < bullets.max_size(); ++i) bullets[i] = std::unique_ptr<Bullet>(new Bullet(bulletXFile, device));
 
 	trans.z = initSpeed;
 
@@ -24,12 +18,17 @@ PlayerAirplane::PlayerAirplane(CDirect3DXFile * xfile, LPDIRECT3DDEVICE9 device,
 	D3DXMatrixRotationY(&mat, D3DX_PI * 90.0f / 180.0f);
 }
 
+PlayerAirplane::PlayerAirplane(CDirect3DXFile * xfile, LPDIRECT3DDEVICE9 device, const D3DXVECTOR3 & coord)
+	: PlayerAirplane(xfile, device, coord, xfile, xfile)
+{
+}
+
 void PlayerAirplane::update(const UpdateDetail & detail)
 {
 	if (!active) return;
 
 	static constexpr auto angleMax = 45.0f;
-	static constexpr auto addAngle = 15.0f;
+	static constexpr auto addAngle = 50.0f;
 
 	// ƒ[ƒ‚É–ß‚·
 	angle = D3DXVECTOR3(0, 0, 0);
@@ -44,11 +43,11 @@ void PlayerAirplane::update(const UpdateDetail & detail)
 	if (detail.input->getTrigger(KeyCode::F5)) drawingBBox = !drawingBBox;
 
 	// ’Ç”öƒ~ƒTƒCƒ‹‚ð”­ŽË‚·‚é
-	if (homingMissile->getState() == HomingMissile::State::PAUSE && detail.input->getTrigger(KeyCode::E))
+	if (homingMissile->getState() == HomingMissile::State::PAUSE && (detail.input->getTrigger(KeyCode::E) || detail.input->getMouseState().rgbButtons[1] & 0x80))
 		triggerHomingMissile(detail.gameObjects);
 
 	// ’e‚ð”­ŽË‚·‚é
-	if (detail.input->getTrigger(KeyCode::Q))
+	if (detail.input->getTrigger(KeyCode::Q) || detail.input->getMouseState().rgbButtons[0] & 0x80)
 		triggerBullet();
 
 	if (homingMissile->getState() == HomingMissile::State::FOLLOWING) homingMissile->update(detail);
