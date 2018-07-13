@@ -38,7 +38,7 @@ EnemyAirplane::EnemyAirplane(CDirect3DXFile* _xfile, LPDIRECT3DDEVICE9 device, c
 		);
 	}
 
-	moveTimelineIndex = 0;
+	moveTimelineIndex = trau::utils::randomEngine() % moveTimeline.size();
 
 	const auto& coord = choice(data["defaultPositions"]);
 
