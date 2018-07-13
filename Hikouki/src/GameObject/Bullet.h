@@ -5,6 +5,7 @@
 #include "XFileObjectBase.h"
 #include "../GameObjectAttachments/BoundingSphere.h"
 #include "../SceneAttachments/Timer.h"
+#include "EnemyAirplane.h"
 #include <memory>
 
 class Bullet : public XFileObjectBase {
@@ -26,6 +27,7 @@ public:
 private:
 	static constexpr auto speed = 50.0f;
 	static constexpr auto lifeTimeSecond = 5.0f; // ê∂ë∂éûä‘
+	std::vector<std::shared_ptr<EnemyAirplane>> enemies;
 	BoundingSphere * bbox;
 	Bullet::State state;
 	trau::Timer timer;

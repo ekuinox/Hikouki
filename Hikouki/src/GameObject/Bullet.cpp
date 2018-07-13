@@ -1,5 +1,4 @@
 #include "Bullet.h"
-#include "EnemyAirplane.h"
 #include "../GameObjectAttachments/Collider.h"
 #include "../Utils/MathUtil.h"
 
@@ -18,6 +17,17 @@ Bullet::~Bullet()
 
 void Bullet::update(const UpdateDetail & detail)
 {
+	// 初期化 OR コンテナに変更があった場合に
+	if (detail.message & (GameObjectInterface::MESSAGE_INITIALIZE | GameObjectInterface::MESSAGE_ADDED | GameObjectInterface::MESSAGE_REMOVED))
+	{
+		// enemiesを設定する
+		enemies.resize(0);
+
+		for (const auto& gameObject : detail.gameObjects)
+			if (gameObject->getId() == EnemyAirplane::id)
+				enemies.emplace_back(std::static_pointer_cast<EnemyAirplane>(gameObject));
+	}
+
 	if (!active) return;
 
 	if (state == State::TRIGGERED)
@@ -32,24 +42,17 @@ void Bullet::update(const UpdateDetail & detail)
 		else
 		{
 			// 衝突を検索
-			for (const auto& gameObject : detail.gameObjects)
+			for (const auto& enemy : enemies)
 			{
-				if (gameObject->getUUID() == getUUID()) break; // 自分を除外
-
-				if (gameObject->getId() == EnemyAirplane::id)
+				if (enemy->getState() == Airplane::State::ALIVE)
 				{
-					const auto& airplane = std::static_pointer_cast<EnemyAirplane>(gameObject);
-
-					if (airplane->getState() == Airplane::State::ALIVE)
+					auto colls = Collider::getCollisions({ bbox }, { enemy->getBBox() });
+					if (colls.size() > 0)
 					{
-						auto colls = Collider::getCollisions({ bbox }, { airplane->getBBox() });
-						if (colls.size() > 0)
-						{
-							airplane->triggerExplosion();
-							state = Bullet::State::HIT;
-							hide();
-							disable();
-						}
+						enemy->triggerExplosion();
+						state = Bullet::State::HIT;
+						hide();
+						disable();
 					}
 				}
 			}

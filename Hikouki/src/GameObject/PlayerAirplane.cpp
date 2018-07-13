@@ -72,8 +72,6 @@ void PlayerAirplane::update(const UpdateDetail & detail)
 	if (detail.input->getTrigger(KeyCode::Q) || detail.input->getMouseState().rgbButtons[0] & 0x80)
 		triggerBullet();
 
-	for (const auto& bullet : bullets) bullet->update(detail);
-
 	// ƒqƒbƒg‚µ‚Ä‚¢‚½‚Æ‚«‚Ìˆ—
 	if (homingMissile->getState() == HomingMissile::State::HIT) homingMissile->pause();
 
@@ -84,6 +82,7 @@ void PlayerAirplane::update(const UpdateDetail & detail)
 	mathutils::makeWorldMatrixTotal(mat, angle * detail.timer->getSeconds(), trans * detail.timer->getSeconds());
 
 	homingMissile->update(detail);
+	for (const auto& bullet : bullets) bullet->update(detail);
 
 	bbox->updatePosition(mat);
 }
