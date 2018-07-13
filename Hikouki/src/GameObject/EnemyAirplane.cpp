@@ -70,5 +70,6 @@ void EnemyAirplane::update(const UpdateDetail& detail)
 
 		mathutils::makeWorldMatrixTotal(mat, angle * detail.timer->getSeconds(), trans * detail.timer->getSeconds());
 		bbox->updatePosition(mat);
+
 	}
 }
