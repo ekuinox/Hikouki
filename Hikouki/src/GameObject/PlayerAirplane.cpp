@@ -103,4 +103,5 @@ void PlayerAirplane::triggerHomingMissile(const std::vector<std::shared_ptr<Game
 void PlayerAirplane::onOutside()
 {
 	triggerExplosion();
+	state = Airplane::State::EXIT;
 }

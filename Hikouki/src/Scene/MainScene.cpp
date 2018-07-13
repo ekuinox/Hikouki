@@ -4,7 +4,6 @@
 #include "../GameObject/EnemyAirplane.h"
 #include "../GameObject/HomingMissile.h"
 #include "../GameObjectAttachments/Collider.h"
-#include "../GameObject/PlayerAirplane.h"
 #include "../GameObject/Camera.h"
 #include "../GameObject/Skydome.h"
 #include "../GameObject/Rader.h"
@@ -25,14 +24,10 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 		gameObjects.emplace_back(new EnemyAirplane(xFileManager->get("Airplane"), graphics->GetDXDevice(), "assets/GameObjectConfig/enemy.json"));
 
 	// プレイヤを生成してカメラのターゲットにセットする
-	const auto& cameraTarget = std::shared_ptr<XFileObjectBase>(new PlayerAirplane(xFileManager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3{ 0, 0, 0 }));
-	gameObjects.emplace_back(cameraTarget);
-	gameObjects.emplace_back(new Camera(cameraTarget, graphics->GetWidth(), graphics->GetHeight()));
-	gameObjects.emplace_back(new Rader(cameraTarget, { 100, 100 }, 80));
-	for (const auto& gameObject : gameObjects)
-	{
-		auto id = gameObject->getId();
-	}
+	player = std::shared_ptr<PlayerAirplane>(new PlayerAirplane(xFileManager->get("Airplane"), graphics->GetDXDevice(), D3DXVECTOR3{ 0, 0, 0 }));
+	gameObjects.emplace_back(player);
+	gameObjects.emplace_back(new Camera(player, graphics->GetWidth(), graphics->GetHeight()));
+	gameObjects.emplace_back(new Rader(player, { 100, 100 }, 80));
 
 	// 初期設定
 	graphics->SetRenderStateArray({
@@ -109,6 +104,9 @@ void MainScene::update()
 	for (const auto& gameObject : gameObjects) gameObject->update({ timer, inputDevice, gameObjects });
 
 	for (const auto& gameObject : gameObjects) gameObject->afterUpdate({ timer, inputDevice, gameObjects });
+
+	// プレイヤの死をキャッチ
+	if (player->getState() == Airplane::State::EXIT) state = State::Exit;
 }
 
 void MainScene::render()

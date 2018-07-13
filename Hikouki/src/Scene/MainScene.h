@@ -8,6 +8,7 @@
 #include <vector>
 #include <boost/format.hpp>
 #include "../GameObject/GameObject.h"
+#include "../GameObject/PlayerAirplane.h"
 
 class MainScene : public Scene {
 public:
@@ -17,6 +18,7 @@ public:
 	Scene::State getState();
 private:
 	std::vector<std::shared_ptr<GameObjectInterface>> gameObjects;
+	std::shared_ptr<PlayerAirplane> player;
 	bool pausing;
 
 	void sortGameObjectsLayer();
