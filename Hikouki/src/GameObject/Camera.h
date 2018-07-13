@@ -36,8 +36,8 @@ private:
 	int w, h;
 	static constexpr auto nearPlane = 1.0f, farPlane = 5000.0f;
 
-	void onFPS(const UpdateDetail&, const D3DXMATRIX&);
-	void onTPS(const UpdateDetail&, const D3DXMATRIX&);
+	void onFPS(const UpdateDetail&, D3DXMATRIX);
+	void onTPS(const UpdateDetail&, D3DXMATRIX);
 	void onOVER(const UpdateDetail&);
 };
 

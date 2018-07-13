@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "../Utils/MathUtil.h"
 
 Camera::Camera(const std::shared_ptr<XFileObjectBase>& _target, const int& _w, const int& _h)
 	: eye(D3DXVECTOR3()), lookat(D3DXVECTOR3()), up(D3DXVECTOR3()), w(_w), h(_h)
@@ -45,22 +46,32 @@ const D3DXMATRIX& Camera::getProj() const
 	return proj;
 }
 
-void Camera::onFPS(const UpdateDetail& detail, const D3DXMATRIX& mat)
+void Camera::onFPS(const UpdateDetail& detail, D3DXMATRIX mat)
 {
 	if (detail.input->getTrigger(KeyCode::V))
 	{
 		state = State::TPS;
 		return;
 	}
-
-	eye = 2 * D3DXVECTOR3(mat._41, mat._42, mat._43); // ‚¸‚ç‚³‚È‚¢‚Æ–{‘Ì‚Æ”í‚Á‚¿‚Ü‚¤‚Ì‚Å
-	lookat = eye + 10 * D3DXVECTOR3(mat._31, mat._32, mat._33);
-	up = D3DXVECTOR3(mat._21, mat._22, mat._23);
+	else if (detail.input->getTrigger(KeyCode::O))
+	{
+		state = State::OVER;
+		return;
+	}
+	mathutils::makeWorldMatrixTotal(mat, {}, { 0, 0, 10 });
+	eye = D3DXVECTOR3(mat._41, mat._42, mat._43); // ‚¸‚ç‚³‚È‚¢‚Æ–{‘Ì‚Æ”í‚Á‚¿‚Ü‚¤‚Ì‚Å
+	lookat = 10 * D3DXVECTOR3(mat._41, mat._42, mat._43);
+	up = D3DXVECTOR3(0, 1, 0);
 }
 
-void Camera::onTPS(const UpdateDetail& detail, const D3DXMATRIX& mat)
+void Camera::onTPS(const UpdateDetail& detail, D3DXMATRIX mat)
 {
 	if (detail.input->getTrigger(KeyCode::V))
+	{
+		state = State::FPS;
+		return;
+	}
+	else if (detail.input->getTrigger(KeyCode::O))
 	{
 		state = State::OVER;
 		return;
