@@ -1,5 +1,6 @@
 #include "TitleScene.h"
 #include "../GameObject/Plain2D.h"
+#include "../GameObject/TextArea.h"
 
 TitleScene::TitleScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, Input* _input, trau::Timer* _timer)
 	: Scene(_graphics, _xfileManager, _input, _timer)
@@ -10,6 +11,13 @@ TitleScene::TitleScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager,
 	}
 
 	gameObjects.emplace_back(new Plain2D({ graphics->GetWidth() / 2.0f, graphics->GetHeight() / 2.0f }, { 200, 200 }, { texture, 0.0f, 0.0f, 1.0f, 1.0f }));
+
+	gameObjects.emplace_back(new trau::TextArea(
+		graphics->GetDXDevice(),
+		100,
+		100,
+		"--- Enterでスタート---\nそうさせつめい\nWASDで機体操作\nQまたは左クリックで弾丸発射\nEまたは右クリックで誘導ミサイル発射\n端っこいくと自殺します\n\n\n浦上紫苑ちゃんかわいい．．．！どうびじゅを読んでください！！"
+	));
 }
 
 TitleScene::~TitleScene()

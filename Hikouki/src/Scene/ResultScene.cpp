@@ -41,7 +41,7 @@ void ResultScene::setResults(const MainScene::Results & _results)
 		graphics->GetDXDevice(),
 		100,
 		100,
-		(boost::format("てき%1%体のうち，%2%体げきはした！\n各務原なでしこちゃん．．．かわいい．．．") % results.enemiesCount % results.defeatEnemiesCount).str()
+		(boost::format("てき%1%体のうち，%2%体げきはした！\n各務原なでしこちゃん．．．かわいい．．．\nEnterキーでタイトルに戻れます．") % results.enemiesCount % results.defeatEnemiesCount).str()
 	));
 }
 
