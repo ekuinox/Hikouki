@@ -25,6 +25,19 @@ PlayerAirplane::PlayerAirplane(CDirect3DXFile * xfile, LPDIRECT3DDEVICE9 device,
 
 void PlayerAirplane::update(const UpdateDetail & detail)
 {
+	// 初期化 OR コンテナに変更があった場合に
+	if (detail.message & (GameObjectInterface::MESSAGE_INITIALIZE | GameObjectInterface::MESSAGE_ADDED | GameObjectInterface::MESSAGE_REMOVED))
+	{
+		// enemiesを設定する
+		enemies.resize(0);
+
+		for (const auto& gameObject : detail.gameObjects)
+		{
+			if (gameObject->getId() == Skydome::id) skydome = std::static_pointer_cast<Skydome>(gameObject);
+			else if (gameObject->getId() == EnemyAirplane::id) enemies.emplace_back(std::static_pointer_cast<EnemyAirplane>(gameObject));
+		}
+	}
+
 	if (!active) return;
 
 	if (state == State::Explosion)
@@ -53,7 +66,7 @@ void PlayerAirplane::update(const UpdateDetail & detail)
 
 	// 追尾ミサイルを発射する
 	if (homingMissile->getState() == HomingMissile::State::PAUSE && (detail.input->getTrigger(KeyCode::E) || detail.input->getMouseState().rgbButtons[1] & 0x80))
-		triggerHomingMissile(detail.gameObjects);
+		triggerHomingMissile();
 
 	// 弾を発射する
 	if (detail.input->getTrigger(KeyCode::Q) || detail.input->getMouseState().rgbButtons[0] & 0x80)
@@ -65,19 +78,8 @@ void PlayerAirplane::update(const UpdateDetail & detail)
 	if (homingMissile->getState() == HomingMissile::State::HIT) homingMissile->pause();
 
 	// スカイドームの外
-	for (const auto& gameObject : detail.gameObjects)
-	{
-		if (gameObject->getId() == Skydome::id)
-		{
-			const auto& r = std::static_pointer_cast<Skydome>(gameObject)->getBBox().get()->getR() - bbox->getR();
-			
-			// 画面端の判定
-			if (fabs(getPos().x) > r || fabs(getPos().y) > r || fabs(getPos().z > r))
-			{
-				onOutside();
-			}
-		}
-	}
+	const auto& r = skydome->getBBox().get()->getR() - bbox->getR();
+	if (fabs(getPos().x) > r || fabs(getPos().y) > r || fabs(getPos().z > r)) onOutside();
 
 	mathutils::makeWorldMatrixTotal(mat, angle * detail.timer->getSeconds(), trans * detail.timer->getSeconds());
 
@@ -102,23 +104,19 @@ std::vector<D3DXVECTOR3> PlayerAirplane::getHomingMissilePositions()
 	return result;
 }
 
-void PlayerAirplane::triggerHomingMissile(const std::vector<std::shared_ptr<GameObjectInterface>>& gameObjects)
+void PlayerAirplane::triggerHomingMissile()
 {
 	// 一番近い敵を見つけ出す
 	enemy = nullptr;
 	float distance = 0.0f;
 
-	for (const auto& gameObject : gameObjects)
+	for (const auto& _enemy : enemies)
 	{
-		if (gameObject->getId() == EnemyAirplane::id)
+		const auto& _distance = Collider::calculateDistance(getPos(), _enemy->getPos());
+		if (_enemy->getState() == Airplane::State::ALIVE && (enemy == nullptr || _distance < distance))
 		{
-			auto _enemy = std::static_pointer_cast<EnemyAirplane>(gameObject);
-			const auto& _distance = Collider::calculateDistance(getPos(), _enemy->getPos());
-			if (_enemy->getState() == Airplane::State::ALIVE && (enemy == nullptr || _distance < distance))
-			{
-				distance = _distance;
-				enemy = _enemy;
-			}
+			distance = _distance;
+			enemy = _enemy;
 		}
 	}
 

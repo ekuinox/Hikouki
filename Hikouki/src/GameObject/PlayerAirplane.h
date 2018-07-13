@@ -5,6 +5,7 @@
 #include "EnemyAirplane.h"
 #include "HomingMissile.h"
 #include "Bullet.h"
+#include "Skydome.h"
 #include <array>
 
 class PlayerAirplane : public Airplane
@@ -19,10 +20,12 @@ public:
 
 	std::vector<D3DXVECTOR3> getHomingMissilePositions();
 private:
+	std::shared_ptr<Skydome> skydome;
 	std::shared_ptr<EnemyAirplane> enemy;
+	std::vector<std::shared_ptr<EnemyAirplane>> enemies;
 	std::unique_ptr<HomingMissile> homingMissile;
 	std::array<std::unique_ptr<Bullet>, 100> bullets;
-	void triggerHomingMissile(const std::vector<std::shared_ptr<GameObjectInterface>>&);
+	void triggerHomingMissile();
 	void triggerBullet();
 	void onOutside();
 };
