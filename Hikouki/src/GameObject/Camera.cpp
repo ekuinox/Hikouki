@@ -59,7 +59,9 @@ void Camera::onFPS(const UpdateDetail& detail, D3DXMATRIX mat)
 		return;
 	}
 
-	eye = D3DXVECTOR3(mat._41, mat._42 + 2, mat._43);
+	// どう書くべきかわかりません！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+
+	eye = D3DXVECTOR3(mat._41, mat._42 + 3, mat._43);
 	lookat = eye + 10 * D3DXVECTOR3(mat._31, mat._32, mat._33);
 	up = D3DXVECTOR3(mat._21, mat._22, mat._23);
 }
