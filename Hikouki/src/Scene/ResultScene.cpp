@@ -1,5 +1,7 @@
 #include "ResultScene.h"
 #include "../GameObject/Plain2D.h"
+#include "../GameObject/TextArea.h"
+#include <boost/format.hpp>
 
 ResultScene::ResultScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, Input* _input, trau::Timer* _timer)
 	: Scene(_graphics, _xfileManager, _input, _timer)
@@ -29,6 +31,18 @@ Scene::State ResultScene::exec()
 Scene::State ResultScene::getState()
 {
 	return state;
+}
+
+void ResultScene::setResults(const MainScene::Results & _results)
+{
+	results = _results;
+
+	gameObjects.emplace_back(new trau::TextArea(
+		graphics->GetDXDevice(),
+		100,
+		100,
+		(boost::format("てき%1%体のうち，%2%体げきはした！\n各務原なでしこちゃん．．．かわいい．．．") % results.enemiesCount % results.defeatEnemiesCount).str()
+	));
 }
 
 void ResultScene::input()

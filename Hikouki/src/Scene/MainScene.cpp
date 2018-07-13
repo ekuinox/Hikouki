@@ -71,6 +71,11 @@ Scene::State MainScene::getState()
 	return state;
 }
 
+MainScene::Results MainScene::getResults()
+{
+	return results;
+}
+
 void MainScene::sortGameObjectsLayer()
 {
 	// 描画順なので降順にする
@@ -100,7 +105,7 @@ void MainScene::input()
 			pausing = !pausing;
 		}
 
-		if (inputDevice->getTrigger(KeyCode::Return)) state = State::Exit;
+		if (inputDevice->getTrigger(KeyCode::Return)) exit();
 	}
 	catch (...)
 	{
@@ -114,7 +119,7 @@ void MainScene::update()
 	for (const auto& gameObject : gameObjects) gameObject->afterUpdate({ timer, inputDevice, gameObjects });
 
 	// プレイヤの死をキャッチ
-	if (player->getState() == Airplane::State::EXIT) state = State::Exit;
+	if (player->getState() == Airplane::State::EXIT) exit();
 }
 
 void MainScene::render()
@@ -124,4 +129,22 @@ void MainScene::render()
 	graphics->Render([&](const LPDIRECT3DDEVICE9 device) {
 		for (const auto& gameObject : gameObjects) gameObject->draw(device);
 	});
+}
+
+void MainScene::exit()
+{
+	results = { 0, 0 };
+
+	for (const auto& gameObject : gameObjects)
+	{
+		if (gameObject->getId() == EnemyAirplane::id)
+		{
+			++results.enemiesCount;
+			if (std::static_pointer_cast<EnemyAirplane>(gameObject)->getState() != EnemyAirplane::State::ALIVE)
+				++results.defeatEnemiesCount;
+		}
+	}
+
+	state = State::Exit;
+
 }

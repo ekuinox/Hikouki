@@ -66,10 +66,11 @@ void GameController::main()
 		if (mainScene->exec() == Scene::State::Exit)
 		{
 			sceneState = SceneState::Result;
+			resultScene->setResults(mainScene->getResults());
 		}
 		break;
 	case SceneState::Result:
-		if (titleScene->exec() == Scene::State::Exit)
+		if (resultScene->exec() == Scene::State::Exit)
 		{
 			initScenes();
 		}
