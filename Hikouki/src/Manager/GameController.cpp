@@ -5,11 +5,15 @@
 
 void GameController::initScenes()
 {
-	scenes.clear();
+	titleScene.reset();
+	mainScene.reset();
+	resultScene.reset();
 
-	scenes.emplace_back(std::unique_ptr<TitleScene>(new TitleScene(graphics, xFileManager, inputDevice, timer)));
-	scenes.emplace_back(std::unique_ptr<MainScene>(new MainScene(graphics, xFileManager, inputDevice, timer)));
-	scenes.emplace_back(std::unique_ptr<ResultScene>(new ResultScene(graphics, xFileManager, inputDevice, timer)));
+	titleScene = std::unique_ptr<TitleScene>(new TitleScene(graphics, xFileManager, inputDevice, timer));
+	mainScene = std::unique_ptr<MainScene>(new MainScene(graphics, xFileManager, inputDevice, timer));
+	resultScene = std::unique_ptr<ResultScene>(new ResultScene(graphics, xFileManager, inputDevice, timer));
+
+	sceneState = SceneState::Title;
 
 	currentSceneIndex = 0;
 }
@@ -40,7 +44,9 @@ GameController::~GameController()
 	Stop();
 
 	if (graphics != nullptr) {
-		scenes.clear();
+		titleScene.reset();
+		mainScene.reset();
+		resultScene.reset();
 		graphics->Exit();
 		delete graphics;
 		delete xFileManager;
@@ -51,8 +57,23 @@ GameController::~GameController()
 
 void GameController::main()
 {
-	if (scenes[currentSceneIndex]->exec() == Scene::State::Exit) {
-		currentSceneIndex++;
-		if (currentSceneIndex == scenes.size()) initScenes();
+	switch (sceneState)
+	{
+	case SceneState::Title:
+		if (titleScene->exec() == Scene::State::Exit) sceneState = SceneState::Main;
+		break; 
+	case SceneState::Main:
+		if (mainScene->exec() == Scene::State::Exit)
+		{
+			sceneState = SceneState::Result;
+		}
+		break;
+	case SceneState::Result:
+		if (titleScene->exec() == Scene::State::Exit)
+		{
+			initScenes();
+		}
+		resultScene->exec();
+		break;
 	}
 }
