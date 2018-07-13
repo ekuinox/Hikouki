@@ -122,6 +122,21 @@ void MainScene::update()
 
 	// プレイヤの死をキャッチ
 	if (player->getState() == Airplane::State::EXIT) exit();
+
+	bool isAllEnemiesDead = true;
+	for (const auto& gameObject : gameObjects)
+	{
+		if (gameObject->getId() == EnemyAirplane::id && std::static_pointer_cast<EnemyAirplane>(gameObject)->getState() == Airplane::State::ALIVE)
+		{
+			isAllEnemiesDead = false;
+			break;
+		}
+	}
+
+	if (isAllEnemiesDead)
+	{
+		exit();
+	}
 }
 
 void MainScene::render()
