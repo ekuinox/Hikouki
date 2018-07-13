@@ -58,10 +58,10 @@ void Camera::onFPS(const UpdateDetail& detail, D3DXMATRIX mat)
 		state = State::OVER;
 		return;
 	}
-	mathutils::makeWorldMatrixTotal(mat, {}, { 0, 0, 10 });
-	eye = D3DXVECTOR3(mat._41, mat._42, mat._43); // ‚¸‚ç‚³‚È‚¢‚Æ–{‘Ì‚Æ”í‚Á‚¿‚Ü‚¤‚Ì‚Å
-	lookat = 10 * D3DXVECTOR3(mat._41, mat._42, mat._43);
-	up = D3DXVECTOR3(0, 1, 0);
+
+	eye = D3DXVECTOR3(mat._41, mat._42 + 2, mat._43);
+	lookat = eye + 10 * D3DXVECTOR3(mat._31, mat._32, mat._33);
+	up = D3DXVECTOR3(mat._21, mat._22, mat._23);
 }
 
 void Camera::onTPS(const UpdateDetail& detail, D3DXMATRIX mat)
