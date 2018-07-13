@@ -73,9 +73,9 @@ void Rader::update(const UpdateDetail & detail)
 void Rader::drawTriangle(const D3DXVECTOR2 & frontVertex, const D3DXVECTOR2 & size, const DWORD & color, LPDIRECT3DDEVICE9 device) const
 {
 	VERTEX vertexes[3] = {
-		VERTEX{ frontVertex.x, frontVertex.y, 0.0f, 0.0f, color },
-		VERTEX{ frontVertex.x + size.x / 2.0f, frontVertex.y + size.y, 0.0f, 0.0f, color },
-		VERTEX{ frontVertex.x - size.x / 2.0f, frontVertex.y + size.y, 0.0f, 0.0f, color },
+		VERTEX{ frontVertex.x, frontVertex.y, 0.0f, 1.0f, color },
+		VERTEX{ frontVertex.x + size.x / 2.0f, frontVertex.y + size.y, 0.0f, 1.0f, color },
+		VERTEX{ frontVertex.x - size.x / 2.0f, frontVertex.y + size.y, 0.0f, 1.0f, color },
 	};
 
 	device->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 1, vertexes, sizeof VERTEX);
@@ -84,10 +84,10 @@ void Rader::drawTriangle(const D3DXVECTOR2 & frontVertex, const D3DXVECTOR2 & si
 void Rader::drawQuad(const D3DXVECTOR2 & frontVertex, const D3DXVECTOR2 & size, const DWORD & color, LPDIRECT3DDEVICE9 device) const
 {
 	VERTEX vertexes[4] = {
-		VERTEX{ frontVertex.x - size.x / 2.0f, frontVertex.y - size.y / 2.0f, 0.0f, 0.0f, color },
-		VERTEX{ frontVertex.x + size.x / 2.0f, frontVertex.y - size.y / 2.0f, 0.0f, 0.0f, color },
-		VERTEX{ frontVertex.x + size.x / 2.0f, frontVertex.y + size.y / 2.0f, 0.0f, 0.0f, color },
-		VERTEX{ frontVertex.x - size.x / 2.0f, frontVertex.y + size.y / 2.0f, 0.0f, 0.0f, color },
+		VERTEX{ frontVertex.x - size.x / 2.0f, frontVertex.y - size.y / 2.0f, 0.0f, 1.0f, color },
+		VERTEX{ frontVertex.x + size.x / 2.0f, frontVertex.y - size.y / 2.0f, 0.0f, 1.0f, color },
+		VERTEX{ frontVertex.x + size.x / 2.0f, frontVertex.y + size.y / 2.0f, 0.0f, 1.0f, color },
+		VERTEX{ frontVertex.x - size.x / 2.0f, frontVertex.y + size.y / 2.0f, 0.0f, 1.0f, color },
 	};
 
 	device->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, vertexes, sizeof VERTEX);
