@@ -124,6 +124,9 @@ void PlayerAirplane::triggerHomingMissile()
 
 void PlayerAirplane::triggerBullet()
 {
+	bulletTriggerTimer.end();
+	if (bulletTriggerTimer.getSeconds() < bulletTriggerSpanSeconds) return;
+
 	// Žg‚Á‚Ä‚¢‚È‚¢’e‚ð’T‚µ‚ÄC”­ŽË‚·‚é
 
 	for (const auto& bullet : bullets)
@@ -134,6 +137,8 @@ void PlayerAirplane::triggerBullet()
 			break;
 		}
 	}
+
+	bulletTriggerTimer.start();
 }
 
 void PlayerAirplane::onOutside()

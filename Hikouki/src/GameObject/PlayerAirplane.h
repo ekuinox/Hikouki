@@ -25,6 +25,9 @@ private:
 	std::vector<std::shared_ptr<EnemyAirplane>> enemies;
 	std::unique_ptr<HomingMissile> homingMissile;
 	std::array<std::unique_ptr<Bullet>, 100> bullets;
+	trau::Timer bulletTriggerTimer;
+	static constexpr auto bulletTriggerSpanSeconds = 0.01f;
+
 	void triggerHomingMissile();
 	void triggerBullet();
 	void onOutside();
