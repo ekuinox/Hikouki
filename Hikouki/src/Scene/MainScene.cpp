@@ -21,7 +21,7 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 
 	gameObjects.emplace_back(new Skydome(xFileManager->get("Skydome"), graphics->GetDXDevice()));
 
-	static constexpr auto enemiesCount = 20;
+	static constexpr auto enemiesCount = 3;
 
 	// “G‚ğ5‘Ì¶¬‚·‚é
 	for (auto i = 0; i < enemiesCount; ++i)
@@ -126,7 +126,7 @@ void MainScene::update()
 	bool isAllEnemiesDead = true;
 	for (const auto& gameObject : gameObjects)
 	{
-		if (gameObject->getId() == EnemyAirplane::id && std::static_pointer_cast<EnemyAirplane>(gameObject)->getState() == Airplane::State::ALIVE)
+		if (gameObject->getId() == EnemyAirplane::id && std::static_pointer_cast<EnemyAirplane>(gameObject)->getState() != Airplane::State::EXIT)
 		{
 			isAllEnemiesDead = false;
 			break;

@@ -11,10 +11,6 @@ class PlayerAirplane : public Airplane
 {
 public:
 	static constexpr unsigned int id = Airplane::id * 100 + 1;
-	enum class State {
-		ALIVE,
-		EXPLOSION
-	};
 	PlayerAirplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, const D3DXVECTOR3&, CDirect3DXFile*, CDirect3DXFile*);
 	PlayerAirplane(CDirect3DXFile*, LPDIRECT3DDEVICE9, const D3DXVECTOR3&);
 	void update(const UpdateDetail&);

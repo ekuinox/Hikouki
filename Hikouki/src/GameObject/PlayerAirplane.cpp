@@ -27,6 +27,15 @@ void PlayerAirplane::update(const UpdateDetail & detail)
 {
 	if (!active) return;
 
+	if (state == State::Explosion)
+	{
+		explosion->update(detail);
+		explosionTimer.end();
+		if (explosionTimer.getSeconds() > explosionTimeSeconds) state = State::EXIT;
+
+		return;
+	}
+
 	static constexpr auto angleMax = 45.0f;
 	static constexpr auto addAngle = 50.0f;
 
@@ -133,5 +142,4 @@ void PlayerAirplane::triggerBullet()
 void PlayerAirplane::onOutside()
 {
 	triggerExplosion();
-	state = Airplane::State::EXIT;
 }

@@ -24,6 +24,8 @@ void Airplane::draw(const LPDIRECT3DDEVICE9& device) const
 {
 	if (!drawing) return;
 
+	if (state == State::EXIT) return;
+
 	if (state == State::Explosion)
 	{
 		explosion->draw(device);
@@ -42,6 +44,8 @@ void Airplane::update(const UpdateDetail& detail)
 	if (state == State::Explosion)
 	{
 		explosion->update(detail);
+		explosionTimer.end();
+		if (explosionTimer.getSeconds() > explosionTimeSeconds) state = State::EXIT;
 	}
 	else
 	{
@@ -56,6 +60,7 @@ void Airplane::triggerExplosion()
 	{
 		explosion->triangleTransforms(getMat());
 		state = State::Explosion;
+		explosionTimer.start();
 	}
 }
 

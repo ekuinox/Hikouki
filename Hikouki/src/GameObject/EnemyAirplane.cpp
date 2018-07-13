@@ -52,6 +52,10 @@ void EnemyAirplane::update(const UpdateDetail& detail)
 	if (state == State::Explosion)
 	{
 		explosion->update(detail);
+		explosionTimer.end();
+		if (explosionTimer.getSeconds() > explosionTimeSeconds) state = State::EXIT;
+
+		return;
 	}
 	else
 	{

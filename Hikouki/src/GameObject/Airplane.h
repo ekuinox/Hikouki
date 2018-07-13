@@ -2,6 +2,7 @@
 #include "XFileObjectBase.h"
 #include "Explosion.h"
 #include "../GameObjectAttachments/BoundingSphere.h"
+#include "../SceneAttachments/Timer.h"
 
 class Airplane : public XFileObjectBase {
 public:
@@ -15,6 +16,8 @@ protected:
 	Explosion* explosion;
 	BoundingSphere *bbox;
 	Airplane::State state;
+	static constexpr auto explosionTimeSeconds = 2.0f;
+	trau::Timer explosionTimer;
 public:
 	static constexpr unsigned int id = XFileObjectBase::id * 100 + 1;
 	Airplane(CDirect3DXFile*, LPDIRECT3DDEVICE9);
