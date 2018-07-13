@@ -6,7 +6,6 @@
 
 #include <memory>
 #include <vector>
-#include <boost/format.hpp>
 #include "../GameObject/GameObject.h"
 #include "../GameObject/PlayerAirplane.h"
 
@@ -26,6 +25,7 @@ private:
 	std::shared_ptr<PlayerAirplane> player;
 	bool pausing;
 	Results results;
+	DWORD updateMessage;
 
 	void sortGameObjectsLayer();
 	void sortGameObjectsPriority();

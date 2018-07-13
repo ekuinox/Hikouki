@@ -21,11 +21,21 @@ protected:
 	unsigned int priority = UINT_MAX; // 更新処理優先度
 public:
 	static constexpr unsigned int id = 0; // 識別用id
+
+	/* MESSAGE TYPES */
+	static constexpr DWORD MESSAGE_NOTHING = 0b0000;
+	static constexpr DWORD MESSAGE_INITIALIZE = 0b0001;
+	static constexpr DWORD MESSAGE_FREEZE = 0b0010;
+	static constexpr DWORD MESSAGE_ADDED = 0b0100;
+	static constexpr DWORD MESSAGE_REMOVED = 0b1000;
+
 	struct UpdateDetail {
 		trau::Timer * timer;
 		Input * input;
-		std::vector<std::shared_ptr<GameObjectInterface>> gameObjects;
+		const std::vector<std::shared_ptr<GameObjectInterface>>& gameObjects;
+		DWORD message;
 	};
+	
 	GameObjectInterface() : uuid(trau::utils::generateUUID()) {}
 	virtual ~GameObjectInterface() {}
 	virtual void beforeDraw(const LPDIRECT3DDEVICE9&) = 0;

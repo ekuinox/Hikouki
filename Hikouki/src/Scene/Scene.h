@@ -10,10 +10,13 @@
 class Scene {
 public:
 	enum class State {
-		Ready, Exit
+		Init,
+		Ready,
+		Exec,
+		Exit
 	};
 	Scene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, Input* _input, trau::Timer* _timer)
-		: graphics(_graphics), xFileManager(_xfileManager), inputDevice(_input), timer(_timer) {}
+		: graphics(_graphics), xFileManager(_xfileManager), inputDevice(_input), timer(_timer), state(State::Init) {}
 	virtual ~Scene() {}
 	virtual State exec() = 0;
 	virtual State getState() = 0;

@@ -49,6 +49,9 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 		{ D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA }, // 透過処理を行う
 		{ D3DRS_SRCBLEND, D3DBLEND_SRCALPHA } // 半透明処理を行う
 	});
+
+	state = State::Ready;
+	updateMessage = GameObjectInterface::MESSAGE_INITIALIZE;
 }
 
 MainScene::~MainScene()
@@ -58,6 +61,7 @@ MainScene::~MainScene()
 
 Scene::State MainScene::exec()
 {
+	state = State::Exec;
 	timer->run([&] {
 		sortGameObjectsPriority();
 		input(); // 入力
@@ -116,9 +120,9 @@ void MainScene::input()
 
 void MainScene::update()
 {
-	for (const auto& gameObject : gameObjects) gameObject->update({ timer, inputDevice, gameObjects });
+	for (const auto& gameObject : gameObjects) gameObject->update({ timer, inputDevice, gameObjects, updateMessage });
 
-	for (const auto& gameObject : gameObjects) gameObject->afterUpdate({ timer, inputDevice, gameObjects });
+	for (const auto& gameObject : gameObjects) gameObject->afterUpdate({ timer, inputDevice, gameObjects, updateMessage });
 
 	// プレイヤの死をキャッチ
 	if (player->getState() == Airplane::State::EXIT) exit();
@@ -137,6 +141,9 @@ void MainScene::update()
 	{
 		exit();
 	}
+
+	// 無にしておく
+	updateMessage = GameObjectInterface::MESSAGE_NOTHING;
 }
 
 void MainScene::render()
