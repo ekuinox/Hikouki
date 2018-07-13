@@ -21,7 +21,7 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 
 	gameObjects.emplace_back(new Skydome(xFileManager->get("Skydome"), graphics->GetDXDevice()));
 
-	static constexpr auto enemiesCount = 3;
+	static constexpr auto enemiesCount = 15;
 
 	// “G‚ğ5‘Ì¶¬‚·‚é
 	for (auto i = 0; i < enemiesCount; ++i)
