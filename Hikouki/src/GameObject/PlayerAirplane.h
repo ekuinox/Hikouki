@@ -4,12 +4,13 @@
 
 #include "EnemyAirplane.h"
 #include "HomingMissile.h"
+#include "Bullet.h"
+#include <array>
 
 class PlayerAirplane : public Airplane
 {
 public:
 	static constexpr unsigned int id = Airplane::id * 100 + 1;
-	static constexpr auto initSpeed = 10.0f;
 	enum class State {
 		ALIVE,
 		EXPLOSION
@@ -23,7 +24,9 @@ public:
 private:
 	std::shared_ptr<EnemyAirplane> enemy;
 	std::unique_ptr<HomingMissile> homingMissile;
+	std::array<std::unique_ptr<Bullet>, 5> bullets;
 	void triggerHomingMissile(const std::vector<std::shared_ptr<GameObjectInterface>>&);
+	void triggerBullet();
 	void onOutside();
 };
 

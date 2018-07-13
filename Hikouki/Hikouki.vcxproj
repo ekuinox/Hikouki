@@ -23,6 +23,7 @@
     <ClInclude Include="src\GameObjectAttachments\BoundingSphere.h" />
     <ClInclude Include="src\GameObjectAttachments\Collider.h" />
     <ClInclude Include="src\GameObject\Airplane.h" />
+    <ClInclude Include="src\GameObject\Bullet.h" />
     <ClInclude Include="src\GameObject\Camera.h" />
     <ClInclude Include="src\GameObject\EnemyAirplane.h" />
     <ClInclude Include="src\GameObject\Explosion.h" />
@@ -54,6 +55,7 @@
     <ClCompile Include="src\GameObjectAttachments\BoundingSphere.cpp" />
     <ClCompile Include="src\GameObjectAttachments\Collider.cpp" />
     <ClCompile Include="src\GameObject\Airplane.cpp" />
+    <ClCompile Include="src\GameObject\Bullet.cpp" />
     <ClCompile Include="src\GameObject\Camera.cpp" />
     <ClCompile Include="src\GameObject\EnemyAirplane.cpp" />
     <ClCompile Include="src\GameObject\Explosion.cpp" />

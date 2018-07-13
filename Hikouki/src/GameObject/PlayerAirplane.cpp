@@ -6,7 +6,17 @@
 PlayerAirplane::PlayerAirplane(CDirect3DXFile * xfile, LPDIRECT3DDEVICE9 device, const D3DXVECTOR3 & coord)
 	: Airplane(xfile, device, coord), enemy(nullptr)
 {
+	static constexpr auto initSpeed = 20.0f;
+
 	homingMissile = std::unique_ptr<HomingMissile>(new HomingMissile(xfile, enemy, D3DX_PI * 10.0f / 180.0f, getPos(), D3DXVECTOR3{ 0, 0, 1 }, device));
+
+	bullets = {
+		std::unique_ptr<Bullet>(new Bullet(xfile, device)),
+		std::unique_ptr<Bullet>(new Bullet(xfile, device)),
+		std::unique_ptr<Bullet>(new Bullet(xfile, device)),
+		std::unique_ptr<Bullet>(new Bullet(xfile, device)),
+		std::unique_ptr<Bullet>(new Bullet(xfile, device)),
+	};
 
 	trans.z = initSpeed;
 
@@ -18,8 +28,8 @@ void PlayerAirplane::update(const UpdateDetail & detail)
 {
 	if (!active) return;
 
-	constexpr auto angleMax = 45.0f;
-	constexpr auto addAngle = 10.0f;
+	static constexpr auto angleMax = 45.0f;
+	static constexpr auto addAngle = 15.0f;
 
 	// ƒ[ƒ‚É–ß‚·
 	angle = D3DXVECTOR3(0, 0, 0);
@@ -37,7 +47,13 @@ void PlayerAirplane::update(const UpdateDetail & detail)
 	if (homingMissile->getState() == HomingMissile::State::PAUSE && detail.input->getTrigger(KeyCode::E))
 		triggerHomingMissile(detail.gameObjects);
 
+	// ’e‚ð”­ŽË‚·‚é
+	if (detail.input->getTrigger(KeyCode::Q))
+		triggerBullet();
+
 	if (homingMissile->getState() == HomingMissile::State::FOLLOWING) homingMissile->update(detail);
+
+	for (const auto& bullet : bullets) bullet->update(detail);
 
 	// ƒqƒbƒg‚µ‚Ä‚¢‚½‚Æ‚«‚Ìˆ—
 	if (homingMissile->getState() == HomingMissile::State::HIT) homingMissile->pause();
@@ -66,6 +82,7 @@ void PlayerAirplane::draw(const LPDIRECT3DDEVICE9 & device) const
 {
 	Airplane::draw(device);
 	if (homingMissile->getState() == HomingMissile::State::FOLLOWING) homingMissile->draw(device);
+	for (const auto& bullet : bullets) bullet->draw(device);
 }
 
 std::vector<D3DXVECTOR3> PlayerAirplane::getHomingMissilePositions()
@@ -98,6 +115,20 @@ void PlayerAirplane::triggerHomingMissile(const std::vector<std::shared_ptr<Game
 	}
 
 	if (enemy != nullptr) homingMissile->trigger(enemy, getMat());
+}
+
+void PlayerAirplane::triggerBullet()
+{
+	// Žg‚Á‚Ä‚¢‚È‚¢’e‚ð’T‚µ‚ÄC”­ŽË‚·‚é
+
+	for (const auto& bullet : bullets)
+	{
+		if (bullet->getState() == Bullet::State::PAUSE)
+		{
+			bullet->trigger(getMat());
+			break;
+		}
+	}
 }
 
 void PlayerAirplane::onOutside()
