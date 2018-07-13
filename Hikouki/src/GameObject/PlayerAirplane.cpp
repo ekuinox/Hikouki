@@ -6,7 +6,7 @@
 PlayerAirplane::PlayerAirplane(CDirect3DXFile * xfile, LPDIRECT3DDEVICE9 device, const D3DXVECTOR3 & coord, CDirect3DXFile * homingMissileXFile, CDirect3DXFile * bulletXFile)
 	: Airplane(xfile, device, coord), enemy(nullptr)
 {
-	static constexpr auto initSpeed = 30.0f;
+	static constexpr auto initSpeed = 50.0f;
 
 	homingMissile = std::unique_ptr<HomingMissile>(new HomingMissile(homingMissileXFile, enemy, D3DX_PI * 45.0f / 180.0f, getPos(), D3DXVECTOR3{ 0, 0, 1 }, device));
 
@@ -71,7 +71,7 @@ void PlayerAirplane::update(const UpdateDetail & detail)
 	{
 		if (gameObject->getId() == Skydome::id)
 		{
-			const auto& r = std::static_pointer_cast<Skydome>(gameObject)->getBBox().get()->getR();
+			const auto& r = std::static_pointer_cast<Skydome>(gameObject)->getBBox().get()->getR() - bbox->getR();
 			
 			// ‰æ–Ê’[‚Ì”»’è
 			if (fabs(getPos().x) > r || fabs(getPos().y) > r || fabs(getPos().z > r))
