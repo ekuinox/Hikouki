@@ -21,8 +21,10 @@ MainScene::MainScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager, I
 
 	gameObjects.emplace_back(new Skydome(xFileManager->get("Skydome"), graphics->GetDXDevice()));
 
+	static constexpr auto enemiesCount = 20;
+
 	// 敵を5体生成する
-	for (auto i = 0; i < 5; ++i)
+	for (auto i = 0; i < enemiesCount; ++i)
 		gameObjects.emplace_back(new EnemyAirplane(xFileManager->get("Airplane"), graphics->GetDXDevice(), "assets/GameObjectConfig/enemy.json"));
 
 	// プレイヤを生成してカメラのターゲットにセットする
