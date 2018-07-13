@@ -4,7 +4,7 @@
 Camera::Camera(const std::shared_ptr<XFileObjectBase>& _target, const int& _w, const int& _h)
 	: eye(D3DXVECTOR3()), lookat(D3DXVECTOR3()), up(D3DXVECTOR3()), w(_w), h(_h)
 	, azimuth(0.0), elevation(90), distance(-100)
-	, state(State::OVER), target(_target)
+	, state(State::TPS), target(_target)
 {
 }
 

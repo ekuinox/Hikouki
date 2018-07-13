@@ -16,7 +16,15 @@ TitleScene::TitleScene(CDirectXGraphics* _graphics, XFileManager *_xfileManager,
 		graphics->GetDXDevice(),
 		100,
 		100,
-		"--- Enterでスタート---\nそうさせつめい\nWASDで機体操作\nQまたは左クリックで弾丸発射\nEまたは右クリックで誘導ミサイル発射\n端っこいくと自殺します\n\n\n浦上紫苑ちゃんかわいい．．．！どうびじゅを読んでください！！"
+		"--- Enterでスタート---\n"
+		"そうさせつめい\n"
+		"WASDで機体操作\n"
+		"Qまたは左クリックで弾丸発射\n"
+		"Eまたは右クリックで誘導ミサイル発射"
+		"Vで視点切り替え"
+		"F5でBBox表示切り替え"
+		"\n端っこいくと自殺します\n\n\n"
+		"浦上紫苑ちゃんかわいい．．．！どうびじゅを読んでください！！"
 	));
 }
 
