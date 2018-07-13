@@ -6,9 +6,9 @@
 PlayerAirplane::PlayerAirplane(CDirect3DXFile * xfile, LPDIRECT3DDEVICE9 device, const D3DXVECTOR3 & coord, CDirect3DXFile * homingMissileXFile, CDirect3DXFile * bulletXFile)
 	: Airplane(xfile, device, coord), enemy(nullptr)
 {
-	static constexpr auto initSpeed = 20.0f;
+	static constexpr auto initSpeed = 30.0f;
 
-	homingMissile = std::unique_ptr<HomingMissile>(new HomingMissile(homingMissileXFile, enemy, D3DX_PI * 10.0f / 180.0f, getPos(), D3DXVECTOR3{ 0, 0, 1 }, device));
+	homingMissile = std::unique_ptr<HomingMissile>(new HomingMissile(homingMissileXFile, enemy, D3DX_PI * 45.0f / 180.0f, getPos(), D3DXVECTOR3{ 0, 0, 1 }, device));
 
 	for (auto i = 0; i < bullets.max_size(); ++i) bullets[i] = std::unique_ptr<Bullet>(new Bullet(bulletXFile, device));
 

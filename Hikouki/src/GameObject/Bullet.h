@@ -24,7 +24,7 @@ public:
 	State getState();
 	virtual unsigned int getId() const { return id; }
 private:
-	static constexpr auto speed = 30.0f;
+	static constexpr auto speed = 50.0f;
 	static constexpr auto lifeTimeSecond = 5.0f; // ¶‘¶ŠÔ
 	BoundingSphere * bbox;
 	Bullet::State state;
