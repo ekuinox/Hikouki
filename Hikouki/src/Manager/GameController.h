@@ -25,7 +25,6 @@ private:
 	CDirectXGraphics * graphics;
 	Input *inputDevice;
 	trau::Timer *timer;
-	int currentSceneIndex;
 	SceneState sceneState;
 	std::unique_ptr<MainScene> mainScene;
 	std::unique_ptr<TitleScene> titleScene;
@@ -33,7 +32,6 @@ private:
 	XFileManager *xFileManager;
 	int width, height;
 
-	void initScenes();
 public:
 	GameController(HINSTANCE, HWND, int, int, bool);
 	~GameController();

@@ -4,6 +4,7 @@
 #define ___GAME_OBJECT_H
 
 #include <vector>
+#include <unordered_map>
 #include <memory>
 #include <typeinfo>
 #include <d3dx9.h>
@@ -14,6 +15,7 @@
 class GameObjectInterface {
 private:
 	std::string uuid;
+	static std::unordered_map<std::string, GameObjectInterface*> __gameObjects;
 protected:
 	bool drawing = false; // 描画するかのフラグ
 	bool active = false; // 更新するかのフラグ
@@ -36,8 +38,14 @@ public:
 		DWORD message;
 	};
 	
-	GameObjectInterface() : uuid(trau::utils::generateUUID()) {}
-	virtual ~GameObjectInterface() {}
+	GameObjectInterface() : uuid(trau::utils::generateUUID())
+	{
+		__gameObjects[uuid] = this;
+	}
+	virtual ~GameObjectInterface()
+	{
+		__gameObjects.erase(uuid);
+	}
 	virtual void beforeDraw(const LPDIRECT3DDEVICE9&) = 0;
 	virtual void draw(const LPDIRECT3DDEVICE9&) const = 0;
 	virtual void update(const UpdateDetail&) = 0;
@@ -50,6 +58,7 @@ public:
 	virtual unsigned int getPriority() const = 0;
 	virtual unsigned int getId() const { return id; }
 	std::string getUUID() const { return uuid; }
+	static const GameObjectInterface* getGameObject(const std::string& _uuid) { return __gameObjects[_uuid]; }
 };
 
 class GameObject : public GameObjectInterface

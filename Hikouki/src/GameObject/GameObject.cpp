@@ -1,5 +1,7 @@
 #include "GameObject.h"
 
+std::unordered_map<std::string, GameObjectInterface*> GameObjectInterface::__gameObjects = {};
+
 GameObject::GameObject()
 	: GameObjectInterface()
 {

@@ -3,21 +3,6 @@
 #include "../Scene/TitleScene.h"
 #include "../Scene/ResultScene.h"
 
-void GameController::initScenes()
-{
-	titleScene.reset();
-	mainScene.reset();
-	resultScene.reset();
-
-	titleScene = std::unique_ptr<TitleScene>(new TitleScene(graphics, xFileManager, inputDevice, timer));
-	mainScene = std::unique_ptr<MainScene>(new MainScene(graphics, xFileManager, inputDevice, timer));
-	resultScene = std::unique_ptr<ResultScene>(new ResultScene(graphics, xFileManager, inputDevice, timer));
-
-	sceneState = SceneState::Title;
-
-	currentSceneIndex = 0;
-}
-
 GameController::GameController(HINSTANCE hinst, HWND hwnd, int _width, int _height, bool fullscreen)
 	: width(_width), height(_height)
 {
@@ -34,7 +19,8 @@ GameController::GameController(HINSTANCE hinst, HWND hwnd, int _width, int _heig
 
 	xFileManager = new XFileManager(graphics->GetDXDevice());
 
-	initScenes();
+	sceneState = SceneState::Title;
+	titleScene.reset(new TitleScene(graphics, xFileManager, inputDevice, timer));
 
 	Start();
 }
@@ -60,21 +46,29 @@ void GameController::main()
 	switch (sceneState)
 	{
 	case SceneState::Title:
-		if (titleScene->exec() == Scene::State::Exit) sceneState = SceneState::Main;
+		if (titleScene->exec() == Scene::State::Exit)
+		{
+			sceneState = SceneState::Main;
+			mainScene.reset(new MainScene(graphics, xFileManager, inputDevice, timer));
+			titleScene.reset();
+		}
 		break; 
 	case SceneState::Main:
 		if (mainScene->exec() == Scene::State::Exit)
 		{
 			sceneState = SceneState::Result;
+			resultScene.reset(new ResultScene(graphics, xFileManager, inputDevice, timer));
 			resultScene->setResults(mainScene->getResults());
+			mainScene.reset();
 		}
 		break;
 	case SceneState::Result:
 		if (resultScene->exec() == Scene::State::Exit)
 		{
-			initScenes();
+			sceneState = SceneState::Title;
+			titleScene.reset(new TitleScene(graphics, xFileManager, inputDevice, timer));
+			resultScene.reset();
 		}
-		resultScene->exec();
 		break;
 	}
 }
